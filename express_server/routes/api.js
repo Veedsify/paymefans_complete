@@ -5,6 +5,7 @@ let checkUserIsAuthenticated = require("../middlewares/checkUserIsAuthenticated.
 const profileController = require("../controllers/api/profileController");
 const modelController = require("../controllers/api/modelsController");
 const multerImageMiddleware = require("../middlewares/multerImageMiddleware.middleware");
+const pointsController = require("../controllers/api/pointsController");
 
 // AUTH
 router.post("/auth/signup", authController.Register);
@@ -30,8 +31,18 @@ router.post(
   profileController.ProfileChange
 );
 
-
 // MODELS
 router.post("/models/all", modelController.GetModels);
+
+//Points
+router.post(
+  "/points/buy",
+  checkUserIsAuthenticated,
+  pointsController.BuyPoints
+);
+router.post("/points/callback", pointsController.Callback);
+
+//GetGlogalPoints
+router.get("/global/points", pointsController.GetGlobalPoints);
 
 module.exports = router;

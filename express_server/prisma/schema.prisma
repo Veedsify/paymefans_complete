@@ -288,7 +288,7 @@ model ReportMessage {
 
 model UserPoints {
   id              Int      @id @default(autoincrement())
-  user_id         String
+  user_id         String   @unique
   points          Int
   conversion_rate Float
   created_at      DateTime @default(now())
@@ -336,7 +336,6 @@ model UserSubscriptionHistory {
 model GlobalPointsBuy {
   id              Int      @id @default(autoincrement())
   points_buy_id   String
-  user_id         String
   points          Int
   amount          Float
   conversion_rate Float
@@ -356,4 +355,15 @@ model UserWithdrawalBankAccount {
   bank_country    String
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+}
+
+model UserPointsPurchase {
+  id          Int      @id @default(autoincrement())
+  purchase_id String   @unique
+  user_id     String
+  points      Int
+  amount      Float
+  success     Boolean
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 }

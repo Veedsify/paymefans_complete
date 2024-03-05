@@ -62,14 +62,13 @@ const SideModels = () => {
           </span>
         </div>
         <div className="py-6 mb-6">
-          {!models || models.length === 0 && <ModelLoader />}
-          {models && (
+          {models ? (
             <div className="grid gap-4 lg:gap-6 grid-cols-3">
               {models?.map((model, index) => {
                 return <ModelsSubscription model={model} key={model.id} />
               })}
             </div>
-          )}
+          ) : <ModelLoader />}
         </div>
         <hr className="" />
         <div className="flex align-middle justify-between  my-8">
