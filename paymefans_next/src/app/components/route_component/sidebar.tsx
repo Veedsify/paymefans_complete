@@ -10,7 +10,7 @@ import swal from "sweetalert";
 import { AuthUserProps } from "@/app/types/user";
 
 interface SideBarProps {
-  points: number | null;
+  points: number ;
   user: AuthUserProps | undefined;
 }
 

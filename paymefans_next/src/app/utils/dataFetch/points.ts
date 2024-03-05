@@ -15,7 +15,7 @@ const getUserPoints = async () => {
   );
   if (data.ok) {
     const res = await data.json();
-    return res.points as { points: number };
+    return res.points as number;
   }
   redirect("/login");
 };

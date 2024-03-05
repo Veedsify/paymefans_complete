@@ -36,7 +36,7 @@ const PageCallBack = () => {
         }
         verifyBuy()
 
-    }, [reference])
+    }, [reference, router])
 
     return (
         <div>
