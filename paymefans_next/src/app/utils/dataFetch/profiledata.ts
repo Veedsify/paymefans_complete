@@ -24,7 +24,7 @@ const getUserProfile = async ({ user_id }: getUserProfileProps) => {
   if (res.ok && res.status === 200) {
     const user = await res.json();
     if (user.status === true) {
-      return user as AuthUserProps;
+      return user.user as AuthUserProps;
     }
     return null;
   }

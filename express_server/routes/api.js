@@ -6,6 +6,7 @@ const profileController = require("../controllers/api/profileController");
 const modelController = require("../controllers/api/modelsController");
 const multerImageMiddleware = require("../middlewares/multerImageMiddleware.middleware");
 const pointsController = require("../controllers/api/pointsController");
+const followerController = require("../controllers/api/followerController");
 
 // AUTH
 router.post("/auth/signup", authController.Register);
@@ -31,8 +32,15 @@ router.post(
   profileController.ProfileChange
 );
 
+router.post(
+  "/profile/settings/update",
+  checkUserIsAuthenticated,
+  profileController.SettingsProfileChange
+);
+
 // MODELS
 router.post("/models/all", modelController.GetModels);
+router.post("/models/signup", checkUserIsAuthenticated, modelController.SignupModel);
 
 //Points
 router.post(
@@ -44,5 +52,12 @@ router.post("/points/callback", pointsController.Callback);
 
 //GetGlogalPoints
 router.get("/global/points", pointsController.GetGlobalPoints);
+
+//CheckFollower
+router.post(
+  "/follow/check",
+  checkUserIsAuthenticated,
+  followerController.CheckFollower
+);
 
 module.exports = router;

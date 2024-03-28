@@ -1,24 +1,19 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
+
+  console.log("Cookies", req.cookies)
+  console.log("Headers", req.headers)
+
   try {
-    if (!req.headers.authorization) {
+    if (!req.cookies.token && !req.headers) {
       return res
         .status(401)
-        .json({ message: "Authorization header is missing", status: false });
+        .json({ message: "Authorization token is missing", status: false });
     }
 
-    const parts = req.headers.authorization.split(" ");
-    if (parts.length !== 2 || parts[0] !== "Bearer") {
-      return res
-        .status(401)
-        .json({
-          message: "Invalid authorization header format",
-          status: false,
-        });
-    }
+    const token = req.cookies.token || req.headers.authorization;
 
-    const token = parts[1];
     if (!token) {
       return res.status(401).json({ message: "No token found", status: false });
     }
@@ -27,7 +22,7 @@ module.exports = async (req, res, next) => {
       throw new Error("JWT_SECRET is not defined in the environment variables");
     }
 
-    const user = await jwt.verify(token, process.env.JWT_SECRET);
+    const user = jwt.verify(token, process.env.JWT_SECRET);
     req.user = user;
     next();
   } catch (error) {

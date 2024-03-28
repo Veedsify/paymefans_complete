@@ -10,17 +10,25 @@ import {
     LucideMail,
     LucideMapPin,
 } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+
+export const metadata: Metadata = {
+    title: "Profile",
+    description: "Profile page",
+};
+
 const ProfilePage = async () => {
     const user = await getUserData()
     return (
         <>
             <div className="overflow-hidden">
-                <BannerComponent profile_banner={user?.user.profile_banner || "/site/banner.png"} />
+                <BannerComponent profile_banner={user?.profile_banner || "/site/banner.png"} />
                 <div className="relative flex w-full px-2 md:px-5">
                     <Image
-                        src={user?.user?.profile_image || "/site/avatar.png"}
+                        src={user?.profile_image || "/site/avatar.png"}
                         alt=""
                         priority
                         height={100}
@@ -33,29 +41,29 @@ const ProfilePage = async () => {
                 </div>
                 <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5 items-start">
                     <div className="flex flex-col ">
-                        <h1 className="font-bold ">{user?.user.name ? user?.user.name : ""}</h1>
-                        <small className="text-gray-500 ">{user?.user.username}</small>
+                        <h1 className="font-bold ">{user?.name ? user.name : ""}</h1>
+                        <small className="text-gray-500 ">{user.username}</small>
                     </div>
                     <p className="font-medium mb-2 leading-normal text-gray-700">
-                        {user?.user.bio ? user?.user.bio : ""}
+                        {user.bio ? user.bio : ""}
                     </p>
-                    {user?.user?.website && <>
+                    {user?.website && <>
                         <Link
-                            href={user?.user.website ? user?.user.website : ""}
+                            href={user.website ? user.website : ""}
                             target="_blank"
                             className="font-medium text-primary-text-dark-pink text-sm mb-2 inline-block"
                         >
                             <LucideLink className="text-primary-text-dark-pink inline-block mr-2" size={18} />
-                            {user?.user.website ? user?.user.website : ""}
+                            {user.website ? user.website : ""}
                         </Link>
                     </>}
                     <div className="flex gap-3 flex-wrap text-sm items-center font-semibold text-gray-700 mb-2">
                         <span className="flex gap-2 items-center">
                             <LucideMapPin className="text-primary-text-dark-pink" size={18} />
-                            <span>{user && user.user.state ? user.user.state + "," : ""} {user?.user.location}</span>
+                            <span>{user && user.state ? user.state + "," : ""} {user.location}</span>
                         </span>
                         {
-                            user?.user.is_model ? (
+                            user.is_model ? (
                                 <span className="flex items-center gap-2">
                                     <LucideLock className="text-primary-text-dark-pink" size={18} />
                                     <span>Model</span>
@@ -65,7 +73,7 @@ const ProfilePage = async () => {
                         <span className="flex items-center gap-2">
                             <LucideCalendar className="text-primary-text-dark-pink" size={18} />
                             <span>Joined {
-                                user?.user.created_at ? new Date(user?.user.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : ""
+                                user.created_at ? new Date(user.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : ""
                             }</span>
                         </span>
                     </div>

@@ -4,7 +4,7 @@ import { useUser } from "@/app/lib/userContext";
 import { UserRegisterType } from "@/app/types/user";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 

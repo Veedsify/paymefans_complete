@@ -1,3 +1,10 @@
+import { Metadata } from "next";
+import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Become a model",
+    description: "Profile page",
+}
 function Models() {
     return (
         <div>
@@ -30,9 +37,9 @@ function Models() {
                 </ul>
             </div>
             <div className="flex align-middle justify-center">
-                <button className="bg-primary-dark-pink text-white text-sm p-4 font-bold m-3 rounded-xl w-full">
+                <Link href="/mix/models/become-a-model" className="bg-primary-dark-pink text-white text-sm p-4 font-bold m-3 rounded-xl w-full text-center">
                     Sign Up
-                </button>
+                </Link>
             </div>
         </div>
     );

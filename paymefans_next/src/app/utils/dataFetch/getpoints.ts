@@ -1,20 +1,13 @@
-import { cookies } from "next/headers";
+import axiosInstance from "../axios";
 
 const getAllPoints = async () => {
-  const res = await fetch(
+  return await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_EXPRESS_URL}/global/points`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${cookies().get("token")?.value}`,
-      },
-    }
-  );
-  if (res.ok) {
-    const { allPoints } = await res.json();
-    return allPoints;
-  }
+  ).then((res) => {
+    return res.data.allPoints;
+  }).catch((err) => {
+    return err;
+  });
 };
 
 export default getAllPoints;

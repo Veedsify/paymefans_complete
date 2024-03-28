@@ -1,6 +1,10 @@
 import HookupSubscription from "@/app/components/sub_componnets/hookup_subscription";
 import { LucideSearch } from "lucide-react";
-
+import { Metadata } from "next";
+export const metadata: Metadata = {
+    title: "Hookup",
+    description: "Profile page",
+}
 const HookupPage = () => {
     return (
         <div className="block p-4 md:p-8">

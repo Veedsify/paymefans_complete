@@ -14,7 +14,7 @@ const HeaderImgClick: React.FC<HeaderImgProps> = ({ user }) => {
                 className="block w-12 h-12 border-2 border-white rounded-full cursor-pointer"
                 onClick={() => setSideBar(true)}
             >
-                <Image width={50} height={50} priority src={user ? user.user.profile_image : ""} alt="" className="w-full h-full object-cover rounded-full" />
+                <Image width={50} height={50} priority src={user ? user.profile_image : ""} alt="" className="w-full h-full object-cover rounded-full" />
             </span>
         </li>
     );

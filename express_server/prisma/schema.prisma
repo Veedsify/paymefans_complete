@@ -35,7 +35,7 @@ model User {
   phone             String    @unique
   profile_image     String?   @default("/site/avatar.png")
   profile_banner    String?   @default("/site/banner.png")
-  bio               String?
+  bio               String?   @db.Text
   location          String?
   website           String?
   country           String?
@@ -49,6 +49,21 @@ model User {
   admin_status      Boolean   @default(true)
   created_at        DateTime  @default(now())
   updated_at        DateTime  @updatedAt
+}
+
+model Model {
+  id                  Int      @id @default(autoincrement())
+  firstname           String
+  lastname            String
+  user_id             String
+  gender              String
+  dob                 DateTime
+  country             String
+  hookup              Boolean  @default(false)
+  verification_video  String   @db.LongText
+  verification_image  String   @db.LongText
+  verification_status String
+  created_at          DateTime @default(now())
 }
 
 model UserMedia {

@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 export function middleware(req: NextRequest) {
   const cookies = req.cookies;
   const token = cookies.get("token")?.value;
+  req.headers.set("Authorization", `Bearer ${token}`);
   if (token && token.length > 0) {
     return NextResponse.next();
   }

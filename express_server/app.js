@@ -9,7 +9,11 @@ var apiRouter = require("./routes/api");
 var session = require("express-session");
 var app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.APP_URL,
+  credentials: true,
+  optionsSuccessStatus: 200,
+}));
 app.use(
   session({
     secret: "sdsd349234ljocecat",
@@ -22,8 +26,8 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 

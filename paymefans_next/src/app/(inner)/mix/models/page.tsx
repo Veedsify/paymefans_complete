@@ -6,7 +6,7 @@ import { LucideSearch } from "lucide-react";
 
 const ModelsPage = async () => {
     const models: AllModelsProps[] = await getSideModels({ limit: 4 })
-    const user: AuthUserProps | undefined = await getUserData()
+    const user: AuthUserProps | null = await getUserData()
     return (
         <>
             <div className="block p-4 md:p-8" >
@@ -23,7 +23,7 @@ const ModelsPage = async () => {
                 <div className="py-6">
                     <div className="grid grid-cols-3 gap-4 lg:gap-6">
                         {models.map((model, index) => {
-                            if (user?.user.id !== model.id) {
+                            if (user?.id !== model.id) {
                                 return <ModelsSubscription model={model} key={model.id} />
                             }
                         })}

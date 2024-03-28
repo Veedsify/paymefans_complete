@@ -14,10 +14,8 @@ module.exports = async ({ name, location, bio, website }, req) => {
       },
     });
     prismaQuery.$disconnect();
-    if (updateUser) {
-      return true;
-    }
-    return false;
+    return !!updateUser;
+    
   } catch (err) {
     console.log(err);
     return false;

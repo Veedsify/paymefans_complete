@@ -1,12 +1,13 @@
 "use client"
 import { AuthUserProps, UserUpdateProfileType } from "@/app/types/user";
+import axios from "axios";
 import { Facebook, Instagram, LucideCamera, LucideInstagram, Twitter, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
+const EditProfileButton = ({ user }: { user: AuthUserProps | null }) => {
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null)
     const [userData, setUserData] = useState<UserUpdateProfileType>({} as UserUpdateProfileType)
@@ -31,19 +32,16 @@ const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
             }
         }
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/profile/image/change`, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    Authorization: `Bearer ${document.cookie.split("token=")[1].split(";")[0]}`,
-                },
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/profile/image/change`, formData, {
+                withCredentials: true,
             })
-            if (response.ok) {
+
+            if (response.status === 200 && response.data) {
                 setOpen(false)
                 toast.success('Profile updated successfully');
                 router.refresh()
             } else {
-                console.log(await response.json())
+                // console.log(await response.json())
                 return toast.error('Failed to update profile')
             }
         } catch (error) {
@@ -81,7 +79,7 @@ const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
                     <label htmlFor="imageUpload">
                         <div className="relative border-[3px] mb-3 inline-block p-2 rounded-full border-dotted group">
                             <Image
-                                src={file ? URL.createObjectURL(file) : user?.user.profile_image || "/site/avatar.png"}
+                                src={file ? URL.createObjectURL(file) : user?.profile_image || "/site/avatar.png"}
                                 alt=""
                                 width={100}
                                 priority
@@ -103,7 +101,7 @@ const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
                             type="text"
                             onChange={handleInputChange}
                             name="name"
-                            defaultValue={user?.user.name}
+                            defaultValue={user?.name}
                             className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
                             placeholder="Name "
                         />
@@ -114,14 +112,14 @@ const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
                             onChange={handleInputChange}
                             name="location"
                             className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
-                            defaultValue={user?.user.location ? user?.user.location : ""}
+                            defaultValue={user?.location ? user?.location : ""}
                             placeholder="Location "
                         />
                     </div>
                     <div>
                         <input
                             type="email"
-                            defaultValue={user?.user.email ? user?.user.email : ""}
+                            defaultValue={user?.email ? user?.email : ""}
                             className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl select-none"
                             readOnly
                             disabled
@@ -136,7 +134,7 @@ const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
                             onChange={handleInputChange}
                             className="resize-none w-full block outline-none border mb-3 border-gray-300 p-4 text-black rounded-xl"
                             placeholder="Bio"
-                            defaultValue={user?.user.bio ? user?.user.bio : ""}
+                            defaultValue={user?.bio ? user?.bio : ""}
                         ></textarea>
                     </div>
                     <div>
@@ -144,7 +142,7 @@ const EditProfileButton = ({ user }: { user: AuthUserProps | undefined }) => {
                             type="text"
                             onChange={handleInputChange}
                             name="website"
-                            defaultValue={user?.user.website ? user?.user.website : ""}
+                            defaultValue={user?.website ? user?.website : ""}
                             className="w-full block border mb-5 border-gray-300 p-4 outline-none text-black rounded-xl"
                             placeholder="Website"
                         />

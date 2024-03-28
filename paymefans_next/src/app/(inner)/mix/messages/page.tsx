@@ -1,6 +1,13 @@
 import { LucideSearch } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+    title: "Messages",
+    description: "Profile page",
+}
+
 const Messages = async () => {
     return (
         <div className="py-3 px-3">

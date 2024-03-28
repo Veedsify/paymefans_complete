@@ -1,5 +1,10 @@
+import { Metadata } from "next";
 import Image from "next/image";
 
+export const metadata: Metadata = {
+    title: "Live",
+    description: "Profile page",
+}
 const Live = () => {
     return (
         <div className="relative w-full h-dvh">

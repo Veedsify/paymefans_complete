@@ -1,8 +1,8 @@
 import axios from "axios";
-import { cookies } from "next/headers";
 
-const axiosServer = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_EXPRESS_URL,
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_EXPRESS_URL,  // Set your base URL here
+  withCredentials: true, // Make sure to enable sending cookies with requests
 });
 
-export default axiosServer;
+export default axiosInstance;
