@@ -1,4 +1,4 @@
-import HookupSubscription from "@/app/components/sub_componnets/hookup_subscription";
+import HookupSubscription from "@/components/sub_componnets/hookup_subscription";
 import { LucideSearch } from "lucide-react";
 import { Metadata } from "next";
 export const metadata: Metadata = {

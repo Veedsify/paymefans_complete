@@ -16,46 +16,71 @@ enum UserRole {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  email             String    @unique
-  name              String
-  password          String
-  fullname          String
-  user_id           String    @unique
-  username          String    @unique
-  admin             Boolean   @default(false)
-  role              UserRole  @default(fan)
-  is_active         Boolean   @default(true)
-  is_verified       Boolean   @default(false)
-  is_email_verified Boolean   @default(false)
-  is_model          Boolean   @default(false)
-  email_verify_code String?
-  email_verify_time DateTime?
-  is_phone_verified Boolean   @default(false)
-  phone             String    @unique
-  profile_image     String?   @default("/site/avatar.png")
-  profile_banner    String?   @default("/site/banner.png")
-  bio               String?   @db.Text
-  location          String?
-  website           String?
-  country           String?
-  state             String?
-  city              String?
-  zip               String?
-  post_watermark    String?
-  total_followers   Int       @default(0)
-  total_following   Int       @default(0)
-  total_subscribers Int       @default(0)
-  admin_status      Boolean   @default(true)
-  created_at        DateTime  @default(now())
-  updated_at        DateTime  @updatedAt
+  id                        Int                         @id @default(autoincrement())
+  email                     String                      @unique
+  name                      String
+  password                  String
+  fullname                  String
+  user_id                   String                      @unique
+  username                  String                      @unique
+  admin                     Boolean                     @default(false)
+  role                      UserRole                    @default(fan)
+  is_active                 Boolean                     @default(true)
+  is_verified               Boolean                     @default(false)
+  is_email_verified         Boolean                     @default(false)
+  is_model                  Boolean                     @default(false)
+  email_verify_code         String?
+  email_verify_time         DateTime?
+  is_phone_verified         Boolean                     @default(false)
+  phone                     String                      @unique
+  profile_image             String?                     @default("/site/avatar.png")
+  profile_banner            String?                     @default("/site/banner.png")
+  bio                       String?                     @db.Text
+  location                  String?
+  website                   String?
+  country                   String?
+  state                     String?
+  city                      String?
+  zip                       String?
+  post_watermark            String?
+  total_followers           Int                         @default(0)
+  total_following           Int                         @default(0)
+  total_subscribers         Int                         @default(0)
+  admin_status              Boolean                     @default(true)
+  created_at                DateTime                    @default(now())
+  updated_at                DateTime                    @updatedAt
+  UserMedia                 UserMedia[]
+  UserRepost                UserRepost[]
+  UserLockedMedia           UserLockedMedia[]
+  UserStory                 UserStory[]
+  PostLike                  PostLike[]
+  PostShared                PostShared[]
+  Follow                    Follow[]
+  Subscribers               Subscribers[]
+  LiveStream                LiveStream[]
+  LiveStreamComment         LiveStreamComment[]
+  LiveStreamLike            LiveStreamLike[]
+  LiveStreamView            LiveStreamView[]
+  Settings                  Settings[]
+  Messages                  Messages[]
+  Notifications             Notifications[]
+  ReportUser                ReportUser[]
+  ReportPost                ReportPost[]
+  ReportComment             ReportComment[]
+  ReportLive                ReportLive[]
+  ReportMessage             ReportMessage[]
+  UserPoints                UserPoints?
+  UserWallet                UserWallet[]
+  UserTransaction           UserTransaction[]
+  UserSubscriptionCurrent   UserSubscriptionCurrent[]
+  UserWithdrawalBankAccount UserWithdrawalBankAccount[]
 }
 
 model Model {
   id                  Int      @id @default(autoincrement())
   firstname           String
   lastname            String
-  user_id             String
+  user_id             Int
   gender              String
   dob                 DateTime
   country             String
@@ -67,51 +92,62 @@ model Model {
 }
 
 model UserMedia {
-  id            Int      @id @default(autoincrement())
-  media_id      String
-  user_id       String
-  media_type    String
-  media         Json
-  post_image    Json
-  locked        Boolean  @default(false)
-  accessible_to String
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  id              Int               @id @default(autoincrement())
+  media_id        String
+  user_id         Int
+  media_type      String
+  media           Json
+  post_image      Json
+  locked          Boolean           @default(false)
+  accessible_to   String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  user            User              @relation(fields: [user_id], references: [id])
+  UserLockedMedia UserLockedMedia[]
 }
 
 model UserRepost {
   id         Int      @id @default(autoincrement())
   repost_id  String
-  user_id    String
-  post_id    String
+  user_id    Int
+  post_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
+  post       Post     @relation(fields: [post_id], references: [id])
 }
 
 model UserLockedMedia {
   id         Int      @id @default(autoincrement())
-  user_id    String
-  media_id   String
+  user_id    Int
+  media_id   Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  // relation fields
+  user  User      @relation(fields: [user_id], references: [id])
+  media UserMedia @relation(fields: [media_id], references: [id])
 }
 
 model UserStory {
   id           Int      @id @default(autoincrement())
-  story_id     String
-  user_id      String
+  story_id     Int
+  user_id      Int
   story        Json
   story_type   String
   posted_at    DateTime @default(now())
   expected_end DateTime
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+
+  // relation fields
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model Post {
-  id              Int      @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   post_id         String
-  was_repost      Boolean  @default(false)
+  was_repost      Boolean       @default(false)
   user_id         String
   title           String
   description     String
@@ -119,102 +155,129 @@ model Post {
   image           Json
   video           Json
   post_status     String
-  post_is_visible Boolean  @default(true)
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  post_is_visible Boolean       @default(true)
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+  UserRepost      UserRepost[]
+  PostComment     PostComment[]
+  PostLike        PostLike[]
+  PostShared      PostShared[]
+  ReportPost      ReportPost[]
 }
 
 model PostComment {
-  id         Int      @id @default(autoincrement())
-  comment_id String
-  user_id    String
-  post_id    String
-  comment    String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id            Int             @id @default(autoincrement())
+  comment_id    String
+  user_id       String
+  post_id       Int
+  comment       String
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
+  post          Post?           @relation(fields: [post_id], references: [id])
+  ReportComment ReportComment[]
 }
 
 model PostLike {
   id         Int      @id @default(autoincrement())
-  like_id    String
-  user_id    String
-  post_id    String
+  like_id    Int
+  user_id    Int
+  post_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  post Post @relation(fields: [post_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model PostShared {
   id         Int      @id @default(autoincrement())
   shared_id  String
-  user_id    String?
-  post_id    String
+  user_id    Int?
+  post_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  post Post  @relation(fields: [post_id], references: [id])
+  user User? @relation(fields: [user_id], references: [id])
 }
 
 model Follow {
   id          Int      @id @default(autoincrement())
   follow_id   String
-  user_id     String
-  follower_id String
+  user_id     Int
+  follower_id Int
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  users       User     @relation(fields: [user_id], references: [id])
 }
 
 model Subscribers {
   id            Int      @id @default(autoincrement())
   sub_id        String
-  user_id       String
-  subscriber_id String
+  user_id       Int
+  subscriber_id Int
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model LiveStream {
-  id          Int       @id @default(autoincrement())
-  user_id     String
-  live_id     String
-  title       String
-  description String
-  image       Json
-  video       Json
-  live_status String
-  live_start  DateTime  @default(now())
-  live_end    DateTime?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  id                Int                 @id @default(autoincrement())
+  user_id           String
+  live_id           String
+  title             String
+  description       String
+  image             Json
+  video             Json
+  live_status       String
+  live_start        DateTime            @default(now())
+  live_end          DateTime?
+  created_at        DateTime            @default(now())
+  updated_at        DateTime            @updatedAt
+  user              User                @relation(fields: [user_id], references: [user_id])
+  LiveStreamComment LiveStreamComment[]
+  LiveStreamLike    LiveStreamLike[]
+  ReportLive        ReportLive[]
 }
 
 model LiveStreamComment {
-  id              Int      @id @default(autoincrement())
+  id              Int        @id @default(autoincrement())
   live_comment_id String
-  user_id         String
-  live_id         String
+  user_id         Int
+  live_id         Int
   comment         String
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
+  user            User       @relation(fields: [user_id], references: [id])
+  live            LiveStream @relation(fields: [live_id], references: [id])
 }
 
 model LiveStreamLike {
   id           Int      @id @default(autoincrement())
   live_like_id String
-  user_id      String
-  live_id      String
+  user_id      Int
+  live_id      Int
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+
+  user User       @relation(fields: [user_id], references: [id])
+  live LiveStream @relation(fields: [live_id], references: [id])
 }
 
 model LiveStreamView {
   id         Int      @id @default(autoincrement())
-  user_id    String
+  user_id    Int
   live_id    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model Settings {
   id                    Int      @id @default(autoincrement())
-  user_id               String
+  user_id               Int
   price_per_message     Float
   enable_free_message   Boolean
   subscription_price    Float
@@ -222,12 +285,13 @@ model Settings {
   subscription_duration String
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
+  user                  User     @relation(fields: [user_id], references: [id])
 }
 
 model Messages {
   id          Int      @id @default(autoincrement())
   message_id  String
-  sender_id   String
+  sender_id   Int
   receiver_id String
   status      String
   seen        Boolean  @default(false)
@@ -235,117 +299,146 @@ model Messages {
   attachment  Json
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  sender        User            @relation(fields: [sender_id], references: [id])
+  ReportMessage ReportMessage[]
 }
 
 model Notifications {
   id              Int      @id @default(autoincrement())
   notification_id String
-  user_id         String
+  user_id         Int
   message         String
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+  user            User     @relation(fields: [user_id], references: [id])
 }
 
 model ReportUser {
   id          Int      @id @default(autoincrement())
   report_id   String
-  user_id     String
+  user_id     Int
   reported_id String
   report_type String
   report      String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  reportUser  User     @relation(fields: [user_id], references: [id])
 }
 
 model ReportPost {
   id          Int      @id @default(autoincrement())
   report_id   String
-  user_id     String
-  post_id     String
+  user_id     Int
+  post_id     Int
   report_type String
   report      String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  post        Post     @relation(fields: [post_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id])
 }
 
 model ReportComment {
   id          Int      @id @default(autoincrement())
   report_id   String
-  user_id     String
-  comment_id  String
+  user_id     Int
+  comment_id  Int
   report_type String
   report      String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  user    User        @relation(fields: [user_id], references: [id])
+  comment PostComment @relation(fields: [comment_id], references: [id])
 }
 
 model ReportLive {
-  id          Int      @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   report_id   String
-  user_id     String
-  live_id     String
+  user_id     Int
+  live_id     Int
   report_type String
   report      String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+  user        User       @relation(fields: [user_id], references: [id])
+  comment     LiveStream @relation(fields: [live_id], references: [id])
 }
 
 model ReportMessage {
   id          Int      @id @default(autoincrement())
   report_id   String
-  user_id     String
-  message_id  String
+  user_id     Int
+  message_id  Int
   report_type String
   report      String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+
+  user    User     @relation(fields: [user_id], references: [id])
+  message Messages @relation(fields: [message_id], references: [id])
 }
 
 model UserPoints {
   id              Int      @id @default(autoincrement())
-  user_id         String   @unique
+  user_id         Int      @unique
   points          Int
   conversion_rate Float
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+
+  user               User                 @relation(fields: [user_id], references: [id])
+  UserPointsPurchase UserPointsPurchase[]
 }
 
 model UserWallet {
   id         Int      @id @default(autoincrement())
-  user_id    String
+  user_id    Int
   wallet_id  String
   balance    Float
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  user            User              @relation(fields: [user_id], references: [id])
+  UserTransaction UserTransaction[]
 }
 
 model UserTransaction {
   id             Int      @id @default(autoincrement())
   transaction_id String
-  user_id        String
-  wallet_id      String
+  user_id        Int
+  wallet_id      Int
   amount         Float
   transaction    String
   created_at     DateTime @default(now())
   updated_at     DateTime @updatedAt
+
+  UserWallet UserWallet @relation(fields: [wallet_id], references: [id])
+  user       User       @relation(fields: [user_id], references: [id])
 }
 
 model UserSubscriptionCurrent {
   id              Int      @id @default(autoincrement())
   subscription_id String
-  user_id         String
+  user_id         Int
   subscription    String
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+
+  UserSubscriptionHistory UserSubscriptionHistory[]
+  user                    User                      @relation(fields: [user_id], references: [id])
 }
 
 model UserSubscriptionHistory {
-  id              Int      @id @default(autoincrement())
-  subscription_id String
-  user_id         String
-  subscription    String
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  id                        Int                      @id @default(autoincrement())
+  subscription_id           String
+  user_id                   String
+  subscription              String
+  created_at                DateTime                 @default(now())
+  updated_at                DateTime                 @updatedAt
+  UserSubscriptionCurrent   UserSubscriptionCurrent? @relation(fields: [userSubscriptionCurrentId], references: [id])
+  userSubscriptionCurrentId Int?
 }
 
 model GlobalPointsBuy {
@@ -361,7 +454,7 @@ model GlobalPointsBuy {
 
 model UserWithdrawalBankAccount {
   id              Int      @id @default(autoincrement())
-  user_id         String
+  user_id         Int
   bank_account_id String
   bank_name       String
   account_name    String
@@ -370,15 +463,19 @@ model UserWithdrawalBankAccount {
   bank_country    String
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model UserPointsPurchase {
-  id          Int      @id @default(autoincrement())
-  purchase_id String   @unique
-  user_id     String
-  points      Int
-  amount      Float
-  success     Boolean
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id           Int         @id @default(autoincrement())
+  purchase_id  String      @unique
+  user_id      Int
+  points       Int
+  amount       Float
+  success      Boolean
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  UserPoints   UserPoints? @relation(fields: [userPointsId], references: [id])
+  userPointsId Int?
 }

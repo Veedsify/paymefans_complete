@@ -1,5 +1,5 @@
-import PointsBuy from "@/app/components/sub_componnets/points";
-import getAllPoints from "@/app/utils/dataFetch/getpoints";
+import PointsBuy from "@/components/sub_componnets/points";
+import getAllPoints from "@/utils/data/getpoints";
 
 type Points = {
     points: number;

@@ -3,9 +3,9 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
-import { useUser } from "@/app/lib/userContext";
+import { useUser } from "@/lib/userContext";
 import { useRouter } from "next/navigation";
-import axiosServer from "@/app/utils/axios";
+import axiosServer from "@/utils/axios";
 import axios from "axios";
 import swal from "sweetalert";
 

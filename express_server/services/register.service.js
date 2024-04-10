@@ -16,10 +16,13 @@ module.exports = async (body) => {
   if (checkEmail) {
     return { error: "Email Address already exists", status: false };
   }
+  const uniqueUserId = Math.random().toString(36).substring(2, 15);
+  const hashPass = hashPassword(registerData?.password);
+  const walletId = uuid().split("-").join(""); // Generate unique wallet ID
+  const pointsId = uuid().split("-").join(""); // Generate unique points ID
+
   try {
-    const uniqueUserId = Math.random().toString(36).substring(2, 15);
-    const hashPass = hashPassword(registerData?.password);
-    const wallet_id = uuid().split("-").join("");
+    // Create a new user
     const user = await prismaQuery.user.create({
       data: {
         fullname: registerData?.name,
@@ -30,28 +33,30 @@ module.exports = async (body) => {
         phone: registerData?.phone,
         location: registerData?.location,
         password: hashPass,
+        UserWallet: { // Create a wallet associated with the user
+          create: {
+            wallet_id: walletId,
+            balance: 0,
+          }
+        },
+        UserPoints: { // Create points associated with the user
+          create: {
+            points: 0,
+            conversion_rate: 0,
+          }
+        }
       },
+      include: {
+        UserWallet: true, // Include the wallet in the returned user object
+        UserPoints: true // Include the user points in the returned user object
+      }
     });
-    await prismaQuery.userWallet.create({
-      data: {
-        wallet_id: wallet_id,
-        user_id: uniqueUserId,
-        balance: 0,
-      },
-    });
-    await prismaQuery.userPoints.create({
-      data: {
-        user_id: uniqueUserId,
-        points: 0,
-        conversion_rate: 0,
-      },
-    });
-    prismaQuery.$disconnect();
 
-    if (user) {
-      return user;
-    }
+    console.log("User created with wallet and points:", user);
+    return user;
+
   } catch (error) {
-    return { error: error.message, status: false };
+    console.error("Error creating user:", error);
+    throw error;
   }
 };

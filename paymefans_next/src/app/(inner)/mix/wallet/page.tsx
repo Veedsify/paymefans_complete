@@ -1,8 +1,8 @@
-import {AuthUserProps} from "@/app/types/user";
-import getUserPoints from "@/app/utils/dataFetch/points";
-import getUserData from "@/app/utils/dataFetch/userdata";
-import {Metadata} from "next";
-import {cookies} from "next/headers";
+import { AuthUserProps } from "@/types/user";
+import axiosInstance from "@/utils/axios";
+import getUserData from "@/utils/data/user-data";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,16 +12,23 @@ export const metadata: Metadata = {
 };
 
 const page = async () => {
-    const user = await getUserData()
-    const points = await getUserPoints()
+    const user = await getUserData() as AuthUserProps
 
-    const {wallet} = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/wallet`, {
-        method: "POST",
+    const { wallet } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/wallet`, {
+    }, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${cookies().get("token")?.value}`
         }
-    }).then(res => res.json()) as { wallet: number }
+    }).then(res => res.data as { wallet: number })
+
+    const { points } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/points`, {
+    }, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${cookies().get("token")?.value}`
+        }
+    }).then(res => res.data as { points: number })
 
 
     return (
@@ -29,7 +36,7 @@ const page = async () => {
             <div className="flex flex-wrap gap-5 items-center justify-between pb-6">
                 <div className="flex align-middle gap-5">
                     <Image src={user.profile_image} width={50} height={50} alt="" priority
-                           className="object-cover w-12 h-12 border-2 rounded-full sm:-top-12  -top-12"/>
+                        className="object-cover w-12 h-12 border-2 rounded-full sm:-top-12  -top-12" />
                     <div className="self-center">
                         <h2 className="font-bold">{user.name}</h2>
                         <p>{user.username}</p>
@@ -51,7 +58,7 @@ const page = async () => {
                         <div className="opacity-100 flex gap-1">
                             <span>{points ? points.toLocaleString() : 0}</span>
                             <Image width={20} height={20} className="w-auto h-5 aspect-square" src="/site/coin.svg"
-                                   alt=""/>
+                                alt="" />
                         </div>
                     </div>
                 </div>
@@ -67,7 +74,7 @@ const page = async () => {
                     </div>
                     <div>
                         <Link href="/mix/wallet/add"
-                              className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">SET
+                            className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">SET
                             WITHDRAWAL BANK ACCOUNT</Link>
                     </div>
                 </>

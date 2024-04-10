@@ -1,5 +1,5 @@
 "use client"
-import Toggle from "@/app/components/sub_componnets/checked";
+import Toggle from "@/components/sub_componnets/checked";
 import swal from 'sweetalert'
 
 import { LucideCamera, LucideChevronDown, LucideChevronUp, LucideEye, LucideLock, LucideUser2 } from "lucide-react";
@@ -124,7 +124,7 @@ const NewPost = () => {
                     </div>
                 </div>
                 <div>
-                   
+
                 </div>
                 <div className="px-8  lg:w-3/5 w-full flex justify-evenly md:justify-start gap-3 items-center">
                     <Image

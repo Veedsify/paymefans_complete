@@ -2,8 +2,16 @@ const registerService = require("../../services/register.service");
 const loginService = require("../../services/login.service");
 const prismaQuery = require("../../utils/prisma");
 const jwt = require("jsonwebtoken");
+/**
+ * Controller class for handling authentication-related API endpoints.
+ */
 class authController {
-  // GET /auth
+  /**
+   * Register a new user account.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response containing the status and message.
+   */
   static async Register(req, res) {
     const createAccount = await registerService(req.body);
 
@@ -18,6 +26,12 @@ class authController {
       .json({ message: "Account created successfully", status: true });
   }
 
+  /**
+   * Check if a username is already taken.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response containing the status and message.
+   */
   static async Username(req, res) {
     const { username } = req.body;
     const user = await prismaQuery.user.findUnique({
@@ -37,6 +51,12 @@ class authController {
       .json({ message: "Username is available", status: true });
   }
 
+  /**
+   * Login a user.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response containing the status, message, and token.
+   */
   static async Login(req, res) {
     const signinUser = await loginService(req.body);
 
@@ -52,6 +72,12 @@ class authController {
     });
   }
 
+  /**
+   * Retrieve user information.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response containing the user information.
+   */
   static async Retrieve(req, res) {
     const user = await prismaQuery.user.findUnique({
       where: {
@@ -65,25 +91,34 @@ class authController {
     return res.status(200).json({ message: "No user found", status: false });
   }
 
+  /**
+   * Get user points.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response containing the user points.
+   */
   static async Points(req, res) {
     const { points } = await prismaQuery.userPoints.findFirst({
       where: {
-        user_id: req.user.user_id,
+        user_id: req.user.id,
       },
       select: {
         points: true,
       },
     });
-    if (points) {
-      return res.status(200).json({ points: points, status: true });
-    }
-    return res.status(200).json({ message: "No Data found", status: false });
+    return res.status(200).json({ points: points, status: true });
   }
 
+  /**
+   * Get user wallet balance.
+   * @param {Object} req - The request object.
+   * @param {Object} res - The response object.
+   * @returns {Object} The response containing the user wallet balance.
+   */
   static async Wallet(req, res) {
     const { balance } = await prismaQuery.userWallet.findFirst({
       where: {
-        user_id: req.user.user_id,
+        user_id: req.user.id,
       },
       select: {
         balance: true,

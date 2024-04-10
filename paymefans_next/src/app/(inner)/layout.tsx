@@ -2,16 +2,17 @@ import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
 import { GeistSans } from 'geist/font/sans';
 import "../globals.css";
-import MenuButtons from "../components/route_component/menu_buttons";
-import ModalComponent from "../components/route_component/modalComponent";
-import SideModels from "../components/route_component/side_models";
-import Header from "../components/route_component/header";
-import SideBar from "../components/route_component/sidebar";
+import MenuButtons from "@/components/route_component/menu_buttons";
+import ModalComponent from "@/components/route_component/modalComponent";
+import SideModels from "@/components/route_component/side_models";
+import Header from "@/components/route_component/header";
+import SideBar from "@/components/route_component/sidebar";
 import { Toaster } from "react-hot-toast";
-import getUserData from "../utils/dataFetch/userdata";
-import QueryProvider from "@/app/utils/QueryProvider";
+import QueryProvider from "@/utils/QueryProvider";
+import getUserData from "@/utils/data/user-data";
+import { use } from 'react';
+import PostComponentPreview from "@/components/post/full-component-preview";
 
-//const font = Inter({ subsets: ["cyrillic", "cyrillic-ext", "greek", "greek-ext", "latin", "latin-ext"], display: "swap", adjustFontFallback: true });
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -23,6 +24,7 @@ export default async function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    const user = await getUserData();
     return (
         <html lang="en">
             <QueryProvider>
@@ -31,6 +33,7 @@ export default async function RootLayout({
                     <div className="relative grid min-h-screen lg:grid-cols-9">
                         <div className="col-span-2">
                             <SideBar
+                                user={user}
                             />
                         </div>
                         <div className="col-span-7 overflow-auto border-r">
@@ -44,6 +47,7 @@ export default async function RootLayout({
                         </div>
                         <MenuButtons />
                         <ModalComponent />
+                        <PostComponentPreview/>
                     </div>
                 </body>
             </QueryProvider>

@@ -1,7 +1,7 @@
 "use client"
-import { getUser } from "@/app/lib/user";
-import { useUser } from "@/app/lib/userContext";
-import axiosServer from "@/app/utils/axios";
+import { getUser } from "@/lib/user";
+import { useUser } from "@/lib/userContext";
+import axiosServer from "@/utils/axios";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";

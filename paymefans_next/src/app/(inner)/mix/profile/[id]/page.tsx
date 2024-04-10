@@ -1,9 +1,9 @@
-import UserNotFound from "@/app/components/route_component/usernotfound";
-import FollowUserComponent from "@/app/components/sub_componnets/followUserComponent";
-import ProfileTabs from "@/app/components/sub_componnets/profile_tabs";
-import getUserProfile from "@/app/utils/dataFetch/profiledata";
-import getUserData from "@/app/utils/dataFetch/userdata";
-import { prismaQuery } from "@/app/utils/prisma";
+import UserNotFound from "@/components/route_component/usernotfound";
+import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
+import ProfileTabs from "@/components/sub_componnets/profile_tabs";
+import getUserProfile from "@/utils/data/profiledata";
+import getUserData from "@/utils/data/user-data";
+import { prismaQuery } from "@/utils/prisma";
 import {
     LucideCalendar,
     LucideLink,

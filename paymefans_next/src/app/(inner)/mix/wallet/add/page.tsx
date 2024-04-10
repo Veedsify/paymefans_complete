@@ -1,5 +1,5 @@
 "use client"
-import { ListOfBanksProps, listOfBanks } from "@/app/lib/banks";
+import { ListOfBanksProps, listOfBanks } from "@/lib/banks";
 import { useEffect, useState } from "react";
 
 const WalletAddBank = () => {

@@ -2,7 +2,7 @@ import { LucideBellRing } from "lucide-react";
 import HeaderTitle from "../sub_componnets/header_title";
 import Image from "next/image";
 import HeaderImgClick from "../sub_componnets/headerImgClick";
-import getUserData from "@/utils/data/userdata";
+import getUserData from "@/utils/data/user-data";
 
 const Header = async () => {
     const user = await getUserData();

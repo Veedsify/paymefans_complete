@@ -1,6 +1,6 @@
 "use client"
-import MessageBubble from "@/app/components/sub_componnets/message_bubble";
-import MessageInput from "@/app/components/sub_componnets/message_input";
+import MessageBubble from "@/components/sub_componnets/message_bubble";
+import MessageInput from "@/components/sub_componnets/message_input";
 import { LucideArrowLeft, LucideGrip } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

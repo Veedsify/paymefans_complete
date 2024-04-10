@@ -1,5 +1,5 @@
 "use client"
-import QuickPostActions from "@/app/components/sub_componnets/quick_post_actions";
+import QuickPostActions from "@/components/sub_componnets/quick_post_actions";
 import { LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

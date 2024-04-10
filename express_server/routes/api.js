@@ -8,16 +8,30 @@ const multerImageMiddleware = require("../middlewares/multerImageMiddleware.midd
 const pointsController = require("../controllers/api/pointsController");
 const followerController = require("../controllers/api/followerController");
 
+
+
 // AUTH
 router.post("/auth/signup", authController.Register);
+
+// Check if username is available
 router.post("/auth/signup/username", authController.Username);
+
+// Login
 router.post("/auth/login", authController.Login);
+
+// Get user points
 router.post("/auth/points", checkUserIsAuthenticated, authController.Points);
+
+// Get user wallet balance
 router.post("/auth/wallet", checkUserIsAuthenticated, authController.Wallet);
+
+// Retrieve User Data
 router.get("/retrieve", checkUserIsAuthenticated, authController.Retrieve);
 
-// PROFILE
+// get a random user profile by username
 router.post("/profile/user", profileController.Profile);
+
+// Change Profile Banner
 router.post(
   "/profile/banner/change",
   checkUserIsAuthenticated,
@@ -25,6 +39,7 @@ router.post(
   profileController.BannerChange
 );
 
+// Change Profile Image
 router.post(
   "/profile/image/change",
   checkUserIsAuthenticated,
@@ -32,23 +47,28 @@ router.post(
   profileController.ProfileChange
 );
 
+
+// Update Profile without image
 router.post(
   "/profile/settings/update",
   checkUserIsAuthenticated,
   profileController.SettingsProfileChange
 );
 
-// MODELS
-router.post("/models/all", modelController.GetModels);
+// View all models
+router.post("/models/all", checkUserIsAuthenticated, modelController.GetModels);
+
+// Model Signup Endpoint
 router.post("/models/signup", checkUserIsAuthenticated, modelController.SignupModel);
 
-//Points
+
+//Buy Points Returns the paystack checkout url
 router.post(
   "/points/buy",
   checkUserIsAuthenticated,
   pointsController.BuyPoints
 );
-router.post("/points/callback", pointsController.Callback);
+router.get("/points/callback", pointsController.Callback);
 
 //GetGlogalPoints
 router.get("/global/points", pointsController.GetGlobalPoints);

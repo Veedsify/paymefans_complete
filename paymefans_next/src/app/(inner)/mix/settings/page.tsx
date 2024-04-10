@@ -1,19 +1,19 @@
-import SettingsTab from "@/app/components/route_component/settingstab";
-import {Metadata} from "next";
+import SettingsTab from "@/components/route_component/settingstab";
+import { Metadata } from "next";
 import Image from "next/image";
-import getUserData from "@/app/utils/dataFetch/userdata";
+import getUserData from "@/utils/data/user-data";
 
 export const metadata: Metadata = {
     title: "Setings & Privacy | Paymefans",
     description: "Profile page",
 }
 const Settings = async () => {
-    const user = await  getUserData()
+    const user = await getUserData()
     return (
         <div className="p-4 lg:mb-4 mb-20">
             <div className="border-[3px] mb-3 inline-block p-2 rounded-full border-dotted">
                 <Image
-                    src={user?.profile_image}
+                    src={`${user?.profile_image}`}
                     alt=""
                     width={100}
                     priority
@@ -23,7 +23,7 @@ const Settings = async () => {
             </div>
 
             {/* <form onSubmit={(e) => e.preventDefault()} action=""> */}
-            <SettingsTab user={user}/>
+            <SettingsTab user={user} />
         </div>
     );
 };

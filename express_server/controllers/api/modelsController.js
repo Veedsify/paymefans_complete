@@ -2,7 +2,8 @@ const allModels = require("../../services/allmodels.service");
 class modelController {
   static async GetModels(req, res) {
     const { limit } = req.body;
-    const getmodels = await allModels(limit);
+    console.log("User", req.user)
+    const getmodels = await allModels(limit, req.user);
     if (!getmodels) {
       return res
         .status(200)

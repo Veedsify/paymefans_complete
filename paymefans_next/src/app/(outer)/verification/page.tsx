@@ -1,5 +1,5 @@
-import { ImageVerification } from "@/app/components/sub_componnets/imageVerification";
-import VideoVerification from "@/app/components/sub_componnets/videoverification";
+import { ImageVerification } from "@/components/sub_componnets/imageVerification";
+import VideoVerification from "@/components/sub_componnets/videoverification";
 import { LucideInfo } from "lucide-react";
 import Image from "next/image";
 

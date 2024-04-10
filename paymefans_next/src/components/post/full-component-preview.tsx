@@ -4,15 +4,19 @@ import {useEffect, useState} from "react";
 import Image from "next/image";
 
 const PostComponentPreview = () => {
-    const {image, open, close} = usePostComponent();
-    if (!image) return <> Loading... </>
+    const {url, type, open, close} = usePostComponent();
 
-    const [activeImage, setActiveImage] = useState<string | null>(null)
+    const [activeMedia, setActiveImage] = useState<string | null>(null)
 
     useEffect(() => {
-        setActiveImage(image)
-    }, [image]);
+        if (open) {
+            setActiveImage(url)
+        } else {
+            setActiveImage(null)
+        }
+    }, [url, open]);
 
+    if (!activeMedia) return <p className={'text-white text-2xl'}> Loading... </p>
 
     return (
         <div
@@ -20,12 +24,21 @@ const PostComponentPreview = () => {
                 e.currentTarget.classList.remove("opacity-100")
                 close()
             }}
-            className={`fixed transition-all ease-in-out inset-0 w-full flex items-center justify-center bg-black z-50 bg-opacity-90 duration-300
+            className={`fixed ease-in-out inset-0 w-full flex items-center justify-center bg-black z-50 bg-opacity-90
             ${open ? "opacity-100 pointer-events-all" : "opacity-0 pointer-events-none"}`}>
             <div className="p-4">
-                <Image src={`${activeImage ? activeImage : ""}`} width={1000} height={1000} priority
-                       className={`w-screen md:w-[550px] block object-cover transition-all duration-200 border-none ${open ? "scale-100" : "scale-75"}`}
-                       alt="image preview"/>
+                <div className={``} onClick={(e) => e.stopPropagation()}>
+                    {type === "video" ? (
+                        <video width={1000} height={1000} autoPlay loop controls
+                               className={`w-screen md:w-[550px] block object-cover transition-all duration-300 border-none ${open ? "scale-100" : "scale-75"}`}>
+                            <source src={`${activeMedia ? activeMedia : ""}`} type="video/mp4"/>
+                        </video>
+                    ) : (
+                        <Image src={`${activeMedia ? activeMedia : ""}`} width={1000} height={1000} priority
+                               className={`w-screen md:w-[550px] block object-cover transition-all duration-300 border-none ${open ? "scale-100" : "scale-75"}`}
+                               alt="image preview"/>
+                    )}
+                </div>
             </div>
         </div>
     )

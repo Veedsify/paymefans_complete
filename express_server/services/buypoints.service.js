@@ -40,7 +40,7 @@ async function PaystackPayment(price, req) {
           amount: price.amount * 100,
           email: req.user.email,
           reference: referenceId,
-          callback_url: process.env.APP_URL + "/mix/points/callback",
+          callback_url: process.env.SERVER_ORIGINAL_URL + "/api/points/callback",
         }),
       }
     );

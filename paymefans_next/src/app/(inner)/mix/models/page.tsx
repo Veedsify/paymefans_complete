@@ -1,12 +1,12 @@
-import ModelsSubscription from "@/app/components/sub_componnets/models_subscription";
-import { AllModelsProps, AuthUserProps } from "@/app/types/user";
-import getSideModels from "@/app/utils/dataFetch/getsidemodels";
-import getUserData from "@/app/utils/dataFetch/userdata";
+import ModelsSubscription from "@/components/sub_componnets/models_subscription";
+import { AllModelsProps, AuthUserProps } from "@/types/user";
+import getSideModels from "@/utils/data/getsidemodels";
+import getUserData from "@/utils/data/user-data";
 import { LucideSearch } from "lucide-react";
 
 const ModelsPage = async () => {
     const models: AllModelsProps[] = await getSideModels({ limit: 4 })
-    const user: AuthUserProps | null = await getUserData()
+    const user = await getUserData()
     return (
         <>
             <div className="block p-4 md:p-8" >

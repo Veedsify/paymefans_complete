@@ -1,7 +1,7 @@
-import BannerComponent from "@/app/components/lib_components/banner_component";
-import EditProfileButton from "@/app/components/sub_componnets/editprofileButton";
-import ProfileTabs from "@/app/components/sub_componnets/profile_tabs";
-import getUserData from "@/app/utils/dataFetch/userdata";
+import BannerComponent from "@/components/lib_components/banner_component";
+import EditProfileButton from "@/components/sub_componnets/editprofileButton";
+import ProfileTabs from "@/components/sub_componnets/profile_tabs";
+import getUserData from "@/utils/data/user-data";
 
 import {
     LucideCalendar,
@@ -42,10 +42,10 @@ const ProfilePage = async () => {
                 <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5 items-start">
                     <div className="flex flex-col ">
                         <h1 className="font-bold ">{user?.name ? user.name : ""}</h1>
-                        <small className="text-gray-500 ">{user.username}</small>
+                        <small className="text-gray-500 ">{user?.username}</small>
                     </div>
                     <p className="font-medium mb-2 leading-normal text-gray-700">
-                        {user.bio ? user.bio : ""}
+                        {user?.bio ? user.bio : ""}
                     </p>
                     {user?.website && <>
                         <Link
@@ -60,10 +60,10 @@ const ProfilePage = async () => {
                     <div className="flex gap-3 flex-wrap text-sm items-center font-semibold text-gray-700 mb-2">
                         <span className="flex gap-2 items-center">
                             <LucideMapPin className="text-primary-text-dark-pink" size={18} />
-                            <span>{user && user.state ? user.state + "," : ""} {user.location}</span>
+                            <span>{user && user.state ? user.state + "," : ""} {user?.location}</span>
                         </span>
                         {
-                            user.is_model ? (
+                            user?.is_model ? (
                                 <span className="flex items-center gap-2">
                                     <LucideLock className="text-primary-text-dark-pink" size={18} />
                                     <span>Model</span>
@@ -73,7 +73,7 @@ const ProfilePage = async () => {
                         <span className="flex items-center gap-2">
                             <LucideCalendar className="text-primary-text-dark-pink" size={18} />
                             <span>Joined {
-                                user.created_at ? new Date(user.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : ""
+                                user?.created_at ? new Date(user.created_at).toLocaleDateString("en-US", { month: "long", year: "numeric" }) : ""
                             }</span>
                         </span>
                     </div>

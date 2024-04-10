@@ -1,6 +1,6 @@
 "use client"
-import { countries } from "@/app/lib/locations";
-import { modelSignUp } from "@/app/utils/dataFetch/modelsignup";
+import { countries } from "@/lib/locations";
+import { modelSignUp } from "@/utils/data/modelsignup";
 import { LucideChevronDown, LucideChevronUp, LucideEye, LucideUser, LucideUser2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, MouseEvent, useState } from 'react';

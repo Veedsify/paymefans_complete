@@ -1,5 +1,5 @@
 "use client"
-import VideoStreamer from "@/app/components/route_component/video_streamer";
+import VideoStreamer from "@/components/route_component/video_streamer";
 import { LucideCoins, LucideHeart, LucideSend, LucideShapes, LucideShare, LucideShare2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

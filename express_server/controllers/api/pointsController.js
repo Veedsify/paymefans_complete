@@ -26,7 +26,7 @@ class pointsController {
 
   // Callback
   static async Callback(req, res) {
-    const { reference } = req.body;
+    const { reference } = req.query;
 
     const getUser = await prismaQuery.userPointsPurchase.findFirst({
       where: { purchase_id: reference },
@@ -37,7 +37,7 @@ class pointsController {
     });
 
     if (checkIfUpdated.success) {
-      return res.status(200).json({ status: false, message: "These points are already updated"});
+      return res.status(200).json({ status: false, message: "These points are already updated" });
     }
 
     if (getUser) {
@@ -55,7 +55,7 @@ class pointsController {
         },
       });
 
-      res.status(200).json({ status: true });
+      res.redirect(process.env.APP_URL + "/mix/wallet/");
     } else {
       res.status(400).json({ status: false });
     }

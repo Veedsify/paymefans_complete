@@ -2,17 +2,15 @@ const jwt = require("jsonwebtoken");
 
 module.exports = async (req, res, next) => {
 
-  console.log("Cookies", req.cookies)
-  console.log("Headers", req.headers)
 
   try {
-    if (!req.cookies.token && !req.headers) {
+    if (!req.headers) {
       return res
         .status(401)
         .json({ message: "Authorization token is missing", status: false });
     }
 
-    const token = req.cookies.token || req.headers.authorization;
+    const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
       return res.status(401).json({ message: "No token found", status: false });
@@ -26,6 +24,7 @@ module.exports = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    console.log("Auth Error", error)
     return res.status(401).json({ message: "Unauthorized", status: false });
   }
 };
