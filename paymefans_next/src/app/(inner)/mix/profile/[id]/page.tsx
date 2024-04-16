@@ -1,7 +1,7 @@
 import UserNotFound from "@/components/route_component/usernotfound";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
 import ProfileTabs from "@/components/sub_componnets/profile_tabs";
-import getUserProfile from "@/utils/data/profiledata";
+import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
 import { prismaQuery } from "@/utils/prisma";
 import {
@@ -24,7 +24,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
     const id = params.id
     const user = await getUserData()
     const userdata = await getUserProfile({ user_id: id })
-    if (!userdata || userdata === null) return <UserNotFound userid={id} />
+    if (!userdata) return <UserNotFound userid={id} />
 
     return (
         <>

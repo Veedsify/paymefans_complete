@@ -107,7 +107,6 @@ const PostComponent: React.FC<PostComponentProps> = ({user, data}) => {
                 </div>
             </div>
         </>
-
     );
 }
 

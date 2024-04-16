@@ -85,9 +85,9 @@ model Model {
   dob                 DateTime
   country             String
   hookup              Boolean  @default(false)
-  verification_video  String   @db.LongText
-  verification_image  String   @db.LongText
-  verification_status String
+  verification_video  String?  @db.LongText
+  verification_image  String?  @db.LongText
+  verification_status Boolean  @default(false)
   created_at          DateTime @default(now())
 }
 

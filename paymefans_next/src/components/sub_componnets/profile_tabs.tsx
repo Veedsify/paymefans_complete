@@ -44,7 +44,6 @@ const ProfileTabs = () => {
             ></span>
           </Tab>
         </TabList>
-
         <TabPanel>
           <PostPanel />
         </TabPanel>

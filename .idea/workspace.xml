@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="083c7743-4b21-413c-af78-59f2187f061e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/express_server/prisma/migrations/20240414121501_updated/migration.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/public/images/converted/1713093404833.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/public/images/converted/1713097057541.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/public/images/converted/1713097071863.JPG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/public/images/uploads/1713093404833.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/public/images/uploads/1713097057541.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/public/images/uploads/1713097071863.JPG" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/express_server/utils/createRandomPayments.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/paymefans_next/src/contexts/user-context.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/paymefans_next/src/providers/user-session-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/admin/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/admin/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/src/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/admin/src/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/src/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/admin/src/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/admin/tailwind.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/.env" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/controllers/api/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/controllers/api/authController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/controllers/api/modelsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/controllers/api/modelsController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/middlewares/checkUserIsAuthenticated.middleware.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/middlewares/checkUserIsAuthenticated.middleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/services/buypoints.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/services/buypoints.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/models/become-a-model/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/models/become-a-model/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/points/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/points/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/profile/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/profile/[id]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post_component.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post_component.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/media_panel_image_card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/media_panel_image_card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/postpanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/postpanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/profile_tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/profile_tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/utils/QueryProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/providers/query-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/utils/data/get-points.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/utils/data/get-points.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/utils/data/model-signup.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/utils/data/model-signup.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="false" />
+    <option name="myAllFileTypesSelected" value="true" />
+    <option name="mySelectedFileTypes">
+      <set />
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2f5Yp6CPt0opFrcJXfKheVVnGTF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Dike Wisdom/Desktop/Projetcs/Webdev/Javascript",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Users\\Dike Wisdom\\Desktop\\Files\\Documents\\Active Website Projects\\PAYMEFANS\\Source_Code\\newcode\\admin\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="083c7743-4b21-413c-af78-59f2187f061e" name="Changes" comment="" />
+      <created>1713092587728</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1713092587728</updated>
+      <workItem from="1713092589589" duration="184000" />
+      <workItem from="1713092785081" duration="3103000" />
+      <workItem from="1713095910388" duration="1886000" />
+      <workItem from="1713169707146" duration="581000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+</project>

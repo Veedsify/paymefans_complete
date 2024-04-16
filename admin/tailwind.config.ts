@@ -5,9 +5,10 @@ const config = {
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
+    './page-components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -19,6 +20,14 @@ const config = {
     },
     extend: {
       colors: {
+        "primary-dark-pink": "#CC0DF8",
+        "primary-text-dark-pink": "#78158E",
+        "messages-unread": "#FCF1FF",
+        "message-bubble": "#CC0DF8",
+        "model-online-notify": "#04D900",
+        coin: "#F4900C",
+        "coins-card-bottom": "#FAE2FF",
+        "coins-card-top": "#e057ff",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
