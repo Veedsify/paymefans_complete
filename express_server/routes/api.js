@@ -68,7 +68,13 @@ router.post(
   checkUserIsAuthenticated,
   pointsController.BuyPoints
 );
+
+//Callback for paystack for points
 router.get("/points/callback", pointsController.Callback);
+
+
+// Validate user model signup
+router.get("/callback/model/signup", modelController.ValidateModelController)
 
 //GetGlogalPoints
 router.get("/global/points", pointsController.GetGlobalPoints);

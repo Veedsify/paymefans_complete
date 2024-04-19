@@ -1,10 +1,10 @@
 // Initiate random payments for a user
 const {v4: uuid} = require("uuid");
 
-const newPayment = async (amount, email, user_id, callback_url) => {
+module.exports = async (amount, email, callback_url) => {
     try {
-        const referenceId = "points" + uuid().split("-").join("");
-        const CreateOrder = await fetch(
+        const referenceId = "models" + uuid().split("-").join("");
+        const modelSignup = await fetch(
             "https://api.paystack.co/transaction/initialize",
             {
                 method: "POST",
@@ -20,11 +20,9 @@ const newPayment = async (amount, email, user_id, callback_url) => {
                 }),
             }
         );
-        const data = await CreateOrder.json();
-        return data.url
+        const data = await modelSignup.json();
+        return data
     } catch (error) {
-        throw new Error(error.message);
+        throw new Error(error);
     }
 }
-
-module.exports = newPayment;

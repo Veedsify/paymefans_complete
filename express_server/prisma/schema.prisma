@@ -84,7 +84,7 @@ model Model {
   id                  Int      @id @default(autoincrement())
   firstname           String
   lastname            String
-  user_id             Int
+  user_id             Int      @unique
   gender              String
   dob                 DateTime
   country             String
