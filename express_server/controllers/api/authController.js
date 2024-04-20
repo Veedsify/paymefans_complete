@@ -86,7 +86,7 @@ class authController {
             },
             include: {
                 UserPoints: true,
-                UserWallet: true
+                UserWallet: true,
             }
         });
         if (user) {

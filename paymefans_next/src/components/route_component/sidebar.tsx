@@ -12,7 +12,7 @@ import {
     LucideUserPlus,
     Router,
 } from "lucide-react";
-import {useEffect, useState} from "react";
+import {useContext, useEffect} from "react";
 import Link from "next/link"
 import {usePathname, useRouter} from "next/navigation";
 import Image from "next/image";
@@ -20,13 +20,14 @@ import swal from "sweetalert";
 import {AuthUserProps} from "@/types/user";
 import getUserPoints from "@/utils/data/points";
 import useUserContext from "@/contexts/user-context";
+import { useUserAuthContext } from "@/lib/userUseContext";
 
 const SideBar = () => {
     const router = useRouter()
     const {sideBarState, setSideBar} = useSideBarContext()
     const pathname = usePathname()
-    const {user} = useUserContext()
-
+    // const {user} = useUserContext()
+    const { user } = useUserAuthContext()
 
     useEffect(() => {
         const closeSideBar = () => {

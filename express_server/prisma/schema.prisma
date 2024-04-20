@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,11 +5,6 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
-}
-
-enum UserRole {
-  fan
-  model
 }
 
 model User {
@@ -49,38 +41,50 @@ model User {
   admin_status              Boolean                     @default(true)
   created_at                DateTime                    @default(now())
   updated_at                DateTime                    @updatedAt
-  UserMedia                 UserMedia[]
-  UserRepost                UserRepost[]
-  UserLockedMedia           UserLockedMedia[]
-  UserStory                 UserStory[]
-  PostLike                  PostLike[]
-  PostShared                PostShared[]
   Follow                    Follow[]
-  Subscribers               Subscribers[]
   LiveStream                LiveStream[]
   LiveStreamComment         LiveStreamComment[]
   LiveStreamLike            LiveStreamLike[]
   LiveStreamView            LiveStreamView[]
-  Settings                  Settings[]
   Messages                  Messages[]
   Notifications             Notifications[]
-  ReportUser                ReportUser[]
-  ReportPost                ReportPost[]
+  PostLike                  PostLike[]
+  PostShared                PostShared[]
   ReportComment             ReportComment[]
   ReportLive                ReportLive[]
   ReportMessage             ReportMessage[]
+  ReportPost                ReportPost[]
+  ReportUser                ReportUser[]
+  Settings                  Settings[]
+  Subscribers               Subscribers[]
+  UserLockedMedia           UserLockedMedia[]
+  UserMedia                 UserMedia[]
   UserPoints                UserPoints?
-  UserWallet                UserWallet[]
-  UserTransaction           UserTransaction[]
+  UserRepost                UserRepost[]
+  UserStory                 UserStory[]
   UserSubscriptionCurrent   UserSubscriptionCurrent[]
+  UserTransaction           UserTransaction[]
+  UserWallet                UserWallet[]
   UserWithdrawalBankAccount UserWithdrawalBankAccount[]
+  Contacts                  Contacts[]
+}
+
+model Contacts {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  contact_id Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [id], references: [id])
+
+  @@index([user_id], map: "Contacts_user_id_fkey")
 }
 
 model Model {
   id                  Int      @id @default(autoincrement())
   firstname           String
   lastname            String
-  user_id             Int
+  user_id             Int      @unique
   gender              String
   dob                 DateTime
   country             String
@@ -88,6 +92,7 @@ model Model {
   verification_video  String?  @db.LongText
   verification_image  String?  @db.LongText
   verification_status Boolean  @default(false)
+  payment_reference   String?  @db.LongText
   created_at          DateTime @default(now())
 }
 
@@ -96,14 +101,16 @@ model UserMedia {
   media_id        String
   user_id         Int
   media_type      String
-  media           Json
-  post_image      Json
+  media           String            @db.LongText
+  post_image      String            @db.LongText
   locked          Boolean           @default(false)
   accessible_to   String
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
-  user            User              @relation(fields: [user_id], references: [id])
   UserLockedMedia UserLockedMedia[]
+  user            User              @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "UserMedia_user_id_fkey")
 }
 
 model UserRepost {
@@ -113,35 +120,39 @@ model UserRepost {
   post_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user       User     @relation(fields: [user_id], references: [id])
   post       Post     @relation(fields: [post_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
+
+  @@index([post_id], map: "UserRepost_post_id_fkey")
+  @@index([user_id], map: "UserRepost_user_id_fkey")
 }
 
 model UserLockedMedia {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   user_id    Int
   media_id   Int
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  media      UserMedia @relation(fields: [media_id], references: [id])
+  user       User      @relation(fields: [user_id], references: [id])
 
-  // relation fields
-  user  User      @relation(fields: [user_id], references: [id])
-  media UserMedia @relation(fields: [media_id], references: [id])
+  @@index([media_id], map: "UserLockedMedia_media_id_fkey")
+  @@index([user_id], map: "UserLockedMedia_user_id_fkey")
 }
 
 model UserStory {
   id           Int      @id @default(autoincrement())
   story_id     Int
   user_id      Int
-  story        Json
+  story        String   @db.LongText
   story_type   String
   posted_at    DateTime @default(now())
   expected_end DateTime
   created_at   DateTime @default(now())
   updated_at   DateTime @updatedAt
+  user         User     @relation(fields: [user_id], references: [id])
 
-  // relation fields
-  user User @relation(fields: [user_id], references: [id])
+  @@index([user_id], map: "UserStory_user_id_fkey")
 }
 
 model Post {
@@ -152,17 +163,17 @@ model Post {
   title           String
   description     String
   post_type       String
-  image           Json
-  video           Json
+  image           String        @db.LongText
+  video           String        @db.LongText
   post_status     String
   post_is_visible Boolean       @default(true)
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
-  UserRepost      UserRepost[]
   PostComment     PostComment[]
   PostLike        PostLike[]
   PostShared      PostShared[]
   ReportPost      ReportPost[]
+  UserRepost      UserRepost[]
 }
 
 model PostComment {
@@ -173,8 +184,10 @@ model PostComment {
   comment       String
   created_at    DateTime        @default(now())
   updated_at    DateTime        @updatedAt
-  post          Post?           @relation(fields: [post_id], references: [id])
+  post          Post            @relation(fields: [post_id], references: [id])
   ReportComment ReportComment[]
+
+  @@index([post_id], map: "PostComment_post_id_fkey")
 }
 
 model PostLike {
@@ -184,9 +197,11 @@ model PostLike {
   post_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  post       Post     @relation(fields: [post_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 
-  post Post @relation(fields: [post_id], references: [id])
-  user User @relation(fields: [user_id], references: [id])
+  @@index([post_id], map: "PostLike_post_id_fkey")
+  @@index([user_id], map: "PostLike_user_id_fkey")
 }
 
 model PostShared {
@@ -196,9 +211,11 @@ model PostShared {
   post_id    Int
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  post       Post     @relation(fields: [post_id], references: [id])
+  user       User?    @relation(fields: [user_id], references: [id])
 
-  post Post  @relation(fields: [post_id], references: [id])
-  user User? @relation(fields: [user_id], references: [id])
+  @@index([post_id], map: "PostShared_post_id_fkey")
+  @@index([user_id], map: "PostShared_user_id_fkey")
 }
 
 model Follow {
@@ -209,6 +226,8 @@ model Follow {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   users       User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "Follow_user_id_fkey")
 }
 
 model Subscribers {
@@ -218,8 +237,9 @@ model Subscribers {
   subscriber_id Int
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+  user          User     @relation(fields: [user_id], references: [id])
 
-  user User @relation(fields: [user_id], references: [id])
+  @@index([user_id], map: "Subscribers_user_id_fkey")
 }
 
 model LiveStream {
@@ -228,8 +248,8 @@ model LiveStream {
   live_id           String
   title             String
   description       String
-  image             Json
-  video             Json
+  image             String              @db.LongText
+  video             String              @db.LongText
   live_status       String
   live_start        DateTime            @default(now())
   live_end          DateTime?
@@ -239,6 +259,8 @@ model LiveStream {
   LiveStreamComment LiveStreamComment[]
   LiveStreamLike    LiveStreamLike[]
   ReportLive        ReportLive[]
+
+  @@index([user_id], map: "LiveStream_user_id_fkey")
 }
 
 model LiveStreamComment {
@@ -249,20 +271,25 @@ model LiveStreamComment {
   comment         String
   created_at      DateTime   @default(now())
   updated_at      DateTime   @updatedAt
-  user            User       @relation(fields: [user_id], references: [id])
   live            LiveStream @relation(fields: [live_id], references: [id])
+  user            User       @relation(fields: [user_id], references: [id])
+
+  @@index([live_id], map: "LiveStreamComment_live_id_fkey")
+  @@index([user_id], map: "LiveStreamComment_user_id_fkey")
 }
 
 model LiveStreamLike {
-  id           Int      @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   live_like_id String
   user_id      Int
   live_id      Int
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
+  created_at   DateTime   @default(now())
+  updated_at   DateTime   @updatedAt
+  live         LiveStream @relation(fields: [live_id], references: [id])
+  user         User       @relation(fields: [user_id], references: [id])
 
-  user User       @relation(fields: [user_id], references: [id])
-  live LiveStream @relation(fields: [live_id], references: [id])
+  @@index([live_id], map: "LiveStreamLike_live_id_fkey")
+  @@index([user_id], map: "LiveStreamLike_user_id_fkey")
 }
 
 model LiveStreamView {
@@ -271,8 +298,9 @@ model LiveStreamView {
   live_id    String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  user       User     @relation(fields: [user_id], references: [id])
 
-  user User @relation(fields: [user_id], references: [id])
+  @@index([user_id], map: "LiveStreamView_user_id_fkey")
 }
 
 model Settings {
@@ -286,22 +314,25 @@ model Settings {
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
   user                  User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "Settings_user_id_fkey")
 }
 
 model Messages {
-  id          Int      @id @default(autoincrement())
-  message_id  String
-  sender_id   Int
-  receiver_id String
-  status      String
-  seen        Boolean  @default(false)
-  message     String
-  attachment  Json
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-
+  id            Int             @id @default(autoincrement())
+  message_id    String
+  sender_id     Int
+  receiver_id   String
+  status        String
+  seen          Boolean         @default(false)
+  message       String
+  attachment    String          @db.LongText
+  created_at    DateTime        @default(now())
+  updated_at    DateTime        @updatedAt
   sender        User            @relation(fields: [sender_id], references: [id])
   ReportMessage ReportMessage[]
+
+  @@index([sender_id], map: "Messages_sender_id_fkey")
 }
 
 model Notifications {
@@ -312,6 +343,8 @@ model Notifications {
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
   user            User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "Notifications_user_id_fkey")
 }
 
 model ReportUser {
@@ -324,6 +357,8 @@ model ReportUser {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
   reportUser  User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "ReportUser_user_id_fkey")
 }
 
 model ReportPost {
@@ -337,20 +372,25 @@ model ReportPost {
   updated_at  DateTime @updatedAt
   post        Post     @relation(fields: [post_id], references: [id])
   user        User     @relation(fields: [user_id], references: [id])
+
+  @@index([post_id], map: "ReportPost_post_id_fkey")
+  @@index([user_id], map: "ReportPost_user_id_fkey")
 }
 
 model ReportComment {
-  id          Int      @id @default(autoincrement())
+  id          Int         @id @default(autoincrement())
   report_id   String
   user_id     Int
   comment_id  Int
   report_type String
   report      String
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  comment     PostComment @relation(fields: [comment_id], references: [id])
+  user        User        @relation(fields: [user_id], references: [id])
 
-  user    User        @relation(fields: [user_id], references: [id])
-  comment PostComment @relation(fields: [comment_id], references: [id])
+  @@index([comment_id], map: "ReportComment_comment_id_fkey")
+  @@index([user_id], map: "ReportComment_user_id_fkey")
 }
 
 model ReportLive {
@@ -362,8 +402,11 @@ model ReportLive {
   report      String
   created_at  DateTime   @default(now())
   updated_at  DateTime   @updatedAt
-  user        User       @relation(fields: [user_id], references: [id])
   comment     LiveStream @relation(fields: [live_id], references: [id])
+  user        User       @relation(fields: [user_id], references: [id])
+
+  @@index([live_id], map: "ReportLive_live_id_fkey")
+  @@index([user_id], map: "ReportLive_user_id_fkey")
 }
 
 model ReportMessage {
@@ -375,59 +418,64 @@ model ReportMessage {
   report      String
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  message     Messages @relation(fields: [message_id], references: [id])
+  user        User     @relation(fields: [user_id], references: [id])
 
-  user    User     @relation(fields: [user_id], references: [id])
-  message Messages @relation(fields: [message_id], references: [id])
+  @@index([message_id], map: "ReportMessage_message_id_fkey")
+  @@index([user_id], map: "ReportMessage_user_id_fkey")
 }
 
 model UserPoints {
-  id              Int      @id @default(autoincrement())
-  user_id         Int      @unique
-  points          Int
-  conversion_rate Float
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-
+  id                 Int                  @id @default(autoincrement())
+  user_id            Int                  @unique
+  points             Int
+  conversion_rate    Float
+  created_at         DateTime             @default(now())
+  updated_at         DateTime             @updatedAt
   user               User                 @relation(fields: [user_id], references: [id])
   UserPointsPurchase UserPointsPurchase[]
 }
 
 model UserWallet {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  wallet_id  String
-  balance    Float
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
-
-  user            User              @relation(fields: [user_id], references: [id])
+  id              Int               @id @default(autoincrement())
+  user_id         Int
+  wallet_id       String
+  balance         Float
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
   UserTransaction UserTransaction[]
+  user            User              @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "UserWallet_user_id_fkey")
 }
 
 model UserTransaction {
-  id             Int      @id @default(autoincrement())
+  id             Int        @id @default(autoincrement())
   transaction_id String
   user_id        Int
   wallet_id      Int
   amount         Float
   transaction    String
-  created_at     DateTime @default(now())
-  updated_at     DateTime @updatedAt
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  user           User       @relation(fields: [user_id], references: [id])
+  UserWallet     UserWallet @relation(fields: [wallet_id], references: [id])
 
-  UserWallet UserWallet @relation(fields: [wallet_id], references: [id])
-  user       User       @relation(fields: [user_id], references: [id])
+  @@index([user_id], map: "UserTransaction_user_id_fkey")
+  @@index([wallet_id], map: "UserTransaction_wallet_id_fkey")
 }
 
 model UserSubscriptionCurrent {
-  id              Int      @id @default(autoincrement())
-  subscription_id String
-  user_id         Int
-  subscription    String
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-
-  UserSubscriptionHistory UserSubscriptionHistory[]
+  id                      Int                       @id @default(autoincrement())
+  subscription_id         String
+  user_id                 Int
+  subscription            String
+  created_at              DateTime                  @default(now())
+  updated_at              DateTime                  @updatedAt
   user                    User                      @relation(fields: [user_id], references: [id])
+  UserSubscriptionHistory UserSubscriptionHistory[]
+
+  @@index([user_id], map: "UserSubscriptionCurrent_user_id_fkey")
 }
 
 model UserSubscriptionHistory {
@@ -437,8 +485,10 @@ model UserSubscriptionHistory {
   subscription              String
   created_at                DateTime                 @default(now())
   updated_at                DateTime                 @updatedAt
-  UserSubscriptionCurrent   UserSubscriptionCurrent? @relation(fields: [userSubscriptionCurrentId], references: [id])
   userSubscriptionCurrentId Int?
+  UserSubscriptionCurrent   UserSubscriptionCurrent? @relation(fields: [userSubscriptionCurrentId], references: [id])
+
+  @@index([userSubscriptionCurrentId], map: "UserSubscriptionHistory_userSubscriptionCurrentId_fkey")
 }
 
 model GlobalPointsBuy {
@@ -463,8 +513,9 @@ model UserWithdrawalBankAccount {
   bank_country    String
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
+  user            User     @relation(fields: [user_id], references: [id])
 
-  user User @relation(fields: [user_id], references: [id])
+  @@index([user_id], map: "UserWithdrawalBankAccount_user_id_fkey")
 }
 
 model UserPointsPurchase {
@@ -476,6 +527,13 @@ model UserPointsPurchase {
   success      Boolean
   created_at   DateTime    @default(now())
   updated_at   DateTime    @updatedAt
-  UserPoints   UserPoints? @relation(fields: [userPointsId], references: [id])
   userPointsId Int?
+  UserPoints   UserPoints? @relation(fields: [userPointsId], references: [id])
+
+  @@index([userPointsId], map: "UserPointsPurchase_userPointsId_fkey")
+}
+
+enum UserRole {
+  fan
+  model
 }

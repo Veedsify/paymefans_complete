@@ -60,5 +60,6 @@ class pointsController {
       res.status(400).json({ status: false });
     }
   }
+
 }
 module.exports = pointsController;

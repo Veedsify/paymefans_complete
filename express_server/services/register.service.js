@@ -52,7 +52,6 @@ module.exports = async (body) => {
       }
     });
 
-    console.log("User created with wallet and points:", user);
     return user;
 
   } catch (error) {
