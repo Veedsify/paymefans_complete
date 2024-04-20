@@ -92,6 +92,7 @@ model Model {
   verification_video  String?  @db.LongText
   verification_image  String?  @db.LongText
   verification_status Boolean  @default(false)
+  payment_reference   String?  @db.LongText
   created_at          DateTime @default(now())
 }
 

@@ -1,9 +1,8 @@
 // Initiate random payments for a user
 const {v4: uuid} = require("uuid");
 
-module.exports = async (amount, email, callback_url) => {
+module.exports = async (amount, email, callback_url, referenceId) => {
     try {
-        const referenceId = "models" + uuid().split("-").join("");
         const modelSignup = await fetch(
             "https://api.paystack.co/transaction/initialize",
             {

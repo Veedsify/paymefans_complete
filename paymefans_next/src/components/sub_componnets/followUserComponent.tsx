@@ -1,5 +1,5 @@
 import { AuthUserProps } from "@/types/user";
-import { checkUserIsFollowing } from '@/utils/data/checkUserIsFollowing';
+import { checkUserIsFollowing } from '@/utils/data/check-user-is-following';
 import React from 'react';
 import FollowButton from "./sub/button";
 

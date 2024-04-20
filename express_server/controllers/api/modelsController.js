@@ -1,6 +1,7 @@
 const allModels = require("../../services/allmodels.service");
 const newPayment = require("../../utils/createRandomPayments");
 const prismaQuery = require("../../utils/prisma");
+const { v4: uuid } = require("uuid");
 
 class modelController {
     static async GetModels(req, res) {
@@ -43,6 +44,8 @@ class modelController {
                     .json({ message: "You're already a model", status: false });
             }
 
+            const referenceId = "models" + uuid().split("-").join("");
+
             let signUpUserAsModel = await prismaQuery.model.create({
                 data: {
                     user_id: id,
@@ -53,7 +56,8 @@ class modelController {
                     country,
                     hookup: available === "yes",
                     audience,
-                    verification_status: false
+                    verification_status: false,
+                    payment_reference: referenceId
                 }
             });
 
@@ -65,7 +69,7 @@ class modelController {
 
             // New Initial Payments
             const modelSignupPayment = await newPayment(process.env.SIGNUP_PRICE, req.user.email,
-                process.env.SERVER_ORIGINAL_URL + "/api/callback/model/signup"
+                process.env.SERVER_ORIGINAL_URL + "/api/callback/model/signup", referenceId
             );
 
 
@@ -75,7 +79,9 @@ class modelController {
                     .json({ message: "An error occurred while setting up payments", status: false });
             }
 
-             req.session.lastPaymentReference = modelSignupPayment.data.reference;
+            req.session.lastPaymentReference = modelSignupPayment.data.reference;
+
+            prismaQuery.$disconnect();
 
             return res
                 .status(200)
@@ -91,8 +97,39 @@ class modelController {
 
     static async ValidateModelPayment(req, res) {
         const { reference, trxref } = req.query;
-        console.log(req.session.lastPaymentReference);
-        res.status(200).json({ message: "Payment validated", status: true });
+        const getUserWithRef = await prismaQuery.model.findFirst({
+            where: {
+                payment_reference: reference
+            },
+            select: {
+                user_id: true
+            }
+        });
+        if (!getUserWithRef.user_id) {
+            return res.status(200).json({ message: "Invalid payment", status: false });
+        }
+        const updateUserAsModel = await prismaQuery.model.update({
+            where: {
+                user_id: getUserWithRef.user_id
+            },
+            data: {
+                verification_status: true
+            }
+        });
+
+        if (updateUserAsModel) {
+            await prismaQuery.user.update({
+                where: {
+                    id: getUserWithRef.user_id
+                },
+                data: {
+                    is_model: true
+                }
+            })
+
+            prismaQuery.$disconnect();
+        }
+        res.status(200).redirect(process.env.APP_URL)
     }
 
 }
