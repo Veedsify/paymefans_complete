@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "path": "express_server",
+      "problemMatcher": [],
+      "label": "npm: dev - express_server",
+      "detail": "nodemon ./bin/www"
+    },
+    {
+      "type": "npm",
+      "script": "dev",
+      "path": "paymefans_next",
+      "problemMatcher": [],
+      "label": "npm: dev - paymefans_next",
+      "detail": "next dev"
+    }
+  ]
+}
