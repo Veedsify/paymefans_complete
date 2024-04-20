@@ -65,7 +65,7 @@ class modelController {
 
             // New Initial Payments
             const modelSignupPayment = await newPayment(process.env.SIGNUP_PRICE, req.user.email,
-                process.env.SERVER_ORIGINAL_URL + "/callback/model/signup"
+                process.env.SERVER_ORIGINAL_URL + "/api/callback/model/signup"
             );
 
 
@@ -75,7 +75,7 @@ class modelController {
                     .json({ message: "An error occurred while setting up payments", status: false });
             }
 
-            req.lastpaymentReference = modelSignupPayment.data.reference;
+             req.session.lastPaymentReference = modelSignupPayment.data.reference;
 
             return res
                 .status(200)
@@ -89,9 +89,10 @@ class modelController {
         }
     }
 
-    static async ValidateModelController(req, res) {
-        const { reference } = req.query;
-        
+    static async ValidateModelPayment(req, res) {
+        const { reference, trxref } = req.query;
+        console.log(req.session.lastPaymentReference);
+        res.status(200).json({ message: "Payment validated", status: true });
     }
 
 }

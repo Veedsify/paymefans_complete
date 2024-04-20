@@ -7,6 +7,7 @@ var cors = require("cors");
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var session = require("express-session");
+const { SESSION_SECRET } = process.env;
 var app = express();
 
 app.use(cors({
@@ -14,11 +15,12 @@ app.use(cors({
   credentials: true,
   optionsSuccessStatus: 200,
 }));
+
 app.use(
   session({
-    secret: "sdsd349234ljocecat",
+    secret: SESSION_SECRET,
     resave: true,
-    saveUninitialized: true,
+    saveUninitialized: false,
   })
 );
 // view engine setup

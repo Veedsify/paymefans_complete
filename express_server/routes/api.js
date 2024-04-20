@@ -60,6 +60,9 @@ router.post("/models/all", checkUserIsAuthenticated, modelController.GetModels);
 
 // Model Signup Endpoint
 router.post("/models/signup", checkUserIsAuthenticated, modelController.SignupModel);
+// Validate user model signup
+router.get("/callback/model/signup", modelController.ValidateModelPayment)
+
 
 
 //Buy Points Returns the paystack checkout url
@@ -73,8 +76,6 @@ router.post(
 router.get("/points/callback", pointsController.Callback);
 
 
-// Validate user model signup
-router.get("/callback/model/signup", modelController.ValidateModelController)
 
 //GetGlogalPoints
 router.get("/global/points", pointsController.GetGlobalPoints);
