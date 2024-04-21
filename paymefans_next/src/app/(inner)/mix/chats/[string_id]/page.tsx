@@ -1,6 +1,6 @@
 "use client"
 import MessageBubble from "@/components/sub_componnets/message_bubble";
-import MessageInput from "@/components/sub_componnets/message_input";
+import MessageInput, { Message } from "@/components/sub_componnets/message_input";
 import { LucideArrowLeft, LucideGrip } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,24 +10,25 @@ import socketIoClient from "socket.io-client";
 
 
 const Chats = () => {
+
     const socket = socketIoClient(process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string);
+    const [messages, setMessages] = React.useState([
+        { message: "Hello", sender: "sender" },
+    ] as Message[]);
     const ref = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
+        document.title = "Chats";
         ref.current?.scrollTo(0, ref.current?.scrollHeight);
     }, []);
 
-    socket.on("connect", () => {
-        console.log("connected");
-    });
-
-    const sendMessage = () => {
-        socket.emit("message",
-            {
-                message: "Hello, how are you doing?",
-                sender: "sender",
-            }
-        );
+    const sendMessage = ({ message, sender, attachment }: Message) => {
+        setMessages([...messages, { message, sender, attachment }]);
     }
+
+    // socket.emit("message", { message, sender, attachment });
+    // socket.on("connect", () => {
+    //     console.log("connected");
+    // });
 
     return (
         <div className="relative chat_height">
@@ -54,83 +55,18 @@ const Chats = () => {
                 </div>
             </div>
             <div className="max-h-[80vh] overflow-auto pb-3" ref={ref}>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="receiver"
-                        message="am doing great, thanks for asking."
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="sender"
-                        message="Hello, how are you doing?"
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="receiver"
-                        message="Hello, how are you doing?"
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="sender"
-                        message="I'm doing great, thanks for asking."
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="receiver"
-                        message="am doing great, thanks for asking."
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="sender"
-                        message="Hello, how are you doing?"
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="receiver"
-                        message="Hello, how are you doing?"
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="sender"
-                        message="I'm doing great, thanks for asking."
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="receiver"
-                        message="am doing great, thanks for asking."
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="sender"
-                        message="Hello, how are you doing?"
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="receiver"
-                        message="Hello, how are you doing?"
-                    />
-                </div>
-                <div className="p-4">
-                    <MessageBubble
-                        sender="sender"
-                        message="I'm doing great, thanks for asking."
-                    />
-                </div>
+                {messages.map((message: any, index: number) => (
+                    <div key={index} className="p-4">
+                        <MessageBubble
+                            sender={message.sender}
+                            message={message.message}
+                        />
+                    </div>
+                ))}
             </div>
 
             <div className="fixed bottom-0 z-30 lg:w-[43.7%] w-full bg-white ">
-                <button onClick={sendMessage}>Send</button>
-                <MessageInput />
+                <MessageInput sendMessage={sendMessage} />
             </div>
         </div>
 
