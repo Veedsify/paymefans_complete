@@ -14,12 +14,21 @@ const Chats = () => {
     const socket = socketIoClient(process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string);
     const [messages, setMessages] = React.useState([
         { message: "Hello", sender: "sender" },
+        { message: "Good Morning Ma", sender: "sender" },
     ] as Message[]);
+
     const ref = React.useRef<HTMLDivElement>(null);
+    const lastNodeRef = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
         document.title = "Chats";
         ref.current?.scrollTo(0, ref.current?.scrollHeight);
     }, []);
+
+    React.useEffect(() => {
+        if (lastNodeRef.current) {
+            lastNodeRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages, lastNodeRef]);
 
     const sendMessage = ({ message, sender, attachment }: Message) => {
         setMessages([...messages, { message, sender, attachment }]);
@@ -56,7 +65,7 @@ const Chats = () => {
             </div>
             <div className="max-h-[80vh] overflow-auto pb-3" ref={ref}>
                 {messages.map((message: any, index: number) => (
-                    <div key={index} className="p-4">
+                    <div key={index} className="p-4" ref={lastNodeRef}>
                         <MessageBubble
                             sender={message.sender}
                             message={message.message}

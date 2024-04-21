@@ -14,8 +14,7 @@ const Post = () => {
             <div className="mb-10">
                 <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-3">
-                        <Image width={40} height={40} src="/images/login_image.png" alt=""
-                            loading="lazy" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
+                        <Image width={40} height={40} src="/images/login_image.png" alt="" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
                         <Link href="/" className="flex items-center gap-1">
                             <p className="text-black font-bold">Jenna</p>@jenna
                         </Link>
@@ -56,7 +55,6 @@ const Post = () => {
                             src="/images/login_image.png"
                             alt=""
                             onClick={() => setActiveImage("/images/login_image.png")}
-                            loading="lazy"
                             className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
                         />
                     </div>
@@ -68,7 +66,6 @@ const Post = () => {
                             src="/images/login_image.png"
                             alt=""
                             onClick={() => setActiveImage("/images/login_image.png")}
-                            loading="lazy"
                             className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
                         />
                     </div>
@@ -80,7 +77,6 @@ const Post = () => {
                             src="/images/login_image.png"
                             alt=""
                             onClick={() => setActiveImage("/images/login_image.png")}
-                            loading="lazy"
                             className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
                         />
                     </div>

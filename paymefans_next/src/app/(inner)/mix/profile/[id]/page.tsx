@@ -16,7 +16,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-    title: "Profile",
+    title: "Profile" + " | Paymefans",
     description: "Profile",
 }
 
@@ -53,12 +53,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
                                 Subscribe
                             </p>
                         </button>
-                        <Link
-                            href="/mix/chats/1"
-                            className="p-1 text-white rounded bg-primary-dark-pink"
-                        >
-                            <LucideMail className="w-5 h-5" />
-                        </Link>
+                        <CreateConversationButton />
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5">
@@ -120,5 +115,19 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
         </>
     );
 }
+
+
+function CreateConversationButton() {
+    // Add a new conversation context here to check if the urrecnt user has a conversation with the user  and if not create a new conversation
+    return (
+        <Link
+            href="/mix/chats/1"
+            className="p-1 text-white rounded bg-primary-dark-pink"
+        >
+            <LucideMail className="w-5 h-5" />
+        </Link>
+    );
+}
+
 
 export default ProfilePage;
