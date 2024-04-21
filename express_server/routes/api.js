@@ -7,8 +7,7 @@ const modelController = require("../controllers/api/modelsController");
 const multerImageMiddleware = require("../middlewares/multerImageMiddleware.middleware");
 const pointsController = require("../controllers/api/pointsController");
 const followerController = require("../controllers/api/followerController");
-
-
+const http = require("http");
 
 // AUTH
 router.post("/auth/signup", authController.Register);

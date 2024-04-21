@@ -80,15 +80,21 @@ const ProfilePage = async () => {
 
                     <div className="flex gap-2 mb-3  flex-wrap sm:text-base text-sm">
                         <span className="flex gap-2 items-center">
-                            <h1 className="font-bold text-sm">2.3K</h1>
+                            <h1 className="font-bold text-sm">{
+                                formatNumber(user?._count.Follow)
+                            }</h1>
                             <p className="font-medium text-gray-500 text-sm">Followers</p>
                         </span>
                         <span className="flex gap-2 items-center">
-                            <h1 className="font-bold text-sm">38.9K</h1>
+                            <h1 className="font-bold text-sm">{formatNumber(user?.following)}</h1>
                             <p className="font-medium text-gray-500 text-sm">Following</p>
                         </span>
                         <span className="flex gap-2 items-center ">
-                            <h1 className="font-bold text-sm">13.3K</h1>
+                            <h1 className="font-bold text-sm">
+                                {
+                                    formatNumber(user?._count.Subscribers)
+                                }
+                            </h1>
                             <p className="font-medium text-gray-500 text-sm">Subscribers</p>
                         </span>
                     </div>
@@ -97,6 +103,18 @@ const ProfilePage = async () => {
             <ProfileTabs />
         </>
     );
+
+    function formatNumber(number: number): string {
+        if (number >= 1000000000) {
+            return (number / 1000000000).toFixed(1) + "B";
+        } else if (number >= 1000000) {
+            return (number / 1000000).toFixed(1) + "M";
+        } else if (number >= 1000) {
+            return (number / 1000).toFixed(1) + "K";
+        } else {
+            return number.toString();
+        }
+    }
 }
 
 export default ProfilePage;

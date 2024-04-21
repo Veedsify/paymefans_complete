@@ -1,6 +1,6 @@
 import ModelsSubscription from "@/components/sub_componnets/models_subscription";
 import { AllModelsProps, AuthUserProps } from "@/types/user";
-import getSideModels from "@/utils/data/getsidemodels";
+import getSideModels from "@/utils/data/get-sidemodels";
 import getUserData from "@/utils/data/user-data";
 import { LucideSearch } from "lucide-react";
 

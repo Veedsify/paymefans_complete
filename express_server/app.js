@@ -9,6 +9,10 @@ var apiRouter = require("./routes/api");
 var session = require("express-session");
 const { SESSION_SECRET } = process.env;
 var app = express();
+var debug = require('debug')('express-server:server');
+const http = require("http").createServer(app);
+const socketIo = require('socket.io');
+
 
 app.use(cors({
   origin: process.env.APP_URL,
@@ -33,6 +37,25 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Socket
+const io = socketIo(http, {
+  cors: {
+    origin: process.env.APP_URL, // Allow this origin
+    methods: ['GET', 'POST'], // Allow these methods
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.on("message", (msg) => {
+    io.emit("chat message", msg);
+  });
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
+});
+
+//Routes
 app.use("/", indexRouter);
 app.use("/api", apiRouter);
 
@@ -52,4 +75,49 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-module.exports = app;
+
+http.listen(process.env.PORT, () => {
+  console.log(`Server running on port process.env.${process.env.PORT}`);
+})
+
+http.on('error', onError);
+http.on('listening', onListening);
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = http.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+
+
+// module.exports = app;

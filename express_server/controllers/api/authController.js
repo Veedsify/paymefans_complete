@@ -19,12 +19,12 @@ class authController {
         if (createAccount.error) {
             return res
                 .status(200)
-                .json({message: createAccount.error, status: false});
+                .json({ message: createAccount.error, status: false });
         }
 
         return res
             .status(200)
-            .json({message: "Account created successfully", status: true});
+            .json({ message: "Account created successfully", status: true });
     }
 
     /**
@@ -34,7 +34,7 @@ class authController {
      * @returns {Object} The response containing the status and message.
      */
     static async Username(req, res) {
-        const {username} = req.body;
+        const { username } = req.body;
         const user = await prismaQuery.user.findUnique({
             where: {
                 username,
@@ -44,12 +44,12 @@ class authController {
         if (user) {
             return res
                 .status(200)
-                .json({message: "Username already exists", status: false});
+                .json({ message: "Username already exists", status: false });
         }
 
         return res
             .status(200)
-            .json({message: "Username is available", status: true});
+            .json({ message: "Username is available", status: true });
     }
 
     /**
@@ -62,7 +62,7 @@ class authController {
         const signinUser = await loginService(req.body);
 
         if (signinUser.error) {
-            return res.status(200).json({message: signinUser.error, status: false});
+            return res.status(200).json({ message: signinUser.error, status: false });
         }
 
         req.session.user = signinUser.user;
@@ -87,13 +87,37 @@ class authController {
             include: {
                 UserPoints: true,
                 UserWallet: true,
+                _count: {
+                    select: {
+                        Follow: {
+                            where: {
+                                user_id: req.user.id
+                            }
+                        }
+                        , Subscribers: {
+                            where: {
+                                user_id: req.user.id
+                            }
+                        }
+                    },
+                },
             }
         });
+        const following = await prismaQuery.user.count({
+            where: {
+                Follow: {
+                    some: {
+                        follower_id: req.user.id
+                    }
+                }
+            }
+        })
+
         if (user) {
-            const {password, ...rest} = user;
-            return res.status(200).json({user: rest, status: true});
+            const { password, ...rest } = user;
+            return res.status(200).json({ user: { ...rest, following }, status: true });
         }
-        return res.status(401).json({message: "No user found", status: false});
+        return res.status(401).json({ message: "No user found", status: false });
     }
 
     /**
@@ -103,7 +127,7 @@ class authController {
      * @returns {Object} The response containing the user points.
      */
     static async Points(req, res) {
-        const {points} = await prismaQuery.userPoints.findFirst({
+        const { points } = await prismaQuery.userPoints.findFirst({
             where: {
                 user_id: req.user.id,
             },
@@ -111,7 +135,7 @@ class authController {
                 points: true,
             },
         });
-        return res.status(200).json({points: points, status: true});
+        return res.status(200).json({ points: points, status: true });
     }
 
     /**
@@ -121,7 +145,7 @@ class authController {
      * @returns {Object} The response containing the user wallet balance.
      */
     static async Wallet(req, res) {
-        const {balance} = await prismaQuery.userWallet.findFirst({
+        const { balance } = await prismaQuery.userWallet.findFirst({
             where: {
                 user_id: req.user.id,
             },
@@ -130,9 +154,9 @@ class authController {
             },
         });
         if (balance) {
-            return res.status(200).json({wallet: balance, status: true});
+            return res.status(200).json({ wallet: balance, status: true });
         }
-        return res.status(200).json({message: "No Data found", status: false});
+        return res.status(200).json({ message: "No Data found", status: false });
     }
 }
 

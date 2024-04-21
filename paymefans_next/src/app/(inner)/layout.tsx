@@ -33,13 +33,13 @@ export default async function RootLayout({
                 <QueryProvider>
                     <body className={GeistSans.className}>
                         <Toaster />
-                        <div className="relative grid min-h-screen lg:grid-cols-9">
+                        <div className="relative grid lg:grid-cols-9">
                             <div className="col-span-2">
                                 <SideBar />
                             </div>
                             <div className="col-span-7 overflow-auto border-r">
                                 <Header />
-                                <div className="grid min-h-screen lg:grid-cols-7 ">
+                                <div className="grid lg:grid-cols-7 ">
                                     <div className="col-span-4 md:border-r">
                                         {children}
                                     </div>
@@ -48,8 +48,8 @@ export default async function RootLayout({
                             </div>
                             <MenuButtons />
                             <ModalComponent />
-                            <PostComponentPreview />
                         </div>
+                        <PostComponentPreview />
                     </body>
                 </QueryProvider>
             </UserContextProvider>

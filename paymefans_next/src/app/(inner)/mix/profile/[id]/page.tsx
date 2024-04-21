@@ -3,7 +3,7 @@ import FollowUserComponent from "@/components/sub_componnets/followUserComponent
 import ProfileTabs from "@/components/sub_componnets/profile_tabs";
 import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
-import { prismaQuery } from "@/utils/prisma";
+
 import {
     LucideCalendar,
     LucideLink,
@@ -55,7 +55,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
                         </button>
                         <Link
                             href="/mix/chats/1"
-                            className="p-1 text-white rounded bg-primary-dark-pink "
+                            className="p-1 text-white rounded bg-primary-dark-pink"
                         >
                             <LucideMail className="w-5 h-5" />
                         </Link>

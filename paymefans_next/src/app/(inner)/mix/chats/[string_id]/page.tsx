@@ -5,11 +5,30 @@ import { LucideArrowLeft, LucideGrip } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import toast from "react-hot-toast";
+import socketIoClient from "socket.io-client";
+
+
 const Chats = () => {
+    const socket = socketIoClient(process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string);
     const ref = React.useRef<HTMLDivElement>(null);
     React.useEffect(() => {
         ref.current?.scrollTo(0, ref.current?.scrollHeight);
     }, []);
+
+    socket.on("connect", () => {
+        console.log("connected");
+    });
+
+    const sendMessage = () => {
+        socket.emit("message",
+            {
+                message: "Hello, how are you doing?",
+                sender: "sender",
+            }
+        );
+    }
+
     return (
         <div className="relative chat_height">
             <div className="flex items-center border-b py-6 px-5 pb-6">
@@ -38,11 +57,61 @@ const Chats = () => {
                 <div className="p-4">
                     <MessageBubble
                         sender="receiver"
+                        message="am doing great, thanks for asking."
                     />
                 </div>
                 <div className="p-4">
                     <MessageBubble
                         sender="sender"
+                        message="Hello, how are you doing?"
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="receiver"
+                        message="Hello, how are you doing?"
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="sender"
+                        message="I'm doing great, thanks for asking."
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="receiver"
+                        message="am doing great, thanks for asking."
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="sender"
+                        message="Hello, how are you doing?"
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="receiver"
+                        message="Hello, how are you doing?"
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="sender"
+                        message="I'm doing great, thanks for asking."
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="receiver"
+                        message="am doing great, thanks for asking."
+                    />
+                </div>
+                <div className="p-4">
+                    <MessageBubble
+                        sender="sender"
+                        message="Hello, how are you doing?"
                     />
                 </div>
                 <div className="p-4">
@@ -59,7 +128,8 @@ const Chats = () => {
                 </div>
             </div>
 
-            <div className="fixed bottom-0  z-30 lg:w-[44%] w-full bg-white ">
+            <div className="fixed bottom-0 z-30 lg:w-[43.7%] w-full bg-white ">
+                <button onClick={sendMessage}>Send</button>
                 <MessageInput />
             </div>
         </div>
