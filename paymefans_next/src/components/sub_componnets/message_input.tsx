@@ -1,6 +1,7 @@
 "use client"
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { LucidePlus, LucideCamera, LucideSendHorizonal } from "lucide-react";
+import crypto from "crypto";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, RefObject, useRef, useState } from "react";
@@ -31,8 +32,9 @@ const MessageInput = ({ sendMessage }: MessageInputProps) => {
     const sendNewMessage = () => {
         const trimmedMessage = message.trim();
         if (!trimmedMessage || trimmedMessage.length === 0) return;
+        const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
         sendMessage({
-            id: Math.floor(Math.random() * (100000 - 1 + 1) + 1),
+            id: id,
             message: trimmedMessage,
             sender: user?.user_id as string,
             seen: false,

@@ -23,7 +23,8 @@ const Chats = ({ allmessages, conversationId, receiver }: { allmessages: Message
       }
     };
     const handleSeen = (id: number) => {
-      console.log("seen id", id)
+      const time = new Date().toLocaleTimeString();
+      console.log(`seen id ${time}:`, id)
       setMessages((prev) => {
         return prev.map((message) => {
           if (message.id === id) {

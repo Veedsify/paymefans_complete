@@ -4,6 +4,37 @@ const { v4: uuid } = require("uuid");
 class ConversationsController {
     static async allConversations(req, res) {
         const conversation = req.params.conversation
+        const user = req.user
+        const validateUserConversation = await prismaQuery.conversations.findFirst({
+            where: {
+                conversation_id: conversation,
+                OR: [
+                    {
+                        participants: {
+                            every: {
+                                user_1: user.user_id,
+                            }
+                        }
+                    },
+                    {
+                        participants: {
+                            every: {
+                                user_2: user.user_id
+                            }
+                        }
+                    }
+                ]
+            },
+            select: {
+                id: true,
+                conversation_id: true,
+            }
+        })
+
+        if (!validateUserConversation) {
+            return res.json({ message: "Invalid conversation", status: false });
+        }
+
         const data = await prismaQuery.conversations.findFirst({
             where: {
                 conversation_id: conversation
