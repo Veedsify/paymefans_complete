@@ -5,11 +5,12 @@ import { redirect } from "next/navigation";
 import { AxiosResponse } from "axios";
 
 const getUserData = async () => {
+  const token = cookies().get("token")?.value;
   try {
     const res: AxiosResponse = await axiosInstance.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/retrieve`, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${cookies().get("token")?.value}`,
+        "Authorization": `Bearer ${token}`,
       }
     })
     if (res.status === 200) {
@@ -20,7 +21,7 @@ const getUserData = async () => {
     }
   }
   catch (err: any) {
-    redirect("/login")
+    return null || undefined;
   }
 };
 

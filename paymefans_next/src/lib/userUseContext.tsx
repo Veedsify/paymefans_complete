@@ -1,4 +1,5 @@
 "use client"
+import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface UserContextValue {
@@ -23,6 +24,10 @@ interface UserContextProviderProps {
 }
 
 export const UserContextProvider = ({ user, children }: UserContextProviderProps) => {
+    const router = useRouter();
+    if (!user) {
+        router.push("/login");
+    }
     const [thisUser, setUser] = useState(user);
 
     const updateUser = (newUserData: any) => {

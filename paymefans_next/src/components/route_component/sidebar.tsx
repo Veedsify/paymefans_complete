@@ -17,9 +17,6 @@ import Link from "next/link"
 import {usePathname, useRouter} from "next/navigation";
 import Image from "next/image";
 import swal from "sweetalert";
-import {AuthUserProps} from "@/types/user";
-import getUserPoints from "@/utils/data/points";
-import useUserContext from "@/contexts/user-context";
 import { useUserAuthContext } from "@/lib/userUseContext";
 
 const SideBar = () => {

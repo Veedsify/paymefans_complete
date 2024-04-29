@@ -8,6 +8,7 @@ const multerImageMiddleware = require("../middlewares/multerImageMiddleware.midd
 const pointsController = require("../controllers/api/pointsController");
 const followerController = require("../controllers/api/followerController");
 const http = require("http");
+const ConversationsController = require("../controllers/api/conversationsController");
 
 // AUTH
 router.post("/auth/signup", authController.Register);
@@ -75,7 +76,6 @@ router.post(
 router.get("/points/callback", pointsController.Callback);
 
 
-
 //GetGlogalPoints
 router.get("/global/points", pointsController.GetGlobalPoints);
 
@@ -85,5 +85,10 @@ router.post(
   checkUserIsAuthenticated,
   followerController.CheckFollower
 );
+
+
+// Conversations
+router.get("/conversation/get-messages/:conversation", checkUserIsAuthenticated, ConversationsController.allConversations)
+router.post("/conversation/create-new", checkUserIsAuthenticated, ConversationsController.createConversation);
 
 module.exports = router;

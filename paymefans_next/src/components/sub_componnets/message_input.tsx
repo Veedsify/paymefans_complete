@@ -6,9 +6,13 @@ import Link from "next/link";
 import { ChangeEvent, RefObject, useRef, useState } from "react";
 
 export interface Message {
+    id: number;
     message: string;
     sender: string;
     attachment?: string;
+    seen: boolean;
+    conversationId?: string;
+    date?: Date;
 }
 export interface MessageInputProps {
     sendMessage: ({
@@ -28,8 +32,11 @@ const MessageInput = ({ sendMessage }: MessageInputProps) => {
         const trimmedMessage = message.trim();
         if (!trimmedMessage || trimmedMessage.length === 0) return;
         sendMessage({
+            id: Math.floor(Math.random() * (100000 - 1 + 1) + 1),
             message: trimmedMessage,
-            sender: user?.id as string,
+            sender: user?.user_id as string,
+            seen: false,
+            date: new Date(),
         });
         setMessage("");
         if (ref.current) {

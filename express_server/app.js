@@ -45,11 +45,32 @@ const io = socketIo(http, {
   }
 });
 
+
+// Outside of any function/component
 io.on("connection", (socket) => {
   console.log("a user connected");
-  socket.on("message", (msg) => {
-    io.emit("chat message", msg);
+  let room = "";
+
+  socket.on("join", (data) => {
+    console.log("Joined Room", data);
+    room = data;
+    socket.join(data);
+    socket.to(data).emit("joined", {
+      message: "User Joined Room"
+    });
   });
+
+  // Moved the "new-message" listener outside of any function/component
+  socket.on("new-message", (data) => {
+    console.log("Message", data);
+    socket.to(room).emit("message", data);
+  });
+
+  socket.on("seen", data => {
+    console.log(data)
+    socket.to(room).emit("seen", data)
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });
