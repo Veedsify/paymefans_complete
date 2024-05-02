@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,43 +8,101 @@ import toast from "react-hot-toast";
 import MessageBubble from "../sub_componnets/message_bubble";
 import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
+const socket = socketIoClient(
+  process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string
+);
 
-const socket = socketIoClient(process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string);
-
-const Chats = ({ allmessages, conversationId, receiver }: { allmessages: Message[], conversationId: string, receiver?: any }) => {
+const Chats = ({
+  allmessages,
+  conversationId,
+  receiver,
+}: {
+  allmessages: Message[];
+  conversationId: string;
+  receiver?: any;
+}) => {
   const [messages, setMessages] = useState(allmessages);
+  const [typing, setTyping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const { user } = useUserAuthContext()
+  const { user } = useUserAuthContext();
 
+  const handleJoined = (message: { message: string }) => {
+    // toast.success(message.message);
+  };
+
+  const sendMessageToReceiver = ({
+    message_id,
+    message,
+    sender_id,
+    attachment,
+  }: Message) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        message_id,
+        message,
+        sender_id,
+        attachment,
+        seen: false,
+        created_at: new Date().toString(),
+      },
+    ]);
+    socket.emit("new-message", {
+      message_id,
+      message,
+      sender_id,
+      attachment,
+      conversationId,
+      date: new Date().toString(),
+    });
+  };
+
+  const sendTyping = (typing: boolean) => {
+    socket.emit("typing", typing);
+  };
+
+  // USE STATES
   useEffect(() => {
-    const handleMessage = (message: Message) => {
+    const handleMessageReceived = (message: Message) => {
       if (message) {
-        setMessages((prev) => [...prev, { id: message.id, seen: false, message: message.message, sender: message.sender, date: new Date() }]);
+        setMessages((prev) => [
+          ...prev,
+          {
+            message_id: message.message_id,
+            seen: false,
+            message: message.message,
+            sender_id: message.sender_id,
+            created_at: new Date().toString(),
+          },
+        ]);
       }
     };
     const handleSeen = (id: number) => {
       const time = new Date().toLocaleTimeString();
-      console.log(`seen id ${time}:`, id)
+
       setMessages((prev) => {
         return prev.map((message) => {
-          if (message.id === id) {
+          if (message.message_id == id) {
             return { ...message, seen: true };
           }
           return message;
         });
       });
-    }
+    };
+    const handleTyping = ({ typing }: { typing: boolean }) => {
+      setTyping(typing);
+    };
 
     socket.emit("join", conversationId);
-    socket.on("message", handleMessage);
-    socket.on("seen", handleSeen);
+    socket.on("message", handleMessageReceived);
+    socket.on("typing", handleTyping);
     socket.on("joined", handleJoined);
     return () => {
-      socket.off("message", handleMessage);
-      socket.off("seen", handleSeen);
+      socket.off("message", handleMessageReceived);
+      socket.off("typing", handleTyping);
       socket.off("joined", handleJoined);
     };
-  }, [conversationId, setMessages]);
+  }, [conversationId, setMessages, typing]);
 
   useLayoutEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -57,7 +115,6 @@ const Chats = ({ allmessages, conversationId, receiver }: { allmessages: Message
         const lastMessage = messages[messages.length - 1];
         if (entry.isIntersecting && !lastMessage.seen) {
           const id = Number(entry.target.getAttribute("data-id"));
-          socket.emit("seen", id);
           observer.unobserve(entry.target);
         }
       });
@@ -71,15 +128,6 @@ const Chats = ({ allmessages, conversationId, receiver }: { allmessages: Message
       observer.disconnect();
     };
   }, [messages, user]);
-
-  const handleJoined = (message: { message: string }) => {
-    // toast.success(message.message);
-  };
-
-  const sendMessage = ({ id, message, sender, attachment }: Message) => {
-    setMessages((prev) => [...prev, { id, message, sender, attachment, seen: false, date: new Date() }]);
-    socket.emit("new-message", { id, message, sender, attachment, conversationId, date: new Date() });
-  };
   return (
     <div className="relative chat_height">
       <div className="flex items-center border-b py-6 px-5 pb-6">
@@ -95,14 +143,26 @@ const Chats = ({ allmessages, conversationId, receiver }: { allmessages: Message
               width={50}
               height={50}
               priority
-              src={receiver.profile_image ? receiver.profile_image : "/images/default_profile_image.png"}
+              src={
+                receiver.profile_image
+                  ? receiver.profile_image
+                  : "/images/default_profile_image.png"
+              }
               alt=""
             />
           </div>
           <div className="">
-            <h1 className="font-bold text-sm md:text-base">
-              <Link href="/mix/profile">{receiver.name}</Link>
-            </h1>
+            <div className="font-bold text-sm md:text-base">
+              <Link
+                href="/mix/profile"
+                className="flex gap-3 duration-300 items-center"
+              >
+                <span>{receiver.name}</span>
+                <span className="text-xs fw-bold text-primary-dark-pink inline-block">
+                  {typing && "typing..."}
+                </span>
+              </Link>
+            </div>
             <div className="flex gap-1 items-center text-xs md:text-xs">
               <span className="block text-center align-middle w-3 h-3 bg-green-400 rounded-full"></span>
               <p>Online</p>
@@ -114,14 +174,28 @@ const Chats = ({ allmessages, conversationId, receiver }: { allmessages: Message
         </div>
       </div>
       <div className="max-h-[80vh] overflow-auto pb-3" ref={ref}>
-        {messages.map((message: any, index: number) => (
-          <div key={index} data-id={message.id} className="p-4 message-bubbles" ref={index === messages.length - 1 ? ref : null}>
-            <MessageBubble seen={message.seen} sender={message.sender} date={message.date} message={message.message} />
+        {messages.map((message: Message, index: number) => (
+          <div
+            key={index}
+            data-id={message.message_id}
+            className="p-4 message-bubbles"
+            ref={index === messages.length - 1 ? ref : null}
+          >
+            <MessageBubble
+              seen={message.seen}
+              sender={message.sender_id}
+              date={message.created_at}
+              message={message.message}
+            />
           </div>
         ))}
       </div>
       <div className="fixed bottom-0 z-30 lg:w-[43.7%] w-full bg-white ">
-        <MessageInput sendMessage={sendMessage} />
+        <MessageInput
+          receiver={receiver}
+          sendMessage={sendMessageToReceiver}
+          sendTyping={sendTyping}
+        />
       </div>
     </div>
   );

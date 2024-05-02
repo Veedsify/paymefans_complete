@@ -87,6 +87,7 @@ class authController {
             include: {
                 UserPoints: true,
                 UserWallet: true,
+                Settings: true,
                 _count: {
                     select: {
                         Follow: {

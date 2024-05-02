@@ -31,8 +31,8 @@ class ConversationsController {
             }
         })
 
-        if (!validateUserConversation) {
-            return res.json({ message: "Invalid conversation", status: false });
+        if (!validateUserConversation && validateUserConversation === null) {
+            return res.json({ message: "Invalid conversation", status: false, invalid_conversation: true });
         }
 
         const data = await prismaQuery.conversations.findFirst({
@@ -48,7 +48,20 @@ class ConversationsController {
         if (data) {
             let participants = data.participants.find(user => user.user_1 === req.user.user_id ? user.user_2 : user.user_1);
             const receiver = participants.user_1 === req.user.user_id ? participants.user_2 : participants.user_1;
-            const { password, ...receiverData } = await prismaQuery.user.findUnique({ where: { user_id: receiver } });
+            const receiverData = await prismaQuery.user.findFirst({
+                where: {
+                    user_id: receiver
+                },
+                select: {
+                    id: true,
+                    user_id: true,
+                    name: true,
+                    username: true,
+                    profile_image: true,
+                    Settings: true
+                }
+            });
+            console.log(receiverData)
             return res.json({ messages: data.messages, receiver: receiverData });
         };
 

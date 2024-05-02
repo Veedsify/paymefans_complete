@@ -54,7 +54,7 @@ model User {
   ReportMessage             ReportMessage[]
   ReportPost                ReportPost[]
   ReportUser                ReportUser[]
-  Settings                  Settings[]
+  Settings                  Settings?
   Subscribers               Subscribers[]
   UserLockedMedia           UserLockedMedia[]
   UserMedia                 UserMedia[]
@@ -91,9 +91,8 @@ model Messages {
   message_id      String
   sender_id       String
   receiver_id     String
-  status          String
   seen            Boolean         @default(false)
-  message         String
+  message         String          @db.LongText
   attachment      Json?           @db.Json
   created_at      DateTime        @default(now())
   updated_at      DateTime        @updatedAt
@@ -338,7 +337,7 @@ model Settings {
   subscription_duration String
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
-  user                  User     @relation(fields: [user_id], references: [id])
+  user                  User     @relation(fields: [id], references: [id])
 
   @@index([user_id], map: "Settings_user_id_fkey")
 }

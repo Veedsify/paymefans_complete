@@ -6,6 +6,7 @@ var logger = require("morgan");
 var cors = require("cors");
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
+const SaveMessageToDb = require("./libs/save-message-db");
 var session = require("express-session");
 const { SESSION_SECRET } = process.env;
 var app = express();
@@ -48,31 +49,51 @@ const io = socketIo(http, {
 
 // Outside of any function/component
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("A user connected");
+
   let room = "";
 
+  // Event handler for joining a room
   socket.on("join", (data) => {
-    console.log("Joined Room", data);
+    console.log("Joined Room:", data);
     room = data;
     socket.join(data);
-    socket.to(data).emit("joined", {
-      message: "User Joined Room"
-    });
+    socket.to(data).emit("joined", { message: "User Joined Room" });
   });
 
-  // Moved the "new-message" listener outside of any function/component
-  socket.on("new-message", (data) => {
-    console.log("Message", data);
+  // Event handler for receiving new messages
+  const handleMessage = (data) => {
+    // Save messages here if needed
+    async function saveMessageFunction() {
+      await SaveMessageToDb.saveMessage(data);
+    }
     socket.to(room).emit("message", data);
-  });
+    saveMessageFunction();
+  };
 
-  socket.on("seen", data => {
-    console.log(data)
-    socket.to(room).emit("seen", data)
-  });
+  // Event handler for marking messages as seen
+  const handleSeen = (data) => {
+    console.log("Dataseen", data);
+    socket.to(room).emit("seen", data);
+  };
 
+  // Event handler for typing indication
+  const handleTyping = (data) => {
+    socket.to(room).emit("typing", { typing: data.typing });
+  };
+
+  // Listen for new messages
+  socket.on("new-message", handleMessage);
+
+  // Listen for messages seen
+  socket.on("seen", handleSeen);
+
+  // Listen for typing indication
+  socket.on("typing", handleTyping);
+
+  // Event handler for user disconnection
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("User disconnected");
   });
 });
 

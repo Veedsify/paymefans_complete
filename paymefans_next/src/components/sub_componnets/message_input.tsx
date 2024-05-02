@@ -1,82 +1,149 @@
-"use client"
+"use client";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { LucidePlus, LucideCamera, LucideSendHorizonal } from "lucide-react";
-import crypto from "crypto";
-import Image from "next/image";
-import Link from "next/link";
-import { ChangeEvent, RefObject, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  MouseEvent,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import swal from "sweetalert";
 
 export interface Message {
-    id: number;
-    message: string;
-    sender: string;
-    attachment?: string;
-    seen: boolean;
-    conversationId?: string;
-    date?: Date;
+  message_id: number;
+  message: string;
+  sender_id: string;
+  receiver_id?: string;
+  attachment?: {
+    type: string;
+    poster: string;
+    url: string;
+  } | null;
+  seen: boolean;
+  conversationId?: string;
+  created_at: string;
 }
 export interface MessageInputProps {
-    sendMessage: ({
-        message,
-        sender,
-        attachment,
-    }: Message) => void;
+  sendMessage: ({}: Message) => void;
+  sendTyping?: (typing: boolean) => void;
+  receiver: any;
 }
 
-const MessageInput = ({ sendMessage }: MessageInputProps) => {
-    const [message, setMessage] = useState("");
-    const { user } = useUserAuthContext()
-    const ref = useRef<HTMLInputElement>(null);
-    const setMessageInput = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)
+const MessageInput = ({
+  sendMessage,
+  sendTyping,
+  receiver,
+}: MessageInputProps) => {
+  const [message, setMessage] = useState("");
+  const { user } = useUserAuthContext();
+  const ref = useRef<HTMLDivElement>(null);
 
-    const sendNewMessage = () => {
-        const trimmedMessage = message.trim();
-        if (!trimmedMessage || trimmedMessage.length === 0) return;
-        const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
-        sendMessage({
-            id: id,
-            message: trimmedMessage,
-            sender: user?.user_id as string,
-            seen: false,
-            date: new Date(),
-        });
+  const sendNewMessage = () => {
+    if (user) {
+      const myBalance = user.UserPoints.points;
+
+      if (myBalance < Number(receiver?.Settings?.price_per_message)) {
         setMessage("");
         if (ref.current) {
-            ref.current.value = "";
-            ref.current.focus();
+          ref.current.innerHTML = "";
+          ref.current.focus();
         }
+
+        return swal({
+          icon: "error",
+          title: "Oops!",
+          text: `Sorry, You need to have at least ${receiver?.Settings?.price_per_message} points to send a message to ${receiver?.name}`,
+        });
+      }
     }
 
-    return (
-        <div className="position-fixed bottom-0 
-        lg:mx-4">
-            <div className="flex mb-2 items-center gap-5 px-6 bg-gray-100 lg:py-2 py-4 lg:rounded-xl">
-                <input
-                    onKeyDown={(e) => {
-                        if (e.shiftKey && e.key === "Enter") {
-                            return;
-                        }
-                        if (e.key === "Enter") {
-                            sendNewMessage();
-                        }
-                    }
-                    }
-                    ref={ref as RefObject<HTMLInputElement>}
-                    onChange={setMessageInput}
-                    placeholder="Type your message...." className="bg-transparent outline-none w-full p-2 font-semibold resize-none" />
-                <span className="cursor-pointer">
-                    <LucidePlus fill="#fff" stroke="#CC0DF8" size={25} />
-                </span>
-                <span className="cursor-pointer">
-                    <LucideCamera fill="#fff" stroke="#CC0DF8" size={25} />
-                </span>
-                <span className="cursor-pointer"
-                    onClick={sendNewMessage}>
-                    <LucideSendHorizonal fill="#fff" stroke="#CC0DF8" size={25} />
-                </span>
-            </div>
-        </div>
-    );
-}
+    const trimmedMessage = message.trim();
+    if (!trimmedMessage || trimmedMessage.length === 0) return;
+    const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
+    sendMessage({
+      message_id: id,
+      message: trimmedMessage,
+      sender_id: user?.user_id as string,
+      seen: false,
+      created_at: new Date().toString(),
+    });
+    setMessage("");
+    if (ref.current) {
+      ref.current.innerHTML = "";
+      ref.current.focus();
+    }
+  };
+
+  const handleSendMessage = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.shiftKey && e.key === "Enter") {
+      e.preventDefault();
+      sendNewMessage();
+      return;
+    }
+    if (e.key === "Enter") {
+      return;
+    }
+  };
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.addEventListener("input", (e: Event) => {
+        const target = e.target as HTMLDivElement;
+        setMessage(target.innerHTML);
+      });
+    }
+
+    document.addEventListener("paste", (e: ClipboardEvent) => {
+      e.preventDefault();
+      const text = e.clipboardData?.getData("text/plain");
+      document.execCommand("insertText", false, text);
+    });
+
+    return () => {
+      document
+        .querySelector("#message-input")
+        ?.removeEventListener("input", (e: Event) => {
+          const target = e.target as HTMLDivElement;
+          setMessage(target.innerHTML);
+        });
+
+      document.removeEventListener("paste", (e: ClipboardEvent) => {
+        e.preventDefault();
+        const text = e.clipboardData?.getData("text/plain");
+        document.execCommand("insertText", false, text);
+      });
+    };
+  }, []);
+
+  return (
+    <div
+      className="position-fixed bottom-0 
+        lg:mx-4"
+    >
+      <div className="flex mb-2 items-center gap-5 px-6 bg-gray-100 lg:py-2 py-4 lg:rounded-xl">
+        <div
+          ref={ref as RefObject<HTMLDivElement>}
+          contentEditable={true}
+          id="message-input"
+          onKeyDown={handleSendMessage}
+          className="bg-transparent outline-none w-full p-2 font-semibold resize-none"
+        ></div>
+
+        <span className="cursor-pointer">
+          <LucidePlus fill="#fff" stroke="#CC0DF8" size={25} />
+        </span>
+        <span className="cursor-pointer">
+          <LucideCamera fill="#fff" stroke="#CC0DF8" size={25} />
+        </span>
+        <span className="cursor-pointer" onClick={sendNewMessage}>
+          <LucideSendHorizonal fill="#fff" stroke="#CC0DF8" size={25} />
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export default MessageInput;
