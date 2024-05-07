@@ -1,13 +1,11 @@
 "use client"
 import { getUser } from "@/lib/user";
-import { useUser } from "@/lib/userContext";
 import axiosServer from "@/utils/axios";
-import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 
 const Login = () => {
     const { setUser } = getUser()

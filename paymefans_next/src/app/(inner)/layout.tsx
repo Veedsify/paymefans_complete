@@ -8,6 +8,7 @@ import SideModels from "@/components/route_component/side_models";
 import Header from "@/components/route_component/header";
 import SideBar from "@/components/route_component/sidebar";
 import { Toaster } from "react-hot-toast";
+import { Toaster as SonnerToast } from "sonner"
 import QueryProvider from "@/providers/query-provider";
 import getUserData from "@/utils/data/user-data";
 import { use } from 'react';
@@ -35,6 +36,7 @@ export default async function RootLayout({
                     <UserPointsContextProvider>
                         <body className={GeistSans.className}>
                             <Toaster />
+                            <SonnerToast richColors position="top-right" />
                             <div className="relative grid lg:grid-cols-9">
                                 <div className="col-span-2">
                                     <SideBar />
