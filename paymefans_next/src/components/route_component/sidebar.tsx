@@ -1,5 +1,5 @@
 "use client"
-import {useSideBarContext} from "@/lib/pageContexts";
+import { useSideBarContext } from "@/lib/pageContexts";
 import {
     LucideSettings,
     LucideLogOut,
@@ -12,16 +12,17 @@ import {
     LucideUserPlus,
     Router,
 } from "lucide-react";
-import {useContext, useEffect} from "react";
+import { useContext, useEffect } from "react";
 import Link from "next/link"
-import {usePathname, useRouter} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import swal from "sweetalert";
 import { useUserAuthContext } from "@/lib/userUseContext";
+import PointsCount from "../sub_componnets/sub/point-count";
 
 const SideBar = () => {
     const router = useRouter()
-    const {sideBarState, setSideBar} = useSideBarContext()
+    const { sideBarState, setSideBar } = useSideBarContext()
     const pathname = usePathname()
     // const {user} = useUserContext()
     const { user } = useUserAuthContext()
@@ -52,7 +53,7 @@ const SideBar = () => {
                 }>
                 <div className="mt-8 mb-16 ">
                     <Image className="block w-auto h-8" quality={100} width={150} height={30} priority
-                           src="/site/logo2.png" alt=""/>
+                        src="/site/logo2.png" alt="" />
                 </div>
                 <div>
                     <div className="flex items-center gap-4 mb-4">
@@ -73,13 +74,8 @@ const SideBar = () => {
                     </div>
                     <div className="pt-5 mb-3">
                         {user ? (
-                            <h2 className="flex items-center mb-1 text-xl font-bold leading-none">
-                                {user.UserPoints.points?.toLocaleString("en-Us")}
-                                <span className="ml-2">
-                                    <Image width={20} height={20} src="/site/coin.svg"
-                                           className="w-auto h-5 aspect-square" alt=""/>
-                                </span>
-                            </h2>) : (
+                            <PointsCount user={user} />
+                        ) : (
                             <div className="w-1/2 p-2 py-3 animate-pulse bg-gray-300 rounded-md">
                             </div>
                         )}
@@ -90,54 +86,54 @@ const SideBar = () => {
                             Add Funds
                         </Link>
                         <Link href="/mix/wallet"
-                              className="p-2 px-8 text-xs font-semibold text-black bg-white border border-gray-600 rounded">
+                            className="p-2 px-8 text-xs font-semibold text-black bg-white border border-gray-600 rounded">
                             Wallet
                         </Link>
                     </div>
                     <div className="pt-6">
                         <Link href="/mix/profile"
-                              className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                            <LucideUser/>
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            <LucideUser />
                             <p>Profile</p>
                         </Link>
                         {user?.is_model && (
                             <Link href="/mix/live"
-                                  className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                                <LucideAirplay/>
+                                className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                                <LucideAirplay />
                                 <p>Go Live</p>
                             </Link>
                         )}
                         <Link href="/hookup"
-                              className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                            <LucideHeart/>
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            <LucideHeart />
                             <p>Hook Up</p>
                         </Link>
                         <Link href="/mix/"
-                              className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                            <LucideStore/>
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            <LucideStore />
                             <p>Store</p>
                         </Link>
                         <Link href="/mix/messages"
-                              className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                            <LucideMessageSquare/>
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            <LucideMessageSquare />
                             <p>Messages</p>
                         </Link>
                         {!user?.is_model && (
                             <Link href="/mix/models/benefits"
-                                  className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                                <LucideUserPlus/>
+                                className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                                <LucideUserPlus />
                                 <p>Become A Model</p>
                             </Link>
                         )}
-                        <hr className="mt-8 mb-8"/>
+                        <hr className="mt-8 mb-8" />
                         <Link href="/mix/"
-                              className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                            <LucideHelpCircle/>
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            <LucideHelpCircle />
                             <p>Help</p>
                         </Link>
                         <Link href="/mix/settings"
-                              className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
-                            <LucideSettings/>
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            <LucideSettings />
                             <p>Settings & Privacy</p>
                         </Link>
                         <span
@@ -156,7 +152,7 @@ const SideBar = () => {
                                 });
                             }}
                         >
-                            <LucideLogOut/>
+                            <LucideLogOut />
                             <p>Logout</p>
                         </span>
                     </div>

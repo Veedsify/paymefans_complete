@@ -1,5 +1,8 @@
 "use client";
+import { useUserPointsContext } from "@/contexts/user-points-context";
 import { useUserAuthContext } from "@/lib/userUseContext";
+import { GetUserPointBalance } from "@/utils/data/get-user-point-balance";
+import { QueryClient, useQuery } from "@tanstack/react-query";
 import { LucidePlus, LucideCamera, LucideSendHorizonal } from "lucide-react";
 import {
   ChangeEvent,
@@ -27,7 +30,7 @@ export interface Message {
   created_at: string;
 }
 export interface MessageInputProps {
-  sendMessage: ({}: Message) => void;
+  sendMessage: ({ }: Message) => void;
   sendTyping?: (typing: boolean) => void;
   receiver: any;
 }
@@ -40,12 +43,12 @@ const MessageInput = ({
   const [message, setMessage] = useState("");
   const { user } = useUserAuthContext();
   const ref = useRef<HTMLDivElement>(null);
+  const { points } = useUserPointsContext()
 
   const sendNewMessage = () => {
     if (user) {
-      const myBalance = user.UserPoints.points;
-
-      if (myBalance < Number(receiver?.Settings?.price_per_message)) {
+      console.log(points, typeof points)
+      if (points < Number(receiver?.Settings?.price_per_message)) {
         setMessage("");
         if (ref.current) {
           ref.current.innerHTML = "";

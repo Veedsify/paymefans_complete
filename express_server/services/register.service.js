@@ -44,6 +44,15 @@ module.exports = async (body) => {
             points: 0,
             conversion_rate: 0,
           }
+        },
+        Settings: {
+          create: {
+            price_per_message: 0,
+            enable_free_message: true,
+            subscription_price: 0,
+            subscription_duration: "1 month",
+            subscription_type: "free",
+          }
         }
       },
       include: {

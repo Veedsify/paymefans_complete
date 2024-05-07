@@ -14,6 +14,7 @@ import { use } from 'react';
 import PostComponentPreview from "@/components/post/full-component-preview";
 import UserSessionProvider from "@/providers/user-session-provider";
 import { UserContextProvider } from "@/lib/userUseContext";
+import { UserPointsContextProvider } from "@/contexts/user-points-context";
 
 
 export const metadata: Metadata = {
@@ -31,26 +32,28 @@ export default async function RootLayout({
         <html lang="en">
             <UserContextProvider user={user}>
                 <QueryProvider>
-                    <body className={GeistSans.className}>
-                        <Toaster />
-                        <div className="relative grid lg:grid-cols-9">
-                            <div className="col-span-2">
-                                <SideBar />
-                            </div>
-                            <div className="col-span-7 overflow-auto border-r">
-                                <Header />
-                                <div className="grid lg:grid-cols-7 ">
-                                    <div className="col-span-4 md:border-r">
-                                        {children}
-                                    </div>
-                                    <SideModels />
+                    <UserPointsContextProvider>
+                        <body className={GeistSans.className}>
+                            <Toaster />
+                            <div className="relative grid lg:grid-cols-9">
+                                <div className="col-span-2">
+                                    <SideBar />
                                 </div>
+                                <div className="col-span-7 overflow-auto border-r">
+                                    <Header />
+                                    <div className="grid lg:grid-cols-7 ">
+                                        <div className="col-span-4 md:border-r">
+                                            {children}
+                                        </div>
+                                        <SideModels />
+                                    </div>
+                                </div>
+                                <MenuButtons />
+                                <ModalComponent />
                             </div>
-                            <MenuButtons />
-                            <ModalComponent />
-                        </div>
-                        <PostComponentPreview />
-                    </body>
+                            <PostComponentPreview />
+                        </body>
+                    </UserPointsContextProvider>
                 </QueryProvider>
             </UserContextProvider>
         </html>

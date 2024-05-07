@@ -126,6 +126,142 @@ class ConversationsController {
             return res.json({ message: "An error occured", status: false });
         }
     }
+
+    static async myConversations(req, res) {
+        try {
+            const user = req.user;
+            const data = await prismaQuery.conversations.findMany({
+                where: {
+                    OR: [
+                        {
+                            participants: {
+                                some: {
+                                    user_1: user.user_id
+                                }
+                            }
+                        },
+                        {
+                            participants: {
+                                some: {
+                                    user_2: user.user_id
+                                }
+                            }
+                        }
+                    ]
+                },
+                select: {
+                    conversation_id: true,
+                    participants: true,
+                    messages: {
+                        orderBy: {
+                            created_at: "desc"
+                        },
+                        take: 1 // Only fetch the latest message
+                    }
+                }
+            });
+
+            if (data) {
+                let conversations = [];
+                for (let i = 0; i < data.length; i++) {
+                    let participants = data[i].participants.find(user => user.user_1 === req.user.user_id ? user.user_2 : user.user_1);
+                    const receiver = participants.user_1 === req.user.user_id ? participants.user_2 : participants.user_1;
+                    const receiverData = await prismaQuery.user.findFirst({
+                        where: {
+                            user_id: receiver
+                        },
+                        select: {
+                            id: true,
+                            user_id: true,
+                            name: true,
+                            username: true,
+                            profile_image: true,
+                            // Settings: true,
+                            Messages: true
+                        }
+                    });
+                    conversations.push({
+                        conversation: receiverData,
+                        conversation_id: data[i].conversation_id,
+                        lastMessage: data[i].messages[0] // Add the last message to each conversation
+                    });
+                }
+                // Sort the conversations by the timestamp of the last message
+                conversations.sort((a, b) => {
+                    if (a.lastMessage.created_at > b.lastMessage.created_at) return -1;
+                    if (a.lastMessage.created_at < b.lastMessage.created_at) return 1;
+                    return 0;
+                });
+
+                return res.json({ conversations });
+            }
+        } catch (err) {
+            console.log(err);
+            return res.json({ message: "An error occurred", status: false });
+        }
+
+        // try {
+        //     const user = req.user;
+        //     const data = await prismaQuery.conversations.findMany({
+        //         where: {
+        //             OR: [
+        //                 {
+        //                     participants: {
+        //                         some: {
+        //                             user_1: user.user_id
+        //                         }
+        //                     }
+        //                 },
+        //                 {
+        //                     participants: {
+        //                         some: {
+        //                             user_2: user.user_id
+        //                         }
+        //                     }
+        //                 }
+        //             ]
+        //         },
+        //         select: {
+        //             conversation_id: true,
+        //             participants: true,
+        //             messages: {
+        //                 orderBy: {
+        //                     created_at: "desc"
+        //                 }
+        //             }
+        //         }
+        //     });
+
+        //     if (data) {
+        //         let conversations = [];
+        //         for (let i = 0; i < data.length; i++) {
+        //             let participants = data[i].participants.find(user => user.user_1 === req.user.user_id ? user.user_2 : user.user_1);
+        //             const receiver = participants.user_1 === req.user.user_id ? participants.user_2 : participants.user_1;
+        //             const receiverData = await prismaQuery.user.findFirst({
+        //                 where: {
+        //                     user_id: receiver
+        //                 },
+        //                 select: {
+        //                     id: true,
+        //                     user_id: true,
+        //                     name: true,
+        //                     username: true,
+        //                     profile_image: true,
+        //                     Settings: true,
+        //                     Messages: true
+        //                 }
+        //             });
+        //             conversations.push(receiverData);
+        //         }
+        //         // Sort the conversations by the last message
+
+        //         return res.json({ conversations });
+        //     };
+        // } catch (err) {
+        //     console.log(err);
+        //     return res.json({ message: "An error occured", status: false });
+        // }
+    }
 }
 
 module.exports = ConversationsController;

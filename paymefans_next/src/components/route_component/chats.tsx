@@ -52,6 +52,7 @@ const Chats = ({
       message,
       sender_id,
       attachment,
+      receiver_id: receiver.user_id,
       conversationId,
       date: new Date().toString(),
     });

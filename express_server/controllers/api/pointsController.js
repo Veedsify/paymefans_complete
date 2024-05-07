@@ -61,5 +61,24 @@ class pointsController {
     }
   }
 
+  static async GetUserPoints(req, res) {
+    const { id } = req.user;
+    const userPoints = await prismaQuery.userPoints.findFirst({
+      where: { user_id: id },
+    });
+
+    if (userPoints) {
+      res.status(200).json({
+        message: "User points retrieved successfully",
+        userPoints,
+        status: true,
+      });
+    } else {
+      res.status(400).json({
+        message: "User points not found",
+        status: false,
+      });
+    }
+  }
 }
 module.exports = pointsController;
