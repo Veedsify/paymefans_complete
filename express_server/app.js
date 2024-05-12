@@ -13,6 +13,7 @@ var app = express();
 var debug = require('debug')('express-server:server');
 const http = require("http").createServer(app);
 const socketIo = require('socket.io');
+const messagesSeenByReceiver = require("./libs/messages-seen-by-receiver");
 
 
 app.use(cors({
@@ -49,7 +50,6 @@ const io = socketIo(http, {
 
 // Outside of any function/component
 io.on("connection", (socket) => {
-  console.log("A user connected");
 
   let room = "";
 
@@ -62,19 +62,23 @@ io.on("connection", (socket) => {
   });
 
   // Event handler for receiving new messages
-  const handleMessage = (data) => {
+  const handleMessage = async (data) => {
     // Save messages here if needed
-    async function saveMessageFunction() {
-      await SaveMessageToDb.saveMessage(data);
-    }
-    socket.to(room).emit("message", data);
-    saveMessageFunction();
+    const message = await SaveMessageToDb.saveMessage(data);
+
+    socket.to(room).emit("message", {
+      ...data,
+      message_id: message.message_id,
+    });
   };
 
   // Event handler for marking messages as seen
-  const handleSeen = (data) => {
-    console.log("Dataseen", data);
-    socket.to(room).emit("seen", data);
+  const handleSeen = async (data) => {
+    const lastMessageSeen = await messagesSeenByReceiver(data);
+    if (lastMessageSeen.success) {
+      console.log("Message seen updated", lastMessageSeen)
+      socket.to(room).emit("message-seen-updated", { messageId: lastMessageSeen.data.message_id, seen: true });
+    }
   };
 
   // Event handler for typing indication
@@ -86,7 +90,7 @@ io.on("connection", (socket) => {
   socket.on("new-message", handleMessage);
 
   // Listen for messages seen
-  socket.on("seen", handleSeen);
+  socket.on("message-seen", handleSeen);
 
   // Listen for typing indication
   socket.on("typing", handleTyping);

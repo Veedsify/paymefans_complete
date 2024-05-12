@@ -66,6 +66,7 @@ model User {
   UserWallet                UserWallet[]
   UserWithdrawalBankAccount UserWithdrawalBankAccount[]
   Messages                  Messages[]
+  Model                     Model?
 }
 
 model Participants {
@@ -88,7 +89,7 @@ model Conversations {
 
 model Messages {
   id              Int             @id @default(autoincrement())
-  message_id      String
+  message_id      String          @unique
   sender_id       String
   receiver_id     String
   seen            Boolean         @default(false)
@@ -117,7 +118,10 @@ model Model {
   verification_image  String?  @db.LongText
   verification_status Boolean  @default(false)
   payment_reference   String?  @db.LongText
-  created_at          DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+
+  created_at DateTime @default(now())
 }
 
 model UserMedia {

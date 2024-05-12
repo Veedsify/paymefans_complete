@@ -1,9 +1,12 @@
+const allhookupmodelsService = require("../../services/allhookupmodels.service");
 const allModels = require("../../services/allmodels.service");
 const newPayment = require("../../utils/createRandomPayments");
 const prismaQuery = require("../../utils/prisma");
 const { v4: uuid } = require("uuid");
 
 class modelController {
+
+    // Get Models
     static async GetModels(req, res) {
         const { limit } = req.body;
         const getmodels = await allModels(limit, req.user);
@@ -17,6 +20,7 @@ class modelController {
             .json({ message: "Models found", status: true, models: getmodels });
     }
 
+    // Signup Model
     static async SignupModel(req, res) {
         try {
             const {
@@ -95,6 +99,7 @@ class modelController {
         }
     }
 
+    // Validate Model Payment
     static async ValidateModelPayment(req, res) {
         const { reference, trxref } = req.query;
         const getUserWithRef = await prismaQuery.model.findFirst({
@@ -132,6 +137,20 @@ class modelController {
         res.status(200).redirect(process.env.APP_URL)
     }
 
+
+    // Get Models Available for Hookup
+    static async GetModelAvailableForHookup(req, res) {
+        const { limit } = req.body;
+        const getHookups = await allhookupmodelsService(limit, req.user, true);
+        if (getHookups === null || getHookups === undefined) {
+            return res
+                .status(200)
+                .json({ message: "No models found", status: false });
+        }
+        return res
+            .status(200)
+            .json({ message: "Models found", status: true, hookups: getHookups });
+    }
 }
 
 module.exports = modelController;

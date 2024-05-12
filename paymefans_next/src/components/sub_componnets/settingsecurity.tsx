@@ -1,5 +1,6 @@
 import { LucideChevronRight, LucideUserMinus2, LucideUsers } from "lucide-react";
 import Link from "next/link";
+import SettingsHookupCheck from "./settings-hookup-check";
 
 const SettingSecurity = () => {
     return (
@@ -55,34 +56,7 @@ const SettingSecurity = () => {
                         className="w-full block border mb-3 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer"
                     />
                 </div>
-
-                <div>
-                    <h2 className="mb-4 font-bold mt-10">
-                        Are you available for hookup?
-                    </h2>
-                </div>
-                <div className="flex items-center gap-4">
-                    <div className="flex items-center">
-                        <input
-                            type="radio"
-                            name="hookup"
-                            id={"yes"}
-                            className="w-5 h-5 mt-1 mr-2 bg-transparent accent-primary-dark-pink"
-                            placeholder="Old Password "
-                        />
-                        <label htmlFor={'yes'} className="">Yes</label>
-                    </div>
-                    <div className="flex items-center">
-                        <input
-                            type="radio"
-                            name="hookup"
-                            id={"no"}
-                            className="w-5 h-5 mt-1 mr-2 bg-transparent accent-primary-dark-pink"
-                            placeholder="Old Password "
-                        />
-                        <label htmlFor={'no'} className="">No</label>
-                    </div>
-                </div>
+                <SettingsHookupCheck />
                 <div>
                     <h2 className="mb-4 font-bold mt-10">
                         Change Username

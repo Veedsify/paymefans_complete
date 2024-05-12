@@ -42,6 +42,13 @@ export type AuthUserProps = {
   updated_at: Date;
   iat: number;
   exp: number;
+  Settings?: {
+    price_per_message: number;
+    subscription_price: number;
+  },
+  Model?: {
+    hookup: boolean
+  }
 }
 
 export type AllModelsProps = {

@@ -17,7 +17,8 @@ const ChatsPage = async ({ params }: { params: { string_id: string } }) => {
   }
   const messages: Message[] = data?.data.messages
   const receiver: string = data?.data.receiver
-  return <Chats receiver={receiver} allmessages={messages} conversationId={conversationId} />;
+  const lastMessage = messages[messages.length - 1];
+  return <Chats receiver={receiver} allmessages={messages} lastMessage={lastMessage} conversationId={conversationId} />;
 };
 
 export default ChatsPage;

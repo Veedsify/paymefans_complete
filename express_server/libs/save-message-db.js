@@ -28,7 +28,7 @@ class SaveMessageToDb {
         const receiver = receiverId.participants[0].user_1 === sender_id ? receiverId.participants[0].user_2 : receiverId.participants[0].user_1
 
         // Save the message to the database
-        await prismaQuery.messages.create({
+        const newMessage = await prismaQuery.messages.create({
             data: {
                 message_id: String(message_id),
                 sender_id: sender_id,
@@ -37,10 +37,14 @@ class SaveMessageToDb {
                 seen: false,
                 receiver_id: receiver,
                 attachment: attachment,
+            },
+            select: {
+                message_id: true
             }
         })
+
         // Return the data
-        return data
+        return newMessage;
     }
 
 

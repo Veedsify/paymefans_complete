@@ -1,8 +1,8 @@
 "use client"
 import { useState } from "react";
 
-const Toggle = () => {
-    const [isChecked, setIsChecked] = useState(false);
+const Toggle = ({ state = false }: { state?: boolean }) => {
+    const [isChecked, setIsChecked] = useState(state);
     const newId = Math.random().toString(36).substring(7);
     const toggleSwitch = () => {
         setIsChecked(!isChecked);

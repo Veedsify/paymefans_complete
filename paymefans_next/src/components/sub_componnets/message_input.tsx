@@ -1,8 +1,6 @@
 "use client";
 import { useUserPointsContext } from "@/contexts/user-points-context";
 import { useUserAuthContext } from "@/lib/userUseContext";
-import { GetUserPointBalance } from "@/utils/data/get-user-point-balance";
-import { QueryClient, useQuery } from "@tanstack/react-query";
 import { LucidePlus, LucideCamera, LucideSendHorizonal } from "lucide-react";
 import {
   ChangeEvent,
@@ -13,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { toast } from "sonner";
 import swal from "sweetalert";
 
 export interface Message {
@@ -47,7 +46,6 @@ const MessageInput = ({
 
   const sendNewMessage = () => {
     if (user) {
-      console.log(points, typeof points)
       if (points < Number(receiver?.Settings?.price_per_message)) {
         setMessage("");
         if (ref.current) {
@@ -55,11 +53,12 @@ const MessageInput = ({
           ref.current.focus();
         }
 
-        return swal({
-          icon: "error",
-          title: "Oops!",
-          text: `Sorry, You need to have at least ${receiver?.Settings?.price_per_message} points to send a message to ${receiver?.name}`,
-        });
+        return toast.info(`Sorry, You need to have at least ${receiver?.Settings?.price_per_message} paypoints to send a message to ${(receiver?.name).charAt(0).toUpperCase() + (receiver?.name).slice(1)}`);
+        // return swal({
+        //   icon: "error",
+        //   title: "Oops!",
+        //   text: `Sorry, You need to have at least ${receiver?.Settings?.price_per_message} points to send a message to ${receiver?.name}`,
+        // });
       }
     }
 

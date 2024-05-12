@@ -22,9 +22,12 @@ router.post("/profile/user", profileController.Profile);
 router.post("/profile/banner/change", checkUserIsAuthenticated, multerImageMiddleware("banner"), profileController.BannerChange);
 router.post("/profile/image/change", checkUserIsAuthenticated, multerImageMiddleware("profile_image"), profileController.ProfileChange);
 router.post("/profile/settings/update", checkUserIsAuthenticated, profileController.SettingsProfileChange);
+// router.post("/profile/settings/update/password", checkUserIsAuthenticated, profileController.SettingsPasswordChange);
+router.post("/profile/settings/update/hookup-status", checkUserIsAuthenticated, profileController.HookupStatusChange);
 
 // Models
 router.post("/models/all", checkUserIsAuthenticated, modelController.GetModels);
+router.post("/models/hookups", checkUserIsAuthenticated, modelController.GetModelAvailableForHookup);
 router.post("/models/signup", checkUserIsAuthenticated, modelController.SignupModel);
 router.get("/callback/model/signup", modelController.ValidateModelPayment);
 

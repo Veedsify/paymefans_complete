@@ -1,9 +1,10 @@
 "use client"
 import { Facebook, Instagram, Twitter } from "lucide-react";
-import { AuthUserProps, UserUpdateProfileType } from "@/types/user";
+import { UserUpdateProfileType } from "@/types/user";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { saveUserSettings } from "@/utils/data/save-user-settings";
 
 type ProfileSettingsProps = {
     user: any
@@ -19,17 +20,10 @@ const ProfileSettings = ({
     }
     const handleSaveClick = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/profile/settings/update`, {
-                method: 'POST',
-                body: JSON.stringify(userData),
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${document.cookie.split("token=")[1].split(";")[0]}`,
-                },
-            })
+            const response = await saveUserSettings(userData)
             if (response.ok) {
                 toast.success('Profile updated successfully');
-                router.refresh()
+                window.location.reload()
             } else {
                 console.log(await response.json())
                 return toast.error('Failed to update profile')

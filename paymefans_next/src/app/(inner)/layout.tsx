@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google";
-import { GeistSans } from 'geist/font/sans';
+import { Inter } from "next/font/google";
+const font = Inter({
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+    // display: "swap",
+    subsets: ["latin", "latin-ext"],
+})
+// import { GeistSans } from 'geist/font/sans';
 import "../globals.css";
 import MenuButtons from "@/components/route_component/menu_buttons";
 import ModalComponent from "@/components/route_component/modalComponent";
@@ -16,6 +21,8 @@ import PostComponentPreview from "@/components/post/full-component-preview";
 import UserSessionProvider from "@/providers/user-session-provider";
 import { UserContextProvider } from "@/lib/userUseContext";
 import { UserPointsContextProvider } from "@/contexts/user-points-context";
+import { MessagesConversationProvider } from "@/contexts/messages-conversation-context";
+import Head from "next/head";
 
 
 export const metadata: Metadata = {
@@ -33,29 +40,43 @@ export default async function RootLayout({
         <html lang="en">
             <UserContextProvider user={user}>
                 <QueryProvider>
-                    <UserPointsContextProvider>
-                        <body className={GeistSans.className}>
-                            <Toaster />
-                            <SonnerToast richColors position="top-right" />
-                            <div className="relative grid lg:grid-cols-9">
-                                <div className="col-span-2">
-                                    <SideBar />
-                                </div>
-                                <div className="col-span-7 overflow-auto border-r">
-                                    <Header />
-                                    <div className="grid lg:grid-cols-7 ">
-                                        <div className="col-span-4 md:border-r">
-                                            {children}
+                    <MessagesConversationProvider>
+                        <UserPointsContextProvider>
+                            <body className={font.className}>
+                                <Toaster />
+                                <SonnerToast richColors position="top-center"
+                                    toastOptions={{
+                                        closeButton: true,
+                                        duration: 10000,
+                                        style: {
+                                            fontSize: "16px",
+                                            borderRadius: "10px",
+                                            fontFamily: "system-ui",
+                                        },
+                                    }}
+                                />
+                                <div className="relative grid lg:grid-cols-9">
+                                    <MessagesConversationProvider>
+                                        <div className="col-span-2">
+                                            <SideBar />
                                         </div>
-                                        <SideModels />
-                                    </div>
+                                        <div className="col-span-7 overflow-auto border-r">
+                                            <Header />
+                                            <div className="grid lg:grid-cols-7 ">
+                                                <div className="col-span-4 md:border-r">
+                                                    {children}
+                                                </div>
+                                                <SideModels />
+                                            </div>
+                                        </div>
+                                    </MessagesConversationProvider>
+                                    <MenuButtons />
+                                    <ModalComponent />
                                 </div>
-                                <MenuButtons />
-                                <ModalComponent />
-                            </div>
-                            <PostComponentPreview />
-                        </body>
-                    </UserPointsContextProvider>
+                                <PostComponentPreview />
+                            </body>
+                        </UserPointsContextProvider>
+                    </MessagesConversationProvider>
                 </QueryProvider>
             </UserContextProvider>
         </html>

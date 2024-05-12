@@ -4,11 +4,10 @@ import ModelsSubscription from "../sub_componnets/models_subscription";
 import HookupSubscription from "../sub_componnets/hookup_subscription";
 import Link from "next/link";
 import { AuthUserProps } from "@/types/user";
-import ModelLoader from "@/components/loaders.tsx/modelloader";
+import { ModelLoader, HookUpLoader } from "@/components/loaders.tsx/modelloader";
 import { useQuery } from "@tanstack/react-query";
-
 import axiosInstance from "@/utils/axios";
-import { useEffect } from "react";
+import { getToken } from "../../utils/cookie.get";
 
 const SideModels = () => {
   const { isLoading, data, error, refetch } = useQuery<{ models: AuthUserProps[] }>({
@@ -18,7 +17,21 @@ const SideModels = () => {
     }, {
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${document.cookie.split("token=")[1].split(";")[0]}`
+        "Authorization": `Bearer ${getToken()}`
+      }
+    }).then((res) => {
+      return res.data;
+    })
+  });
+
+  const { isLoading: loadinModels, data: data2, error: ErrHookup } = useQuery<{ hookups: AuthUserProps[] }>({
+    queryKey: ['hookups'],
+    queryFn: async () => axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/models/hookups`, {
+      limit: 6,
+    }, {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${getToken()}`
       }
     }).then((res) => {
       return res.data;
@@ -59,11 +72,12 @@ const SideModels = () => {
             <Link href="/hookup" className="bg-primary-dark-pink text-white px-3 text-sm py-1 font-semibold rounded-md">View All</Link>
           </span>
         </div>
+        {data2?.hookups?.length === 0 && <div className="text-center">No Hookup Available</div>}
+        {loadinModels && <HookUpLoader />}
         <div className="grid gap-4 lg:gap-6 grid-cols-3 ">
-          <HookupSubscription />
-          <HookupSubscription />
-          <HookupSubscription />
-          <HookupSubscription />
+          {data2?.hookups && data2?.hookups?.map((hookup: AuthUserProps) => {
+            return <HookupSubscription hookup={hookup} key={hookup?.user_id} />;
+          })}
         </div>
       </div>
     </div >

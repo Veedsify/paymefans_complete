@@ -1,10 +1,16 @@
 "use client";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LucideArrowLeft, LucideGrip } from "lucide-react";
 import socketIoClient from "socket.io-client";
-import toast from "react-hot-toast";
+import { toast } from "sonner";
 import MessageBubble from "../sub_componnets/message_bubble";
 import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
@@ -14,10 +20,12 @@ const socket = socketIoClient(
 
 const Chats = ({
   allmessages,
+  lastMessage,
   conversationId,
   receiver,
 }: {
   allmessages: Message[];
+  lastMessage: Message;
   conversationId: string;
   receiver?: any;
 }) => {
@@ -26,109 +34,105 @@ const Chats = ({
   const ref = useRef<HTMLDivElement>(null);
   const { user } = useUserAuthContext();
 
-  const handleJoined = (message: { message: string }) => {
+  const handleJoined = useCallback((message: { message: string }) => {
     // toast.success(message.message);
-  };
+  }, []);
 
-  const sendMessageToReceiver = ({
-    message_id,
-    message,
-    sender_id,
-    attachment,
-  }: Message) => {
-    setMessages((prev) => [
-      ...prev,
-      {
+  const sendMessageToReceiver = useCallback(
+    ({ message_id, message, sender_id, attachment }: Message) => {
+      const newMessage = {
+        id: messages.length + 1,
         message_id,
         message,
         sender_id,
         attachment,
         seen: false,
-        created_at: new Date().toString(),
-      },
-    ]);
-    socket.emit("new-message", {
-      message_id,
-      message,
-      sender_id,
-      attachment,
-      receiver_id: receiver.user_id,
-      conversationId,
-      date: new Date().toString(),
-    });
-  };
+        created_at: new Date().toISOString(), // Using ISO format for consistency
+      };
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      socket.emit("new-message", {
+        ...newMessage,
+        receiver_id: receiver.user_id,
+        conversationId,
+        date: newMessage.created_at,
+      });
+    },
+    [setMessages, receiver, conversationId, messages]
+  );
 
-  const sendTyping = (typing: boolean) => {
+  const sendTyping = useCallback((typing: boolean) => {
     socket.emit("typing", typing);
-  };
+  }, []);
 
-  // USE STATES
   useEffect(() => {
     const handleMessageReceived = (message: Message) => {
       if (message) {
-        setMessages((prev) => [
-          ...prev,
+        setMessages((prevMessages) => [
+          ...prevMessages,
           {
             message_id: message.message_id,
             seen: false,
             message: message.message,
             sender_id: message.sender_id,
-            created_at: new Date().toString(),
+            created_at: new Date().toISOString(),
           },
         ]);
+
+        if (message.sender_id !== user.user_id) {
+          socket.emit("message-seen", {
+            conversationId,
+            lastMessageId: message.message_id,
+          });
+        }
       }
     };
-    const handleSeen = (id: number) => {
-      const time = new Date().toLocaleTimeString();
 
-      setMessages((prev) => {
-        return prev.map((message) => {
-          if (message.message_id == id) {
-            return { ...message, seen: true };
-          }
-          return message;
-        });
-      });
-    };
-    const handleTyping = ({ typing }: { typing: boolean }) => {
-      setTyping(typing);
+    const handleSeenByReceiver = (data: any) => {
+      if (data.messageId) {
+        setMessages((prevMessages) =>
+          prevMessages.map((message) => {
+            if (message.seen !== true) {
+              return {
+                ...message,
+                seen: true,
+              }
+            } else {
+              return message;
+            }
+          })
+        );
+      }
     };
 
     socket.emit("join", conversationId);
-    socket.on("message", handleMessageReceived);
-    socket.on("typing", handleTyping);
     socket.on("joined", handleJoined);
+    socket.on("message", handleMessageReceived);
+    socket.on("message-seen-updated", handleSeenByReceiver);
+
     return () => {
       socket.off("message", handleMessageReceived);
-      socket.off("typing", handleTyping);
       socket.off("joined", handleJoined);
+      socket.off("message-seen-updated", handleSeenByReceiver);
     };
-  }, [conversationId, setMessages, typing]);
+  }, [conversationId, setMessages, messages, user, handleJoined]);
 
   useLayoutEffect(() => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
-    const MessageBubble = document.querySelectorAll(".message-bubbles");
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        const lastMessage = messages[messages.length - 1];
-        if (entry.isIntersecting && !lastMessage.seen) {
-          const id = Number(entry.target.getAttribute("data-id"));
-          observer.unobserve(entry.target);
-        }
-      });
-    });
-
-    MessageBubble.forEach((message) => {
-      observer.observe(message);
-    });
-
-    return () => {
-      observer.disconnect();
+    ref.current?.scrollTo(0, ref.current.scrollHeight);
+    const handleSeen = () => {
+      if (lastMessage && lastMessage.sender_id !== user.user_id) {
+        socket.emit("message-seen", {
+          conversationId,
+          lastMessageId: lastMessage.message_id,
+        });
+      }
     };
-  }, [messages, user]);
+    handleSeen();
+  }, [lastMessage, user, conversationId]);
+
   return (
     <div className="relative chat_height">
       <div className="flex items-center border-b py-6 px-5 pb-6">
@@ -155,7 +159,7 @@ const Chats = ({
           <div className="">
             <div className="font-bold text-sm md:text-base">
               <Link
-                href="/mix/profile"
+                href={`/mix/profile/${receiver.username}`}
                 className="flex gap-3 duration-300 items-center"
               >
                 <span>{receiver.name}</span>

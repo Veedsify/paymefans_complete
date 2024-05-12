@@ -21,10 +21,10 @@ const HookupPage = () => {
             <div className="py-6">
                 <div className="grid md:grid-cols-4 grid-cols-3 gap-4 lg:gap-6 justify-between">
                     {/* INSERT RETURNED RESULTS HERE */}
+                    {/* <HookupSubscription />
                     <HookupSubscription />
                     <HookupSubscription />
-                    <HookupSubscription />
-                    <HookupSubscription />
+                    <HookupSubscription /> */}
                 </div>
             </div>
         </div>

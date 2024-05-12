@@ -61,7 +61,9 @@ class ConversationsController {
                     Settings: true
                 }
             });
-            console.log(receiverData)
+
+            prismaQuery.$disconnect();
+
             return res.json({ messages: data.messages, receiver: receiverData });
         };
 
@@ -122,7 +124,7 @@ class ConversationsController {
             }
             prismaQuery.$disconnect();
         } catch (error) {
-            console.log(error);
+
             return res.json({ message: "An error occured", status: false });
         }
     }
@@ -166,9 +168,26 @@ class ConversationsController {
                 for (let i = 0; i < data.length; i++) {
                     let participants = data[i].participants.find(user => user.user_1 === req.user.user_id ? user.user_2 : user.user_1);
                     const receiver = participants.user_1 === req.user.user_id ? participants.user_2 : participants.user_1;
+
                     const receiverData = await prismaQuery.user.findFirst({
                         where: {
-                            user_id: receiver
+                            user_id: receiver,
+                            OR: [
+                                {
+                                    Messages: {
+                                        some: {
+                                            sender_id: user.user_id
+                                        }
+                                    }
+                                },
+                                {
+                                    Messages: {
+                                        some: {
+                                            receiver_id: user.user_id
+                                        }
+                                    }
+                                }
+                            ]
                         },
                         select: {
                             id: true,
@@ -183,9 +202,11 @@ class ConversationsController {
                     conversations.push({
                         conversation: receiverData,
                         conversation_id: data[i].conversation_id,
-                        lastMessage: data[i].messages[0] // Add the last message to each conversation
+                        lastMessage: data[i].messages[0] ? data[i].messages[0] : []
+                        // Add the last message to each conversation
                     });
                 }
+
                 // Sort the conversations by the timestamp of the last message
                 conversations.sort((a, b) => {
                     if (a.lastMessage.created_at > b.lastMessage.created_at) return -1;
@@ -193,10 +214,12 @@ class ConversationsController {
                     return 0;
                 });
 
-                return res.json({ conversations });
+                return res.json({ conversations, status: true });
             }
+
+            prismaQuery.$disconnect();
         } catch (err) {
-            console.log(err);
+
             return res.json({ message: "An error occurred", status: false });
         }
 
@@ -258,7 +281,7 @@ class ConversationsController {
         //         return res.json({ conversations });
         //     };
         // } catch (err) {
-        //     console.log(err);
+        //     
         //     return res.json({ message: "An error occured", status: false });
         // }
     }
