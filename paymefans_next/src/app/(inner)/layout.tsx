@@ -16,13 +16,13 @@ import { Toaster } from "react-hot-toast";
 import { Toaster as SonnerToast } from "sonner"
 import QueryProvider from "@/providers/query-provider";
 import getUserData from "@/utils/data/user-data";
-import { use } from 'react';
 import PostComponentPreview from "@/components/post/full-component-preview";
 import UserSessionProvider from "@/providers/user-session-provider";
 import { UserContextProvider } from "@/lib/userUseContext";
 import { UserPointsContextProvider } from "@/contexts/user-points-context";
 import { MessagesConversationProvider } from "@/contexts/messages-conversation-context";
 import Head from "next/head";
+import { redirect } from "next/navigation";
 
 
 export const metadata: Metadata = {

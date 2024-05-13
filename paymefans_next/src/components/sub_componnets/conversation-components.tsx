@@ -89,9 +89,10 @@ const ConversationCard = ({ conversation }: {
                         </div>
                         <div className="text-sm">
                             <Link href={`/mix/chats/${conversation?.conversation_id}`}>
-                                <p className="text-xs md:text-sm truncate">
-                                    {conversation?.lastMessage?.message}
-                                </p>
+                                <div className="text-xs md:text-sm"
+                                    dangerouslySetInnerHTML={{ __html: String(conversation?.lastMessage?.message).substring(0, 100) + "..." }}
+                                >
+                                </div>
                             </Link>
                         </div>
                     </div>

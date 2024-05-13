@@ -65,10 +65,10 @@ io.on("connection", (socket) => {
   const handleMessage = async (data) => {
     // Save messages here if needed
     const message = await SaveMessageToDb.saveMessage(data);
-
+    console.log(message)
     socket.to(room).emit("message", {
       ...data,
-      message_id: message.message_id,
+      message_id: message.message_id
     });
   };
 

@@ -11,12 +11,13 @@ interface PointsCountProps {
 }
 
 const PointsCount = ({ user }: PointsCountProps) => {
-    const { updatePoints } = useUserPointsContext()
+    const { updatePoints } = useUserPointsContext();
     const { isLoading, data } = useQuery({
         queryKey: ["user"],
         queryFn: async () => {
             return await GetUserPointBalance(user.id)
-        }
+        },
+        staleTime: 100
     })
 
     useEffect(() => {

@@ -16,6 +16,10 @@ const getUserData = async () => {
     if (res.status === 200) {
       return res.data.user
     }
+
+    if (res.status === 401) {
+      redirect("/login");
+    }
     else {
       return null;
     }
