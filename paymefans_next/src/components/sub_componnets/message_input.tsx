@@ -7,23 +7,27 @@ import {
   KeyboardEvent,
   MouseEvent,
   RefObject,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { toast } from "sonner";
 import swal from "sweetalert";
+import UploadMediaComponent from "../route_component/upload-media-conponent";
+
+export interface Attachment {
+  type: string;
+  poster: string;
+  url: string;
+}
 
 export interface Message {
   message_id: number;
   message: string;
   sender_id: string;
   receiver_id?: string;
-  attachment?: {
-    type: string;
-    poster: string;
-    url: string;
-  } | null;
+  attachment?: Attachment[] | null;
   seen: boolean;
   conversationId?: string;
   created_at: string;
@@ -40,11 +44,17 @@ const MessageInput = ({
   receiver,
 }: MessageInputProps) => {
   const [message, setMessage] = useState("");
+  const [attachmentModal, setAttachmentModal] = useState(false);
   const { user } = useUserAuthContext();
   const ref = useRef<HTMLDivElement>(null);
   const { points } = useUserPointsContext()
 
-  const sendNewMessage = () => {
+  const openAttachmentModal = () => setAttachmentModal(!attachmentModal)
+  const closeAttachmentModal = () => setAttachmentModal(false)
+  const insertNewMessageFromPreview = (message: string) => {
+    setMessage(message)
+  }
+  const sendNewMessage = (textMessage: string, attachment: Attachment[]) => {
     if (user) {
       if (points < Number(receiver?.Settings?.price_per_message)) {
         setMessage("");
@@ -52,22 +62,17 @@ const MessageInput = ({
           ref.current.innerHTML = "";
           ref.current.focus();
         }
-
         return toast.info(`Sorry, You need to have at least ${receiver?.Settings?.price_per_message} paypoints to send a message to ${(receiver?.name).charAt(0).toUpperCase() + (receiver?.name).slice(1)}`);
-        // return swal({
-        //   icon: "error",
-        //   title: "Oops!",
-        //   text: `Sorry, You need to have at least ${receiver?.Settings?.price_per_message} points to send a message to ${receiver?.name}`,
-        // });
       }
     }
 
-    const trimmedMessage = message.trim();
+    const trimmedMessage = textMessage.trim();
     if (!trimmedMessage || trimmedMessage.length === 0) return;
     const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
     sendMessage({
       message_id: id,
       message: trimmedMessage,
+      attachment: attachment,
       sender_id: user?.user_id as string,
       seen: false,
       created_at: new Date().toString(),
@@ -77,12 +82,12 @@ const MessageInput = ({
       ref.current.innerHTML = "";
       ref.current.focus();
     }
-  };
+  }
 
   const handleSendMessage = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.shiftKey && e.key === "Enter") {
       e.preventDefault();
-      sendNewMessage();
+      sendNewMessage(message, []);
       return;
     }
     if (e.key === "Enter") {
@@ -121,30 +126,32 @@ const MessageInput = ({
   }, []);
 
   return (
-    <div
-      className="position-fixed bottom-0 
-        lg:mx-4"
-    >
-      <div className="flex mb-2 items-center gap-5 px-6 bg-gray-100 lg:py-2 py-4 lg:rounded-xl">
-        <div
-          ref={ref as RefObject<HTMLDivElement>}
-          contentEditable={true}
-          id="message-input"
-          onKeyDown={handleSendMessage}
-          className="bg-transparent outline-none w-full p-2 font-semibold resize-none"
-        ></div>
-
-        <span className="cursor-pointer">
-          <LucidePlus fill="#fff" stroke="#CC0DF8" size={25} />
-        </span>
-        <span className="cursor-pointer">
-          <LucideCamera fill="#fff" stroke="#CC0DF8" size={25} />
-        </span>
-        <span className="cursor-pointer" onClick={sendNewMessage}>
-          <LucideSendHorizonal fill="#fff" stroke="#CC0DF8" size={25} />
-        </span>
+    <>
+      <div
+        className="bottom-0 
+        lg:ml-4 lg:mr-2 "
+      >
+        <div className="flex mb-2 items-center gap-5 px-6 bg-gray-100 lg:py-2 py-4 lg:rounded-xl">
+          <div
+            ref={ref as RefObject<HTMLDivElement>}
+            contentEditable={true}
+            id="message-input"
+            onKeyDown={handleSendMessage}
+            className="bg-transparent outline-none w-full p-2 font-semibold resize-none"
+          ></div>
+          <span className="cursor-pointer" onClick={openAttachmentModal}>
+            <LucidePlus fill="#fff" stroke="#CC0DF8" size={25} />
+          </span>
+          <span className="cursor-pointer">
+            <LucideCamera fill="#fff" stroke="#CC0DF8" size={25} />
+          </span>
+          <span className="cursor-pointer" onClick={() => sendNewMessage(message, [])}>
+            <LucideSendHorizonal fill="#fff" stroke="#CC0DF8" size={25} />
+          </span>
+        </div>
       </div>
-    </div>
+      <UploadMediaComponent sendMessage={sendNewMessage} open={attachmentModal} close={closeAttachmentModal} setMessage={insertNewMessageFromPreview} />
+    </>
   );
 };
 

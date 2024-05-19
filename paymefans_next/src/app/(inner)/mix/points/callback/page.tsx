@@ -37,7 +37,7 @@ const PageCallBack = () => {
         <div>
             {successful === null ? (
                 <CoinProcessing />
-            ) : successful === true ? (
+            ) : successful ? (
                 <CoinPurchaseSuccessful />
             ) : (
                 <CoinUsedUp />

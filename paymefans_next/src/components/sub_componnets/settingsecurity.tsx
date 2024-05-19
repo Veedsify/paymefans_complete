@@ -1,6 +1,7 @@
 import { LucideChevronRight, LucideUserMinus2, LucideUsers } from "lucide-react";
 import Link from "next/link";
 import SettingsHookupCheck from "./settings-hookup-check";
+import UpdatePasswords from "./update-password";
 
 const SettingSecurity = () => {
     return (
@@ -36,26 +37,7 @@ const SettingSecurity = () => {
                         Change Password
                     </h2>
                 </div>
-                <div>
-                    <input
-                        type="password"
-                        className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
-                        placeholder="Old Password "
-                    /><input
-                        type="npassword"
-                        className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
-                        placeholder="New Password "
-                    /><input
-                        type="confirmNpassword"
-                        className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
-                        placeholder="Re-enter new Password "
-                    />
-                    <input
-                        type="submit"
-                        value={"Update Password"}
-                        className="w-full block border mb-3 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer"
-                    />
-                </div>
+                <UpdatePasswords />
                 <SettingsHookupCheck />
                 <div>
                     <h2 className="mb-4 font-bold mt-10">

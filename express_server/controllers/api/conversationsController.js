@@ -219,71 +219,8 @@ class ConversationsController {
 
             prismaQuery.$disconnect();
         } catch (err) {
-
             return res.json({ message: "An error occurred", status: false });
         }
-
-        // try {
-        //     const user = req.user;
-        //     const data = await prismaQuery.conversations.findMany({
-        //         where: {
-        //             OR: [
-        //                 {
-        //                     participants: {
-        //                         some: {
-        //                             user_1: user.user_id
-        //                         }
-        //                     }
-        //                 },
-        //                 {
-        //                     participants: {
-        //                         some: {
-        //                             user_2: user.user_id
-        //                         }
-        //                     }
-        //                 }
-        //             ]
-        //         },
-        //         select: {
-        //             conversation_id: true,
-        //             participants: true,
-        //             messages: {
-        //                 orderBy: {
-        //                     created_at: "desc"
-        //                 }
-        //             }
-        //         }
-        //     });
-
-        //     if (data) {
-        //         let conversations = [];
-        //         for (let i = 0; i < data.length; i++) {
-        //             let participants = data[i].participants.find(user => user.user_1 === req.user.user_id ? user.user_2 : user.user_1);
-        //             const receiver = participants.user_1 === req.user.user_id ? participants.user_2 : participants.user_1;
-        //             const receiverData = await prismaQuery.user.findFirst({
-        //                 where: {
-        //                     user_id: receiver
-        //                 },
-        //                 select: {
-        //                     id: true,
-        //                     user_id: true,
-        //                     name: true,
-        //                     username: true,
-        //                     profile_image: true,
-        //                     Settings: true,
-        //                     Messages: true
-        //                 }
-        //             });
-        //             conversations.push(receiverData);
-        //         }
-        //         // Sort the conversations by the last message
-
-        //         return res.json({ conversations });
-        //     };
-        // } catch (err) {
-        //     
-        //     return res.json({ message: "An error occured", status: false });
-        // }
     }
 }
 

@@ -60,7 +60,7 @@ const SideModels = () => {
             {isLoading && <ModelLoader />}
             <div className="grid grid-cols-3 gap-3">
               {data?.models && data?.models?.map((model: any) => {
-                return <ModelsSubscription model={model} key={model?.id} />;
+                return <ModelsSubscription model={model} key={model?.username} />;
               })}
             </div>
           </div>
@@ -76,7 +76,7 @@ const SideModels = () => {
         {loadinModels && <HookUpLoader />}
         <div className="grid gap-4 lg:gap-6 grid-cols-3 ">
           {data2?.hookups && data2?.hookups?.map((hookup: AuthUserProps) => {
-            return <HookupSubscription hookup={hookup} key={hookup?.user_id} />;
+            return <HookupSubscription hookup={hookup} key={hookup?.username} />;
           })}
         </div>
       </div>

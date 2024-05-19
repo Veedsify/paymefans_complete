@@ -1,12 +1,11 @@
 "use client"
-import { X } from "lucide-react";
+import { LucideArrowLeft, LucideArrowRight, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState } from "react";
 import { useUser } from "@/lib/userContext";
 import { useRouter } from "next/navigation";
 import axiosServer from "@/utils/axios";
-import axios from "axios";
 import swal from "sweetalert";
 
 const ChooseUserName = () => {
@@ -146,6 +145,12 @@ const ChooseUserName = () => {
                     <div className="max-w-screen-xl pt-12 mx-auto mb-24 md:mt-16">
                         <Link href="/">
                             <Image width={150} height={150} priority src="/site/logo.svg" alt="Logo" />
+                        </Link>
+                    </div>
+                    <div className="mb-3">
+                        <Link href="/register" className="text-white flex items-center gap-2 font-bold">
+                            <LucideArrowLeft size={20} stroke="#CC0DF8" />
+                            Back
                         </Link>
                     </div>
                     <div className="flex flex-col items-start justify-center max-w-screen-xl mx-auto">

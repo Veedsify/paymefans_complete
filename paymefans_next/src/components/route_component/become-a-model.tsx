@@ -75,8 +75,7 @@ const BecomeAModel = () => {
 
         if (res && res.status === true) {
             console.log(res)
-            window.location.href = res.url
-            router.refresh()
+            router.push("/verification")
         } else {
             toast.dismiss(loadingToast)
             swal({
@@ -88,7 +87,7 @@ const BecomeAModel = () => {
     }
 
     const { user } = useUserAuthContext()
-    if (user.is_model) {
+    if (user?.is_model) {
         return (
             <>
                 <div>
@@ -187,10 +186,8 @@ const BecomeAModel = () => {
                     <label></label>
                 </label>
             </div>
-            <p className=" mt-5 ">Pay a one time membership fee of <b>₦5,000 </b></p>
             <button onClick={submitData}
-                className="bg-primary-dark-pink w-full p-3 rounded-xl mt-3 mb-20 text-white font-semibold">SUBMIT &
-                Pay
+                className="bg-primary-dark-pink w-full p-3 rounded-xl mt-3 mb-20 text-white font-semibold">Signup
             </button>
         </div>
     );

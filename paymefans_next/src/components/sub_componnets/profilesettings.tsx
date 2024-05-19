@@ -23,7 +23,7 @@ const ProfileSettings = ({
             const response = await saveUserSettings(userData)
             if (response.ok) {
                 toast.success('Profile updated successfully');
-                window.location.reload()
+                router.refresh()
             } else {
                 console.log(await response.json())
                 return toast.error('Failed to update profile')

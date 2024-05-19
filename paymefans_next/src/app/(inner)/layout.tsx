@@ -17,12 +17,9 @@ import { Toaster as SonnerToast } from "sonner"
 import QueryProvider from "@/providers/query-provider";
 import getUserData from "@/utils/data/user-data";
 import PostComponentPreview from "@/components/post/full-component-preview";
-import UserSessionProvider from "@/providers/user-session-provider";
 import { UserContextProvider } from "@/lib/userUseContext";
 import { UserPointsContextProvider } from "@/contexts/user-points-context";
 import { MessagesConversationProvider } from "@/contexts/messages-conversation-context";
-import Head from "next/head";
-import { redirect } from "next/navigation";
 
 
 export const metadata: Metadata = {
@@ -62,7 +59,7 @@ export default async function RootLayout({
                                         </div>
                                         <div className="col-span-7 overflow-auto border-r">
                                             <Header />
-                                            <div className="grid lg:grid-cols-7 ">
+                                            <div className="grid lg:grid-cols-7">
                                                 <div className="col-span-4 md:border-r">
                                                     {children}
                                                 </div>

@@ -4,6 +4,12 @@ const { v4: uuid } = require("uuid");
 module.exports = async (body) => {
   const registerData = body;
 
+  if (!registerData) return { error: "Invalid request", status: false };
+
+  if (!registerData?.name || !registerData?.username || !registerData?.email || !registerData?.phone || !registerData?.password || !registerData?.location) {
+    return { error: "All fields are required", status: false };
+  }
+
   const checkPhone = await prismaQuery.user.findUnique({
     where: { phone: registerData?.phone },
   });
@@ -17,7 +23,7 @@ module.exports = async (body) => {
     return { error: "Email Address already exists", status: false };
   }
   const uniqueUserId = Math.random().toString(36).substring(2, 15);
-  const hashPass = hashPassword(registerData?.password);
+  const hashPass = await hashPassword(registerData?.password);
   const walletId = uuid().split("-").join(""); // Generate unique wallet ID
   const pointsId = uuid().split("-").join(""); // Generate unique points ID
 

@@ -1,7 +1,7 @@
-const { createHash } = require("crypto");
+// const { createHash } = require("crypto");
+const bcrypt = require("bcrypt")
 
-module.exports = function hashPassword(password) {
-  const hash = createHash("sha256");
-  hash.update(password);
-  return hash.digest("hex");
+module.exports = async function hashPassword(password) {
+  const saltRounds = 10;
+  return await bcrypt.hash(password, saltRounds)
 };

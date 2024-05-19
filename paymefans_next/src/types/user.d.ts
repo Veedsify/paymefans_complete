@@ -42,10 +42,15 @@ export type AuthUserProps = {
   updated_at: Date;
   iat: number;
   exp: number;
+  _count: {
+    Follow: number;
+    Subscribers: number
+  }
   Settings?: {
     price_per_message: number;
     subscription_price: number;
   },
+  following: number;
   Model?: {
     hookup: boolean
   }

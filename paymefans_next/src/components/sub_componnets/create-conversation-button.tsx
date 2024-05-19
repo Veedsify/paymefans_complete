@@ -9,7 +9,7 @@ export default function CreateConversationButton({ profileId }: { profileId: str
     const router = useRouter();
     const { user } = useUserAuthContext();
     const createConversation = async () => {
-        createNewConversation({ userId: user.user_id, profileId }).then((res) => {
+        createNewConversation({ userId: user?.user_id as string, profileId }).then((res) => {
             if (res?.status === 200 && res.data.status === true) {
                 router.push(`/mix/chats/${res.data.conversation_id}`)
             } else {

@@ -2,7 +2,6 @@ import UserNotFound from "@/components/route_component/usernotfound";
 import CreateConversationButton from "@/components/sub_componnets/create-conversation-button";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
 import ProfileTabs from "@/components/sub_componnets/profile_tabs";
-import { useUserAuthContext } from "@/lib/userUseContext";
 import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
 

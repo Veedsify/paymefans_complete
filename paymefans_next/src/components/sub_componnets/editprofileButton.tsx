@@ -1,6 +1,5 @@
 "use client"
-import { useUserAuthContext } from "@/lib/userUseContext";
-import { AuthUserProps, UserUpdateProfileType } from "@/types/user";
+import { UserUpdateProfileType } from "@/types/user";
 import axios from "axios";
 import { Facebook, Instagram, LucideCamera, LucideInstagram, Twitter, X } from "lucide-react";
 import Image from "next/image";
@@ -9,7 +8,6 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const EditProfileButton = ({ user }: { user: any }) => {
-    const { updateUser } = useUserAuthContext()
     const [open, setOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null)
     const [userData, setUserData] = useState<UserUpdateProfileType>({} as UserUpdateProfileType)

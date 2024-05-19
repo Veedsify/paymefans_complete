@@ -67,6 +67,7 @@ model User {
   UserWithdrawalBankAccount UserWithdrawalBankAccount[]
   Messages                  Messages[]
   Model                     Model?
+  UserAttachments           UserAttachments[]
 }
 
 model Participants {
@@ -542,6 +543,20 @@ model UserPointsPurchase {
   UserPoints   UserPoints? @relation(fields: [userPointsId], references: [id])
 
   @@index([userPointsId], map: "UserPointsPurchase_userPointsId_fkey")
+}
+
+model UserAttachments {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  path       String
+  type       String
+  name       String
+  size       Int
+  extension  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
 enum UserRole {

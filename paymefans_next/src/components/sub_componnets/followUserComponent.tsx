@@ -4,7 +4,7 @@ import React from 'react';
 import FollowButton from "./sub/button";
 
 type FollowUserProps = {
-    thisuser: AuthUserProps;
+    thisuser: AuthUserProps | null;
     user: AuthUserProps;
 }
 

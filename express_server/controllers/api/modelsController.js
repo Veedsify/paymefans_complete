@@ -65,31 +65,40 @@ class modelController {
                 }
             });
 
+            await prismaQuery.user.update({
+                where: {
+                    id
+                },
+                data: {
+                    is_model: true
+                }
+            })
+
             if (!signUpUserAsModel) {
                 return res
                     .status(200)
                     .json({ message: "An error occurred while signing you up", status: false });
             }
 
-            // New Initial Payments
-            const modelSignupPayment = await newPayment(process.env.SIGNUP_PRICE, req.user.email,
-                process.env.SERVER_ORIGINAL_URL + "/api/callback/model/signup", referenceId
-            );
+            // // New Initial Payments
+            // const modelSignupPayment = await newPayment(process.env.SIGNUP_PRICE, req.user.email,
+            //     process.env.SERVER_ORIGINAL_URL + "/api/callback/model/signup", referenceId
+            // );
 
 
-            if (!modelSignupPayment) {
-                return res
-                    .status(200)
-                    .json({ message: "An error occurred while setting up payments", status: false });
-            }
+            // if (!modelSignupPayment) {
+            //     return res
+            //         .status(200)
+            //         .json({ message: "An error occurred while setting up payments", status: false });
+            // }
 
-            req.session.lastPaymentReference = modelSignupPayment.data.reference;
+            // req.session.lastPaymentReference = modelSignupPayment.data.reference;
 
             prismaQuery.$disconnect();
 
             return res
                 .status(200)
-                .json({ message: "You have been signed up as a model", status: true, url: modelSignupPayment.data.authorization_url });
+                .json({ message: "You have been signed up as a model", status: true });
 
         } catch (e) {
             console.log(e)

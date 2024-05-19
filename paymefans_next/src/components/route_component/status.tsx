@@ -6,12 +6,13 @@ import Image from "next/image";
 import { SetStateAction, useEffect, useState } from 'react';
 import Loader from './loader';
 import StoriesHeader from './stories_header';
+import { useUserAuthContext } from '@/lib/userUseContext';
 
 const StatusComponent = () => {
     return (
         <div className="select-none border-b">
             <div className="flex items-center gap-4 overflow-x-auto lg:overflow-hidden lg:hover:overflow-x-auto w-screen md:w-full p-4 py-6 pb-9 clean-sidebar">
-                <UserStatus data={{ image: "/images/user.png", story: "" }} />
+                <UserStatus />
                 <Status islive={true} data={{ image: "/images/login_image.png", story: "", name: "the_artgetteedfrw4escsdcsfer" }} />
                 {/* <Status islive={false} data={{ image: "/images/profilecover.png", story: "", name: "bridgette" }} />
                 <Status islive={true} data={{ image: "/images/profilecover.png", story: "", name: "thora" }} />
@@ -68,12 +69,8 @@ export const Status = ({ islive, data }: {
         </div>
     );
 }
-export const UserStatus = ({ data }: {
-    data: {
-        image: string;
-        story: string;
-    }
-}) => {
+export const UserStatus = () => {
+    const { user } = useUserAuthContext()
     return (
         <div className="block relative">
             <div className="flex items-center bg-gray-300 flex-shrink-0 justify-center cursor-pointer rounded-full aspect-square h-20 w-20 md:h-24 md:w-24 relative mb-2">
@@ -82,9 +79,9 @@ export const UserStatus = ({ data }: {
                         width={80}
                         height={80}
                         priority
-                        src={data.image} className="rounded-full object-cover border-4 border-gray-300 w-auto h-16 md:h-20 aspect-square" alt="" />
+                        src={user ? user.profile_image : "/site/avatar.png"} className="rounded-full object-cover border-4 border-gray-300 w-auto h-16 md:h-20 aspect-square" alt="" />
                 </div>
-                <div className="p-1 bg-blue-400 text-white text-xs border-4 border-white absolute -bottom-0 right-0 scale-90 rounded-full">
+                <div className="p-1 bg-primary-dark-pink text-white text-xs border-4 border-white absolute -bottom-0 right-0 scale-90 rounded-full">
                     <LucidePlus stroke="#fff" size={15} strokeWidth={3} />
                 </div>
             </div>
@@ -100,7 +97,7 @@ export const StatusModal = ({ open, setStoriesOpen }: { open: boolean, setStorie
         {
             header: <StoriesHeader />,
             type: 'video',
-            url: 'https://player.vimeo.com/external/456571058.hd.mp4?s=8317f2fbdbd326599437704d1e8e96c5e71a9f83&profile_id=174&oauth2_token_id=57447761',
+            url: 'https://videos.pexels.com/video-files/7297870/7297870-sd_540_960_30fps.mp4',
             duration: 10000,
         },
         {

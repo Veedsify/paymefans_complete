@@ -19,13 +19,15 @@ import Image from "next/image";
 import swal from "sweetalert";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import PointsCount from "../sub_componnets/sub/point-count";
+import { useConversationsContext } from "@/contexts/messages-conversation-context";
 
 const SideBar = () => {
     const router = useRouter()
     const { sideBarState, setSideBar } = useSideBarContext()
     const pathname = usePathname()
-    // const {user} = useUserContext()
     const { user } = useUserAuthContext()
+    const { count } = useConversationsContext();
+
 
     useEffect(() => {
         const closeSideBar = () => {
@@ -35,14 +37,7 @@ const SideBar = () => {
     }, [pathname, setSideBar]);
 
     const LogOut = () => {
-        // axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/logout`, {
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": `Bearer ${document.cookie.split("token=")[1].split(";")[0]}`,
-        //     },
-        // }).then(() => {
-        // });
-        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = `token=; expires=${new Date()}; path=/;`;
         router.push("/login")
     };
 
@@ -61,7 +56,7 @@ const SideBar = () => {
                             width={50}
                             height={50}
                             priority
-                            src={user ? user.profile_image : "/site/banner.png"}
+                            src={user ? user.profile_image : "/site/avatar.png"}
                             className="object-cover w-12 h-12 rounded-full"
                             alt=""
                         />
@@ -117,6 +112,9 @@ const SideBar = () => {
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                             <LucideMessageSquare />
                             <p>Messages</p>
+                            <span className="ml-auto h-8 w-8 p-0 font-bold flex items-center justify-center inline-block rounded-full bg-primary-dark-pink text-white">
+                                {count ? count : 0}
+                            </span>
                         </Link>
                         {!user?.is_model && (
                             <Link href="/mix/models/benefits"

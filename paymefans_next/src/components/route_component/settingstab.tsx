@@ -5,8 +5,27 @@ import ProfileSettings from "../sub_componnets/profilesettings";
 import Settingsbilling from "../sub_componnets/settingsbilling";
 import SettingSecurity from "../sub_componnets/settingsecurity";
 import { AuthUserProps } from "@/types/user";
+import { MouseEvent, useEffect, useState } from "react";
+import { useSearchParams } from 'next/navigation';
 
 const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
+    const searchParams = useSearchParams();
+    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+        const tab = e.currentTarget.getAttribute("data-tab");
+        window.history.pushState({}, "", `?tab=${tab}`);
+    }
+
+
+    useEffect(() => {
+        const tab = searchParams.get("tab");
+        if (tab) {
+            const index = ["profile", "security", "billing"].indexOf(tab);
+            if (index > -1) {
+
+            }
+        }
+    }, [searchParams]);
+
     return (
         <div>
             <Tabs
@@ -14,16 +33,25 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
             >
                 <TabList className="flex gap-9 mb-4 border-b">
                     <Tab>
-                        <button className="text-black font-bold py-2">Profile</button>
+                        <button
+                            onClick={handleClick}
+                            data-tab="profile"
+                            className="text-black font-bold py-2">Profile</button>
                     </Tab>
                     <Tab>
-                        <button className="text-black font-bold py-2">Security</button>
+                        <button
+                            onClick={handleClick}
+                            data-tab="security"
+                            className="text-black font-bold py-2">Security</button>
                     </Tab>
                     <Tab>
-                        <button className="text-black font-bold py-2">Billing</button>
+                        <button
+                            onClick={handleClick}
+                            data-tab="billing"
+                            className="text-black font-bold py-2">Billing</button>
                     </Tab>
                 </TabList>
-                <TabPanel>
+                <TabPanel >
                     <ProfileSettings user={user} />
                 </TabPanel>
                 <TabPanel>

@@ -1,4 +1,5 @@
 const passwordHasher = require("../utils/passwordHasher");
+const bcrypt = require("bcrypt");
 const jwt = require("../utils/jsonwebtoken");
 const prismaQuery = require("../utils/prisma");
 
@@ -18,7 +19,9 @@ module.exports = async ({ data }) => {
     return { error: "Invalid email or password", status: false };
   }
 
-  if (user.password !== passwordHasher(userpassword)) {
+  const match = bcrypt.compare(userpassword, user.password);
+  
+  if (!match) {
     return { error: "Invalid email or password", status: false };
   }
 

@@ -35,6 +35,23 @@
   background-color: #400546;
 }
 
+.media-upload::-webkit-scrollbar {
+  height: 10px;
+}
+
+.media-upload::-webkit-scrollbar-track {
+  background-color: #ebebeb;
+}
+
+.media-upload::-webkit-scrollbar-thumb {
+  background-color: #be04d6;
+  border-radius: 4px;
+}
+
+.media-upload::-webkit-scrollbar-thumb:hover {
+  background-color: #400546;
+}
+
 .chat_height {
   height: calc(100vh - 81px);
 }
@@ -49,6 +66,7 @@
 .swal-icon--custom {
   scale: 2;
 }
+
 
 @media screen and (min-width: 1024px) {
   .clean-sidebar::-webkit-scrollbar {

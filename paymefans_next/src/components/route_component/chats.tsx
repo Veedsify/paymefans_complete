@@ -10,13 +10,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { LucideArrowLeft, LucideGrip } from "lucide-react";
 import socketIoClient from "socket.io-client";
-import { toast } from "sonner";
 import MessageBubble from "../sub_componnets/message_bubble";
 import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
-const socket = socketIoClient(
-  process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string
-);
+import { socket } from "../sub_componnets/sub/socket";
+
 
 const Chats = ({
   allmessages,
@@ -25,11 +23,11 @@ const Chats = ({
   receiver,
 }: {
   allmessages: Message[];
-  lastMessage: Message;
+  lastMessage: Message | undefined | null;
   conversationId: string;
   receiver?: any;
 }) => {
-  const [messages, setMessages] = useState(allmessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [typing, setTyping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { user } = useUserAuthContext();
@@ -37,6 +35,10 @@ const Chats = ({
   const handleJoined = useCallback((message: { message: string }) => {
     // toast.success(message.message);
   }, []);
+
+  useEffect(() => {
+    setMessages(allmessages);
+  }, [allmessages]);
 
   const sendMessageToReceiver = useCallback(
     ({ message_id, message, sender_id, attachment }: Message) => {
@@ -78,7 +80,7 @@ const Chats = ({
           },
         ]);
 
-        if (message.sender_id !== user.user_id) {
+        if (message.sender_id !== user?.user_id) {
           socket.emit("message-seen", {
             conversationId,
             lastMessageId: message.message_id,
@@ -90,7 +92,7 @@ const Chats = ({
     const handleSeenByReceiver = (data: any) => {
       if (data.messageId) {
         setMessages((prevMessages) =>
-          prevMessages.map((message) => {
+          prevMessages && prevMessages.map((message) => {
             if (message.seen !== true) {
               return {
                 ...message,
@@ -117,13 +119,13 @@ const Chats = ({
   }, [conversationId, setMessages, messages, user, handleJoined]);
 
   useLayoutEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "smooth" });
+    ref.current?.scrollIntoView({ behavior: "auto" });
   }, [messages]);
 
   useEffect(() => {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
     const handleSeen = () => {
-      if (lastMessage && lastMessage.sender_id !== user.user_id) {
+      if (lastMessage && lastMessage.sender_id !== user?.user_id) {
         socket.emit("message-seen", {
           conversationId,
           lastMessageId: lastMessage.message_id,
@@ -151,7 +153,7 @@ const Chats = ({
               src={
                 receiver.profile_image
                   ? receiver.profile_image
-                  : "/images/default_profile_image.png"
+                  : "/site/avatar.png"
               }
               alt=""
             />
@@ -162,7 +164,7 @@ const Chats = ({
                 href={`/mix/profile/${receiver.username}`}
                 className="flex gap-3 duration-300 items-center"
               >
-                <span>{receiver.name}</span>
+                <span>{receiver ? receiver.name : ""}</span>
                 <span className="text-xs fw-bold text-primary-dark-pink inline-block">
                   {typing && "typing..."}
                 </span>
@@ -178,8 +180,8 @@ const Chats = ({
           <LucideGrip size={30} className="cursor-pointer" />
         </div>
       </div>
-      <div className="max-h-[80vh] overflow-auto pb-3" ref={ref}>
-        {messages.map((message: Message, index: number) => (
+      <div className="max-h-[80vh] overflow-auto pb-5" ref={ref}>
+        {messages?.map((message: Message, index: number) => (
           <div
             key={index}
             data-id={message.message_id}

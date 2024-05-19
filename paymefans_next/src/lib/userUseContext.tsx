@@ -1,25 +1,27 @@
-"use client"
+"use client";
+
+import { AuthUserProps } from "@/types/user";
 import { usePathname, useRouter } from "next/navigation";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
 interface UserContextValue {
-    user: any;
-    updateUser: (newUserData: any) => void;
+    user: AuthUserProps | null;
+    updateUser: (newUserData: AuthUserProps) => void;
 }
 
 const UserContext = createContext<UserContextValue | null>(null);
 
 export const useUserAuthContext = () => {
     const context = useContext(UserContext);
-    if (!context || !context.user) {
-        throw new Error("useUserAuthContext must be used within a UserContextProvider or user is undefined");
+    if (!context) {
+        throw new Error("useUserAuthContext must be used within a UserContextProvider");
     }
     return context;
-}
+};
 
 
 interface UserContextProviderProps {
-    user: any;
+    user: AuthUserProps | null;
     children: ReactNode;
 }
 
@@ -27,19 +29,23 @@ export const UserContextProvider = ({ user, children }: UserContextProviderProps
     const router = useRouter();
     const location = usePathname();
 
-    if (!user) {
-        router.push(`/login?redirect=${location}`, { scroll: false });
-    }
+    const [thisUser, setUser] = useState<AuthUserProps | null>(null);
 
-    const [thisUser, setUser] = useState(user);
+    useEffect(() => {
+        if (!user) {
+            router.push(`/login?redirect=${location}`);
+        } else {
+            setUser(user);
+        }
+    }, [user, router, location]);
 
-    const updateUser = (newUserData: any) => {
+    const updateUser = (newUserData: AuthUserProps) => {
         setUser(newUserData);
-    }
+    };
 
     return (
         <UserContext.Provider value={{ user: thisUser, updateUser }}>
             {children}
         </UserContext.Provider>
     );
-}
+};

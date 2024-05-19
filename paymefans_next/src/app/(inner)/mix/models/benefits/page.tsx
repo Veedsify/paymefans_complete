@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 async function Models() {
 
     const user = await getUserData();
-    if (user.is_model) {
+    if (user?.is_model) {
         return (
             <>
                 <div>

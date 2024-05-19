@@ -8,6 +8,9 @@ const multerImageMiddleware = require("../middlewares/multerImageMiddleware.midd
 const pointsController = require("../controllers/api/pointsController");
 const followerController = require("../controllers/api/followerController");
 const ConversationsController = require("../controllers/api/conversationsController");
+const { changePassword } = require("../controllers/api/settingsController");
+const uploadAttachmentMulterMiddleware = require("../middlewares/uploadAttachmentMulter.middleware");
+const uploadMediaController = require("../controllers/api/mediaUploadController");
 
 // Authentication
 router.post("/auth/signup", authController.Register);
@@ -21,9 +24,13 @@ router.get("/retrieve", checkUserIsAuthenticated, authController.Retrieve);
 router.post("/profile/user", profileController.Profile);
 router.post("/profile/banner/change", checkUserIsAuthenticated, multerImageMiddleware("banner"), profileController.BannerChange);
 router.post("/profile/image/change", checkUserIsAuthenticated, multerImageMiddleware("profile_image"), profileController.ProfileChange);
-router.post("/profile/settings/update", checkUserIsAuthenticated, profileController.SettingsProfileChange);
 // router.post("/profile/settings/update/password", checkUserIsAuthenticated, profileController.SettingsPasswordChange);
+
+
+// Settngs and Configs
+router.post("/profile/settings/update", checkUserIsAuthenticated, profileController.SettingsProfileChange);
 router.post("/profile/settings/update/hookup-status", checkUserIsAuthenticated, profileController.HookupStatusChange);
+router.patch("/settings/update/password", checkUserIsAuthenticated, changePassword)
 
 // Models
 router.post("/models/all", checkUserIsAuthenticated, modelController.GetModels);
@@ -44,4 +51,7 @@ router.post("/follow/check", checkUserIsAuthenticated, followerController.CheckF
 router.get("/conversation/get-messages/:conversation", checkUserIsAuthenticated, ConversationsController.allConversations);
 router.post("/conversation/create-new", checkUserIsAuthenticated, ConversationsController.createConversation);
 router.get("/conversations/my-conversations", checkUserIsAuthenticated, ConversationsController.myConversations);
+router.post("/upload/attachments", checkUserIsAuthenticated, uploadAttachmentMulterMiddleware.array("attachments[]"), uploadMediaController.attachments);
+
+
 module.exports = router;

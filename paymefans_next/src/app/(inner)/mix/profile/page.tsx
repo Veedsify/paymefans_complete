@@ -1,6 +1,7 @@
 import BannerComponent from "@/components/lib_components/banner_component";
 import EditProfileButton from "@/components/sub_componnets/editprofileButton";
 import ProfileTabs from "@/components/sub_componnets/profile_tabs";
+import { AuthUserProps } from "@/types/user";
 import getUserData from "@/utils/data/user-data";
 
 import {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 const ProfilePage = async () => {
-    const user = await getUserData()
+    const user: AuthUserProps | null = await getUserData()
     return (
         <>
             <div className="overflow-hidden">
@@ -104,7 +105,7 @@ const ProfilePage = async () => {
         </>
     );
 
-    function formatNumber(number: number): string {
+    function formatNumber(number: any): string {
         if (number >= 1000000000) {
             return (number / 1000000000).toFixed(1) + "B";
         } else if (number >= 1000000) {

@@ -10,17 +10,19 @@ const SaveMessageToDb = require("./libs/save-message-db");
 var session = require("express-session");
 const { SESSION_SECRET } = process.env;
 var app = express();
-var debug = require('debug')('express-server:server');
+var debug = require("debug")("express-server:server");
 const http = require("http").createServer(app);
-const socketIo = require('socket.io');
+const { Server } = require("socket.io");
 const messagesSeenByReceiver = require("./libs/messages-seen-by-receiver");
+const getUserConversations = require("./libs/get-user-conversations");
 
-
-app.use(cors({
-  origin: process.env.APP_URL,
-  credentials: true,
-  optionsSuccessStatus: 200,
-}));
+app.use(
+  cors({
+    origin: process.env.APP_URL,
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.use(
   session({
@@ -40,35 +42,45 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Socket
-const io = socketIo(http, {
+const io = new Server(http, {
   cors: {
     origin: process.env.APP_URL, // Allow this origin
-    methods: ['GET', 'POST'], // Allow these methods
-  }
+    methods: ["GET", "POST"], // Allow these methods
+  },
 });
-
 
 // Outside of any function/component
 io.on("connection", (socket) => {
-
   let room = "";
+
+  const users = {};
+
+  socket.on("user-connected", (data) => {
+    users.socketId = socket.id;
+    users.userId = data.userId;
+  });
+
+  const interval = setInterval(() => {
+    getUserConversations(users.userId).then((data) => {
+      socket.emit("conversations", data);
+    });
+  }, 3000);
 
   // Event handler for joining a room
   socket.on("join", (data) => {
-    console.log("Joined Room:", data);
     room = data;
     socket.join(data);
-    socket.to(data).emit("joined", { message: "User Joined Room" });
+    socket.to(room).emit("joined", { message: "User Joined Room" });
   });
 
   // Event handler for receiving new messages
   const handleMessage = async (data) => {
     // Save messages here if needed
     const message = await SaveMessageToDb.saveMessage(data);
-    console.log(message)
+
     socket.to(room).emit("message", {
       ...data,
-      message_id: message.message_id
+      message_id: message.message_id,
     });
   };
 
@@ -76,8 +88,12 @@ io.on("connection", (socket) => {
   const handleSeen = async (data) => {
     const lastMessageSeen = await messagesSeenByReceiver(data);
     if (lastMessageSeen.success) {
-      console.log("Message seen updated", lastMessageSeen)
-      socket.to(room).emit("message-seen-updated", { messageId: lastMessageSeen.data.message_id, seen: true });
+      socket
+        .to(room)
+        .emit("message-seen-updated", {
+          messageId: lastMessageSeen.data.message_id,
+          seen: true,
+        });
     }
   };
 
@@ -97,7 +113,7 @@ io.on("connection", (socket) => {
 
   // Event handler for user disconnection
   socket.on("disconnect", () => {
-    console.log("User disconnected");
+    clearInterval(interval);
   });
 });
 
@@ -121,31 +137,26 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
+http.listen(process.env.PORT, () => { });
 
-http.listen(process.env.PORT, () => {
-  console.log(`Server running on port process.env.${process.env.PORT}`);
-})
-
-http.on('error', onError);
-http.on('listening', onListening);
+http.on("error", onError);
+http.on("listening", onListening);
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
+  if (error.syscall !== "listen") {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === "string" ? "Pipe " + port : "Port " + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
       process.exit(1);
       break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
       process.exit(1);
       break;
     default:
@@ -159,11 +170,8 @@ function onError(error) {
 
 function onListening() {
   var addr = http.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  var bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
+  debug("Listening on " + bind);
 }
-
 
 // module.exports = app;
