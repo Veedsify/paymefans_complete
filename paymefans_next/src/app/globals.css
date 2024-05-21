@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.grid-auto-columns {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
 
 .aspect-long {
   aspect-ratio: 9/16;

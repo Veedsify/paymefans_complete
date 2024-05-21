@@ -4,7 +4,6 @@ import { imageTypes, videoTypes } from "@/lib/filetypes";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { generatePosterFromVideo } from "@/lib/video-poster";
 import { getToken } from "@/utils/cookie.get";
-import axios from "axios";
 import { LucideChevronRight } from "lucide-react";
 import Image from "next/image";
 import { RefObject, useCallback, useEffect, useRef, useState } from "react";
@@ -12,13 +11,14 @@ import { Navigation } from "swiper/modules";
 import { Swiper } from "swiper/react";
 import { SwiperSlide } from "swiper/react";
 import { Attachment } from "./message_input";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 
 interface MediaPreviewProps {
     files: FileList;
     setMessage: (message: string) => void;
-    sendMessage: (textmessage: string, attachment: Attachment[]) => void;
+    sendNewMessage: (attachment: Attachment[]) => void;
     close: () => void;
+    message: string;
 }
 interface PreviewTypes {
     type: "image" | "video"
@@ -26,7 +26,7 @@ interface PreviewTypes {
     poster?: string
 }
 
-const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendMessage, close }) => {
+const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendNewMessage, close, message }) => {
     const [mainTab, setMainTab] = useState<File | null>(null);
     const [preview, setPreview] = useState<PreviewTypes[]>([]);
     const swiperRef = useRef(null); // Assuming you want to interact with the Swiper instance
@@ -39,7 +39,6 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendMe
 
     const handleAttachmentUpload = useCallback(async () => {
         if (!user) return;
-
         const formData = new FormData()
         const attachedFiles: File[] = Array.from(files)
         formData.append("userId", user?.user_id as string)
@@ -48,7 +47,7 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendMe
         })
         close()
         toast.loading("Uploading attachments")
-        await new Promise(resolve => setTimeout(resolve, 2000))
+        // await new Promise(resolve => setTimeout(resolve, 2000))
         const res = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/upload/attachments`, {
             body: formData,
             method: "POST",
@@ -56,14 +55,12 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendMe
                 "Authorization": `Bearer ${token}`
             }
         })
-
         if (res.ok) {
             const data = await res.json()
             toast.dismiss()
-            console.log(data);
+            sendNewMessage(data.attachments)
         }
-
-    }, [])
+    }, [sendNewMessage, close, files, token, user])
 
     useEffect(() => {
         if (ref.current) {
@@ -80,7 +77,7 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendMe
                     setMessage(target.innerHTML);
                 });
         }
-    }, [])
+    }, [setMessage])
 
     useEffect(() => {
         if (files.length > 0) {
@@ -100,7 +97,7 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendMe
             setPreview(newPreviews);
         };
         generatePreviews();
-    }, [files]);
+    }, [files, setMainTab, setPreview, generatePosterFromVideo, imageTypes, videoTypes]);
 
     return (
         <>

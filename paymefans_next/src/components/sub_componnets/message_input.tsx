@@ -3,22 +3,20 @@ import { useUserPointsContext } from "@/contexts/user-points-context";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { LucidePlus, LucideCamera, LucideSendHorizonal } from "lucide-react";
 import {
-  ChangeEvent,
   KeyboardEvent,
-  MouseEvent,
   RefObject,
-  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { toast } from "sonner";
-import swal from "sweetalert";
 import UploadMediaComponent from "../route_component/upload-media-conponent";
 
 export interface Attachment {
   type: string;
-  poster: string;
+  extension: string;
+  size: number;
+  name: string;
   url: string;
 }
 
@@ -27,14 +25,14 @@ export interface Message {
   message: string;
   sender_id: string;
   receiver_id?: string;
-  attachment?: Attachment[] | null;
+  attachment: Attachment[] | null;
   seen: boolean;
   conversationId?: string;
   created_at: string;
 }
 export interface MessageInputProps {
   sendMessage: ({ }: Message) => void;
-  sendTyping?: (typing: boolean) => void;
+  sendTyping: (value: boolean) => void;
   receiver: any;
 }
 
@@ -49,12 +47,14 @@ const MessageInput = ({
   const ref = useRef<HTMLDivElement>(null);
   const { points } = useUserPointsContext()
 
+  useEffect(() => { console.log("message", message) }, [message])
+
   const openAttachmentModal = () => setAttachmentModal(!attachmentModal)
   const closeAttachmentModal = () => setAttachmentModal(false)
   const insertNewMessageFromPreview = (message: string) => {
     setMessage(message)
   }
-  const sendNewMessage = (textMessage: string, attachment: Attachment[]) => {
+  const sendNewMessage = (attachment: Attachment[]) => {
     if (user) {
       if (points < Number(receiver?.Settings?.price_per_message)) {
         setMessage("");
@@ -65,9 +65,11 @@ const MessageInput = ({
         return toast.info(`Sorry, You need to have at least ${receiver?.Settings?.price_per_message} paypoints to send a message to ${(receiver?.name).charAt(0).toUpperCase() + (receiver?.name).slice(1)}`);
       }
     }
-
-    const trimmedMessage = textMessage.trim();
-    if (!trimmedMessage || trimmedMessage.length === 0) return;
+    const trimmedMessage = message.trim();
+    if ((trimmedMessage.length === 0) && attachment.length === 0) {
+      console.log("Message is empty");
+      return;
+    }
     const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
     sendMessage({
       message_id: id,
@@ -87,7 +89,7 @@ const MessageInput = ({
   const handleSendMessage = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.shiftKey && e.key === "Enter") {
       e.preventDefault();
-      sendNewMessage(message, []);
+      sendNewMessage([]);
       return;
     }
     if (e.key === "Enter") {
@@ -145,12 +147,18 @@ const MessageInput = ({
           <span className="cursor-pointer">
             <LucideCamera fill="#fff" stroke="#CC0DF8" size={25} />
           </span>
-          <span className="cursor-pointer" onClick={() => sendNewMessage(message, [])}>
+          <span className="cursor-pointer" onClick={() => sendNewMessage([])}>
             <LucideSendHorizonal fill="#fff" stroke="#CC0DF8" size={25} />
           </span>
         </div>
       </div>
-      <UploadMediaComponent sendMessage={sendNewMessage} open={attachmentModal} close={closeAttachmentModal} setMessage={insertNewMessageFromPreview} />
+      <UploadMediaComponent
+        sendNewMessage={sendNewMessage}
+        open={attachmentModal}
+        close={closeAttachmentModal}
+        setMessage={insertNewMessageFromPreview}
+        message={message}
+      />
     </>
   );
 };

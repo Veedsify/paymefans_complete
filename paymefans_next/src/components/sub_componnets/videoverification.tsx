@@ -6,8 +6,8 @@ const VideoVerification = () => {
             <label htmlFor="videos">
                 <div className="flex bg-gray-200 items-center justify-center aspect-square rounded-xl mb-3 cursor-pointer">
                     <Image
-                        width={200}
-                        height={200}
+                        width={40}
+                        height={40}
                         priority
                         src="/site/verification_videos.png" alt="" className="block text-center mx-auto mb-4" />
                 </div>

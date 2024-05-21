@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 const font = Inter({
     weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-    // display: "swap",
+    display: "auto",
     subsets: ["latin", "latin-ext"],
 })
 // import { GeistSans } from 'geist/font/sans';

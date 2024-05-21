@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
 
   // Event handler for typing indication
   const handleTyping = (data) => {
-    socket.to(room).emit("typing", { typing: data.typing });
+    socket.to(room).emit("sender-typing", { value: data.value, sender_id: data.sender_id });
   };
 
   // Listen for new messages

@@ -10,15 +10,15 @@ const Verification = () => {
                 <h1 className="mt-auto mb-16 text-2xl font-bold text-center">Public Verification</h1>
                 <div className="grid grid-cols-3 max-w-96 mx-auto mb-12">
                     <div>
-                        <Image width={20} height={20} src="/site/front_verification.svg" alt="" className="block text-center mx-auto mb-4 aspect-square rounded-xl" />
+                        <Image width={100} height={100} src="/site/front_verification.svg" alt="" className="block text-center mx-auto mb-4 aspect-square rounded-xl" />
                         <p className="text-center font-medium">FRONT</p>
                     </div>
                     <div>
-                        <Image width={20} height={20} src="/site/back_verification.svg" alt="" className="block text-center mx-auto mb-4 aspect-square rounded-xl" />
+                        <Image width={100} height={100} src="/site/back_verification.svg" alt="" className="block text-center mx-auto mb-4 aspect-square rounded-xl" />
                         <p className="text-center font-medium">BACK</p>
                     </div>
                     <div>
-                        <Image width={20} height={20} src="/site/side_verification.svg" alt="" className="block text-center mx-auto mb-4 aspect-square rounded-xl" />
+                        <Image width={100} height={100} src="/site/side_verification.svg" alt="" className="block text-center mx-auto mb-4 aspect-square rounded-xl" />
                         <p className="text-center font-medium">SIDE</p>
                     </div>
                 </div>

@@ -1,0 +1,14 @@
+{
+  "name": "paymefans",
+  "version": "1.0.0",
+  "description": "paymefans site",
+  "main": "index.js",
+  "scripts": {
+    "run_all": "concurrently \"cd express_server && npm run dev\" \"cd paymefans_next && npm run dev\""
+  },
+  "keywords": [
+    "paymefans"
+  ],
+  "author": "Dike WIsdom",
+  "license": "ISC"
+}

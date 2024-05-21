@@ -14,6 +14,7 @@ import MessageBubble from "../sub_componnets/message_bubble";
 import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { socket } from "../sub_componnets/sub/socket";
+import toast from "react-hot-toast";
 
 
 const Chats = ({
@@ -62,10 +63,6 @@ const Chats = ({
     [setMessages, receiver, conversationId, messages]
   );
 
-  const sendTyping = useCallback((typing: boolean) => {
-    socket.emit("typing", typing);
-  }, []);
-
   useEffect(() => {
     const handleMessageReceived = (message: Message) => {
       if (message) {
@@ -74,6 +71,7 @@ const Chats = ({
           {
             message_id: message.message_id,
             seen: false,
+            attachment: message.attachment,
             message: message.message,
             sender_id: message.sender_id,
             created_at: new Date().toISOString(),
@@ -110,13 +108,24 @@ const Chats = ({
     socket.on("joined", handleJoined);
     socket.on("message", handleMessageReceived);
     socket.on("message-seen-updated", handleSeenByReceiver);
-
+    socket.on("sender-typing", (data: any) => {
+      setTyping(data.value);
+    });
     return () => {
       socket.off("message", handleMessageReceived);
       socket.off("joined", handleJoined);
+      socket.off("sender-typing");
       socket.off("message-seen-updated", handleSeenByReceiver);
     };
   }, [conversationId, setMessages, messages, user, handleJoined]);
+
+  const sendTyping = (value: boolean) => {
+    socket.emit("typing", {
+      send_id: user?.user_id,
+      value,
+      conversationId,
+    });
+  };
 
   useLayoutEffect(() => {
     ref.current?.scrollIntoView({ behavior: "auto" });
@@ -166,7 +175,7 @@ const Chats = ({
               >
                 <span>{receiver ? receiver.name : ""}</span>
                 <span className="text-xs fw-bold text-primary-dark-pink inline-block">
-                  {typing && "typing..."}
+                  {typing ? "typing..." : ""}
                 </span>
               </Link>
             </div>
@@ -190,6 +199,7 @@ const Chats = ({
           >
             <MessageBubble
               seen={message.seen}
+              attachment={message.attachment}
               sender={message.sender_id}
               date={message.created_at}
               message={message.message}

@@ -12,21 +12,22 @@ class uploadMediaController {
             async function addFilesToAttachments() {
                 files.forEach((file) => {
                     attachments.push({
-                        url: file.path.replace("public", ""),
+                        url: file.path.replace("public\\", "").replace(/\\/g, "/"),
                         name: file.filename,
                         size: file.size,
                         type: file.mimetype,
                         extension: path.extname(file.originalname)
                     });
                 });
+                return true;
             }
 
             async function insertAttachments() {
                 for (let file of files) {
                     await prismaQuery.userAttachments.create({
                         data: {
-                            user_id: req.user.id,
-                            path: file.path.replace("public", ""),
+                            user_id: Number(req.user.id),
+                            path: file.path.replace("public\\", "").replace(/\\/g, "/"),
                             name: file.filename,
                             size: file.size,
                             type: file.mimetype,
@@ -34,10 +35,11 @@ class uploadMediaController {
                         }
                     });
                 }
+                return true;
             }
 
             const [addFiles, insertFiles] = await Promise.all([addFilesToAttachments(), insertAttachments()]);
-
+            console.log(attachments);
             if (addFiles && insertFiles) {
                 return res.json({ message: "Attachments uploaded successfully", attachments });
             } else {

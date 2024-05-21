@@ -10,10 +10,11 @@ import { Attachment } from '../sub_componnets/message_input';
 type UploadMediaCompProps = {
     open: boolean;
     close: () => void;
-    sendMessage: (textmessage: string, attachment: Attachment[]) => void;
-    setMessage: (message: string) => void
+    sendNewMessage: (attachment: Attachment[]) => void;
+    setMessage: (message: string) => void;
+    message: string;
 }
-const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, setMessage, sendMessage }) => {
+const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, setMessage, sendNewMessage, message }) => {
     const [files, setFiles] = useState<FileList | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -33,7 +34,7 @@ const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, set
     const closeModal = useCallback(() => {
         setFiles(null);
         close()
-    }, [])
+    }, [setFiles, close])
 
     return (
         <div className={`fixed bg-white inset-0  w-full min-h-screen z-[999] ${open ? "block" : "hidden"}`}>
@@ -42,7 +43,7 @@ const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, set
                     <X size={30} stroke='#000' className='p-0 m-0' />
                 </div>
                 {files && files.length > 0 ? (
-                    <MediaPreviewer close={close} files={files} setMessage={setMessage} sendMessage={sendMessage} />
+                    <MediaPreviewer close={closeModal} files={files} setMessage={setMessage} message={message} sendNewMessage={sendNewMessage} />
                 ) : (
                     <>
                         <input

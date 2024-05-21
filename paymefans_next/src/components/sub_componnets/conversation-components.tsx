@@ -2,6 +2,7 @@
 import { useConversationsContext } from "@/contexts/messages-conversation-context";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { Conversation, LastMessage } from "@/types/conversations";
+import { LucideLink2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -110,11 +111,19 @@ const ConversationCard = ({ conversation }: {
                         <div className="text-sm">
                             <Link href={`/mix/chats/${conversation?.conversation_id}`}>
                                 {conversation?.lastMessage?.created_at ? (
-                                    <div className="text-xs md:text-sm"
-                                        dangerouslySetInnerHTML={{ __html: String(conversation?.lastMessage?.message).substring(0, 100) + (conversation?.lastMessage?.message?.length > 100 ? "..." : "") }}
-                                    >
-                                    </div>
-                                ) : ""}
+                                    <div>
+                                        <div className="text-xs md:text-sm"
+                                            dangerouslySetInnerHTML={{ __html: String(conversation?.lastMessage?.message).substring(0, 100) + (conversation?.lastMessage?.message?.length > 100 ? "..." : "") }}
+                                        >
+                                        </div>
+                                        <>
+                                            {conversation?.lastMessage?.attachment?.length > 0 && <div className="flex gap-1">
+                                                {conversation?.lastMessage?.attachment.map((file, index) => (
+                                                    <LucideLink2 className="text-gray-500" key={index} />
+                                                ))}
+                                            </div>}
+                                        </>
+                                    </div>) : "New Conversation"}
                             </Link>
                         </div>
                     </div>

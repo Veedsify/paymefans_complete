@@ -39,8 +39,8 @@ export const ImageVerification = () => {
                     backgroundSize: "cover",
                 }}>
                     <Image
-                        width={200}
-                        height={200}
+                        width={40}
+                        height={40}
                         priority
                         src="/site/verification_images.png" alt="" className="block text-center mx-auto mb-4" />
                 </div>

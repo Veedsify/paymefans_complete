@@ -1,0 +1,39 @@
+version: '3.8' # Adjusted for compatibility
+
+services:
+  client:
+    build:
+      context: ./paymefans_next
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80" # Expose port 3000 on the host and map it to port 80 in the container
+    depends_on:
+      - server
+    env_file:
+    - ./paymefans_next/.env
+
+  server:
+    build:
+      context: ./express_server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001" # Expose port 3001 on the host and map it to port 3001 in the container
+    depends_on:
+      - mysql
+    env_file:
+      - ./express_server/.env
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: paymefans
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306" # Expose port 3306 on the host and map it to port 3306 in the container
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
