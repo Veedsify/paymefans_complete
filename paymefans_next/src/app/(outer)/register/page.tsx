@@ -31,7 +31,6 @@ const Register = () => {
     }, [userData, setUser]);
 
     const selectCountry = (e: MouseEvent<HTMLButtonElement>) => {
-        console.log("clicked");
         const code = e.currentTarget.getAttribute("data-code");
         const selectedCountry = countries.find(country => country.code === code);
 

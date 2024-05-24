@@ -25,7 +25,6 @@ const ProfileSettings = ({
                 toast.success('Profile updated successfully');
                 router.refresh()
             } else {
-                console.log(await response.json())
                 return toast.error('Failed to update profile')
             }
         } catch (error) {

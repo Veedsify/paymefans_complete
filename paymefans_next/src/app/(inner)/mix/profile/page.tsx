@@ -82,12 +82,12 @@ const ProfilePage = async () => {
                     <div className="flex gap-2 mb-3  flex-wrap sm:text-base text-sm">
                         <span className="flex gap-2 items-center">
                             <h1 className="font-bold text-sm">{
-                                formatNumber(user?._count.Follow)
+                                formatNumber(user?.total_followers)
                             }</h1>
                             <p className="font-medium text-gray-500 text-sm">Followers</p>
                         </span>
                         <span className="flex gap-2 items-center">
-                            <h1 className="font-bold text-sm">{formatNumber(user?.following)}</h1>
+                            <h1 className="font-bold text-sm">{formatNumber(user?.total_following)}</h1>
                             <p className="font-medium text-gray-500 text-sm">Following</p>
                         </span>
                         <span className="flex gap-2 items-center ">

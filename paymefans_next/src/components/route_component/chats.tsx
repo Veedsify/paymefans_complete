@@ -109,6 +109,7 @@ const Chats = ({
     socket.on("message", handleMessageReceived);
     socket.on("message-seen-updated", handleSeenByReceiver);
     socket.on("sender-typing", (data: any) => {
+      if (data.sender_id === user?.user_id) return;
       setTyping(data.value);
     });
     return () => {
@@ -121,7 +122,7 @@ const Chats = ({
 
   const sendTyping = (value: boolean) => {
     socket.emit("typing", {
-      send_id: user?.user_id,
+      sender_id: user?.user_id,
       value,
       conversationId,
     });

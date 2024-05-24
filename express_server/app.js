@@ -15,6 +15,7 @@ const http = require("http").createServer(app);
 const { Server } = require("socket.io");
 const messagesSeenByReceiver = require("./libs/messages-seen-by-receiver");
 const getUserConversations = require("./libs/get-user-conversations");
+const { checkUserFollowing, followUser } = require("./libs/check-user-following");
 
 app.use(
   cors({
@@ -52,32 +53,17 @@ const io = new Server(http, {
 // Outside of any function/component
 io.on("connection", (socket) => {
   let room = "";
-
   const users = {};
-
-  socket.on("user-connected", (data) => {
-    users.socketId = socket.id;
-    users.userId = data.userId;
-  });
-
   const interval = setInterval(() => {
     getUserConversations(users.userId).then((data) => {
       socket.emit("conversations", data);
     });
-  }, 3000);
-
-  // Event handler for joining a room
-  socket.on("join", (data) => {
-    room = data;
-    socket.join(data);
-    socket.to(room).emit("joined", { message: "User Joined Room" });
-  });
+  }, 200);
 
   // Event handler for receiving new messages
   const handleMessage = async (data) => {
     // Save messages here if needed
     const message = await SaveMessageToDb.saveMessage(data);
-
     socket.to(room).emit("message", {
       ...data,
       message_id: message.message_id,
@@ -101,6 +87,40 @@ io.on("connection", (socket) => {
   const handleTyping = (data) => {
     socket.to(room).emit("sender-typing", { value: data.value, sender_id: data.sender_id });
   };
+
+  const checkFollowing = (data) => {
+    checkUserFollowing(data.user_id, data.thisuser_id).then((response) => {
+      socket.emit("isFollowing", {
+        status: response.status,
+        followID: response.followId ? response.followId : null,
+      });
+    });
+  }
+
+  const followThisUser = (data) => {
+    followUser(data.user_id, data.profile_id, data.status, data.followId).then((response) => {
+      socket.emit("followed", { status: response.action == 'followed' ? true : false, followID: response.followUuid });
+    });
+  }
+
+  // Event handler to check if user is following
+  socket.on("checkUserIsFollowing", checkFollowing);
+
+  // Event to follow a user
+  socket.on("followUser", followThisUser);
+
+  // Event handler for joining a room
+  socket.on("join", (data) => {
+    room = data;
+    socket.join(data);
+    socket.to(room).emit("joined", { message: "User Joined Room" });
+  });
+
+  // Event handler for joining a room
+  socket.on("user-connected", (data) => {
+    users.socketId = socket.id;
+    users.userId = data.userId;
+  });
 
   // Listen for new messages
   socket.on("new-message", handleMessage);

@@ -5,12 +5,14 @@ import { LucidePlus, LucideCamera, LucideSendHorizonal } from "lucide-react";
 import {
   KeyboardEvent,
   RefObject,
+  useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
 import { toast } from "sonner";
 import UploadMediaComponent from "../route_component/upload-media-conponent";
+import { socket } from "./sub/socket";
 
 export interface Attachment {
   type: string;
@@ -46,14 +48,41 @@ const MessageInput = ({
   const { user } = useUserAuthContext();
   const ref = useRef<HTMLDivElement>(null);
   const { points } = useUserPointsContext()
-
-  useEffect(() => { console.log("message", message) }, [message])
-
   const openAttachmentModal = () => setAttachmentModal(!attachmentModal)
   const closeAttachmentModal = () => setAttachmentModal(false)
   const insertNewMessageFromPreview = (message: string) => {
     setMessage(message)
   }
+
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeout = useRef<number | null>(null);
+
+  const handleKeyDown = useCallback(() => {
+    if (!isTyping) {
+      setIsTyping(true);
+      sendTyping(true);
+    }
+
+    if (typingTimeout.current) {
+      clearTimeout(typingTimeout.current);
+    }
+
+    typingTimeout.current = window.setTimeout(() => {
+      setIsTyping(false);
+      sendTyping(false);
+    }, 1000); // Adjust the timeout duration as needed
+  }, [isTyping, sendTyping]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      if (typingTimeout.current) {
+        clearTimeout(typingTimeout.current);
+      }
+    };
+  }, [isTyping, handleKeyDown]);
+
   const sendNewMessage = (attachment: Attachment[]) => {
     if (user) {
       if (points < Number(receiver?.Settings?.price_per_message)) {
@@ -67,7 +96,6 @@ const MessageInput = ({
     }
     const trimmedMessage = message.trim();
     if ((trimmedMessage.length === 0) && attachment.length === 0) {
-      console.log("Message is empty");
       return;
     }
     const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
@@ -95,7 +123,9 @@ const MessageInput = ({
     if (e.key === "Enter") {
       return;
     }
+    handleKeyDown();
   };
+
 
   useEffect(() => {
     if (ref.current) {

@@ -16,7 +16,6 @@ module.exports = async (path, req) => {
     }
     return false;
   } catch (err) {
-    console.log(err);
     return false;
   }
 };

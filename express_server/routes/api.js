@@ -11,6 +11,7 @@ const ConversationsController = require("../controllers/api/conversationsControl
 const { changePassword } = require("../controllers/api/settingsController");
 const uploadAttachmentMulterMiddleware = require("../middlewares/uploadAttachmentMulter.middleware");
 const uploadMediaController = require("../controllers/api/mediaUploadController");
+const { GetTransactions } = require("../controllers/api/transactionsController");
 
 // Authentication
 router.post("/auth/signup", authController.Register);
@@ -43,6 +44,9 @@ router.post("/points/buy", checkUserIsAuthenticated, pointsController.BuyPoints)
 router.get("/points/callback", pointsController.Callback);
 router.post("/user/get-points", checkUserIsAuthenticated, pointsController.GetUserPoints);
 router.get("/global/points", pointsController.GetGlobalPoints);
+
+// Wallet & Transactions
+router.get("/wallet/transactions", checkUserIsAuthenticated, GetTransactions);
 
 // Followers
 router.post("/follow/check", checkUserIsAuthenticated, followerController.CheckFollower);

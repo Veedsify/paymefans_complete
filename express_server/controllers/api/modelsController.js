@@ -34,7 +34,6 @@ class modelController {
             } = req.body
 
             const { id } = req.user;
-            console.log(req.body)
 
             const checkUserIsModel = await prismaQuery.model.findFirst({
                 where: {
@@ -101,7 +100,6 @@ class modelController {
                 .json({ message: "You have been signed up as a model", status: true });
 
         } catch (e) {
-            console.log(e)
             return res
                 .status(500)
                 .json({ message: "An error occurred while signing you up", status: false });

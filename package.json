@@ -4,7 +4,7 @@
   "description": "paymefans site",
   "main": "index.js",
   "scripts": {
-    "run_all": "concurrently \"cd express_server && npm run dev\" \"cd paymefans_next && npm run dev\""
+    "all": "concurrently \"cd express_server && npm run dev\" \"cd paymefans_next && npm run dev\""
   },
   "keywords": [
     "paymefans"

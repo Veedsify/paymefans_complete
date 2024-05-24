@@ -9,7 +9,6 @@ router.get('/', function (req, res, next) {
 router.get('/attachments/:video_id', (req, res) => {
   const video = req.params.video_id;
   const videoPath = path.join(__dirname, `../public/${video}`);
-  console.log(videoPath);
   const stat = fs.statSync(videoPath);
   const fileSize = stat.size;
   const range = req.headers.range;

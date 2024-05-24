@@ -5,7 +5,6 @@ class uploadMediaController {
 
     static async attachments(req, res) {
         try {
-            console.log(req.files);
             const files = req.files;
             const attachments = [];
 
@@ -39,14 +38,12 @@ class uploadMediaController {
             }
 
             const [addFiles, insertFiles] = await Promise.all([addFilesToAttachments(), insertAttachments()]);
-            console.log(attachments);
             if (addFiles && insertFiles) {
                 return res.json({ message: "Attachments uploaded successfully", attachments });
             } else {
                 return res.json({ message: "An error occured while uploading attachment" });
             }
         } catch (error) {
-            console.log(error);
             res.json({ message: "An error occured while uploading attachment" })
         }
     }

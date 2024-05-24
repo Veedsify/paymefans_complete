@@ -20,8 +20,7 @@ class SettingsController {
             })
 
             const passwordStrengthResult = passwordStrength(newPassword).value
-            console.log(oldPassword)
-            
+
             const match = await bcrypt.compare(oldPassword, userPassword.password);
             if (!match) {
                 return res.status(200).json({ message: "Old password is incorrect", status: false });
@@ -42,7 +41,6 @@ class SettingsController {
             })
             res.status(200).json({ message: "Password changed successfully", status: true });
         } catch (error) {
-            console.log(error)
             res.status(500).json({ message: "An error occurred", status: false });
         }
     }

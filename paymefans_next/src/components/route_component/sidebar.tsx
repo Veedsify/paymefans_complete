@@ -47,7 +47,7 @@ const SideBar = () => {
                 className={`lg:ml-auto bg-white h-screen lg:h-screen fixed lg:sticky top-0 overflow-auto smart-width p-4 z-50 shadow-xl lg:shadow-none lg:border-r duration-300 ease-in-out  ${sideBarState ? "left-0" : "-left-full"}`
                 }>
                 <div className="mt-8 mb-16 ">
-                    <Image className="block w-auto h-8" quality={100} width={150} height={30} priority
+                    <Image className="block h-8 w-36" width={150} height={30} priority
                         src="/site/logo2.png" alt="" />
                 </div>
                 <div>

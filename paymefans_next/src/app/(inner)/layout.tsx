@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-const font = Inter({
-    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-    display: "auto",
-    subsets: ["latin", "latin-ext"],
-})
-// import { GeistSans } from 'geist/font/sans';
+// import { Plus_Jakarta_Sans } from "next/font/google";
+// const font = Plus_Jakarta_Sans({
+//     weight: ["200", "300", "400", "500", "600", "700", "800"],
+//     display: "auto",
+//     subsets: ["latin", "latin-ext"],
+// })
+import { GeistSans } from 'geist/font/sans';
 import "../globals.css";
 import MenuButtons from "@/components/route_component/menu_buttons";
 import ModalComponent from "@/components/route_component/modalComponent";
@@ -20,6 +20,7 @@ import PostComponentPreview from "@/components/post/full-component-preview";
 import { UserContextProvider } from "@/lib/userUseContext";
 import { UserPointsContextProvider } from "@/contexts/user-points-context";
 import { MessagesConversationProvider } from "@/contexts/messages-conversation-context";
+import Loader from "@/components/route_component/loader";
 
 
 export const metadata: Metadata = {
@@ -39,7 +40,8 @@ export default async function RootLayout({
                 <QueryProvider>
                     <MessagesConversationProvider>
                         <UserPointsContextProvider>
-                            <body className={font.className}>
+                            <body className={GeistSans.className}>
+                                <Loader />
                                 <Toaster />
                                 <SonnerToast richColors position="top-center"
                                     toastOptions={{

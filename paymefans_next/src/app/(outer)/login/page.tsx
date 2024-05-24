@@ -42,7 +42,7 @@ const Login = () => {
                 <div className="h-full lg:p-14 2xl:p-28">
                     <div className="max-w-screen-xl pt-12 mx-auto mb-24 md:mt-16">
                         <Link href="/">
-                            <Image width={150} height={150} priority className="h-auto" src="/site/logo.svg" alt="Logo" />
+                            <Image width={150} height={150} priority className="h-auto w-[150px]" src="/site/logo.svg" alt="Logo" />
                         </Link>
                     </div>
                     <h1 className="mt-auto mb-5 text-2xl font-bold text-white ">Sign in</h1>

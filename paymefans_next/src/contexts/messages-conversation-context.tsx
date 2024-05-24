@@ -49,9 +49,6 @@ export const MessagesConversationProvider = ({ children }: { children: ReactNode
 
         socket.on("conversations", (data) => {
             setData(data.conversations)
-            if (data.conversations.length === 0) {
-
-            }
         })
         return () => {
             socket.off("conversations");

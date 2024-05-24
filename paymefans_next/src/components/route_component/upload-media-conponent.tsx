@@ -24,7 +24,7 @@ const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, set
         if (e.target.files) {
             const isValidType = imageTypes.includes(e.target.files[0].type) || videoTypes.includes(e.target.files[0].type);
             if (!isValidType) {
-                toast.error("Invalid file type");
+                toast.error("Invalid file type, please select an image or video file");
                 return;
             }
             setFiles(e.target.files);

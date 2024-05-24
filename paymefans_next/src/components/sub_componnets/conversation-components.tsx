@@ -13,8 +13,8 @@ const ConversationComponent = () => {
     const { conversations } = useConversationsContext();
     return (
         <>
-            {conversations.length === 0 && <ConversationCardLoader />}
-            {conversations === null && <div className="text-center">No conversations yet</div>}
+            {conversations.length === null && <ConversationCardLoader />}
+            {conversations.length === 0 && <div className="text-center">No conversations yet</div>}
             {conversations
                 // .filter(conversation => conversation?.conversation?.Messages?.length > 0)
                 .map((conversation) => (

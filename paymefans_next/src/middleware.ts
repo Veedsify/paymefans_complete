@@ -6,7 +6,11 @@ export function middleware(req: NextRequest) {
   const token = cookies.get("token")?.value;
   req.headers.set("Authorization", `Bearer ${token}`);
   if (token && token.length > 0) {
-    return NextResponse.next();
+    if (req.nextUrl.pathname.includes("/login")) {
+      return NextResponse.redirect(new URL("/mix", req.url));
+    } else {
+      return NextResponse.next();
+    }
   }
 
   return NextResponse.redirect(new URL("/login", req.url));

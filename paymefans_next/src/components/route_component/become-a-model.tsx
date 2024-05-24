@@ -74,8 +74,7 @@ const BecomeAModel = () => {
         })
 
         if (res && res.status === true) {
-            console.log(res)
-            router.push("/verification")
+            router.push("/mix/verification")
         } else {
             toast.dismiss(loadingToast)
             swal({

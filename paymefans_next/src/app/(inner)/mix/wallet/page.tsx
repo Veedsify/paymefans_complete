@@ -1,5 +1,6 @@
 import { AuthUserProps } from "@/types/user";
 import axiosInstance from "@/utils/axios";
+import getTransactionsData from "@/utils/data/transactions";
 import getUserData from "@/utils/data/user-data";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 const page = async () => {
     const user = await getUserData() as AuthUserProps
-
+    const { data: transactions } = await getTransactionsData()
     const { wallet } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/wallet`, {
     }, {
         headers: {
@@ -79,6 +80,33 @@ const page = async () => {
                     </div>
                 </>
             )}
+            <div>
+                <h2 className="text-xl font-semibold mt-10 mb-10">Transactions</h2>
+                <div className="grid gap-4">
+                    {transactions.map((transaction: any, i: number) => (
+                        <div key={i} className="bg-white rounded-xl">
+                            <div className="flex justify-between items-center py-2">
+                                <div>
+                                    <p className={`text-sm font-semibold ${transaction.success ? "text-green-600" : "text-red-500"}`}>{transaction.success ? "Transaction Successful" : "Transaction Failed"}</p>
+                                    <div className="flex items-center gap-3">
+                                        <small className="text-xs">{new Date(transaction.created_at).toLocaleDateString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                            year: "numeric",
+                                        })}</small>
+                                    </div>
+                                </div>
+                                <p className={`text-sm font-semibold flex items-center gap-3 ${transaction.success ? "text-green-600" : "text-red-500"}`}>+{transaction.points}
+                                    <Image width={20} height={20} className="w-auto h-5 aspect-square" src="/site/coin.svg"
+                                        alt="" />
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

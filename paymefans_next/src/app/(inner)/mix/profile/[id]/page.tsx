@@ -15,16 +15,29 @@ import {
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Profile" + " | Paymefans",
   description: "Profile",
 };
+function formatNumber(number: any): string {
+  if (number >= 1000000000) {
+    return (number / 1000000000).toFixed(1) + "B";
+  } else if (number >= 1000000) {
+    return (number / 1000000).toFixed(1) + "M";
+  } else if (number >= 1000) {
+    return (number / 1000).toFixed(1) + "K";
+  } else {
+    return number.toString();
+  }
+}
 
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const user = await getUserData();
   const userdata = await getUserProfile({ user_id: id });
+  if (user?.id === userdata.id) redirect("/mix/profile");
   if (!userdata) return <UserNotFound userid={id} />;
 
   return (
@@ -48,7 +61,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
             className="absolute object-cover md:w-24 md:h-24 w-20 h-20 sm:border-4 border-2 rounded-full md:-top-12  -top-6 border-primary-dark-pink "
           />
           <div className="flex items-center gap-3 sm:p-3 ml-auto p-3  ">
-            <FollowUserComponent thisuser={user} user={userdata} />
+            <FollowUserComponent thisuser={user} profileuser={userdata} />
             <button>
               <p className="sm:px-4 py-1 px-2 text-sm font-semibold text-white bg-black border border-black rounded text-color">
                 Subscribe
@@ -112,15 +125,15 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
 
           <div className="flex gap-2 mb-3  flex-wrap sm:text-base text-sm">
             <span className="flex gap-2 items-center">
-              <h1 className="font-bold text-sm">2.3K</h1>
+              <h1 className="font-bold text-sm">{formatNumber(userdata.total_followers)}</h1>
               <p className="font-medium text-gray-500 text-sm">Followers</p>
             </span>
             <span className="flex gap-2 items-center">
-              <h1 className="font-bold text-sm">38.9K</h1>
+              <h1 className="font-bold text-sm">{formatNumber(userdata.total_following)}</h1>
               <p className="font-medium text-gray-500 text-sm">Following</p>
             </span>
             <span className="flex gap-2 items-center ">
-              <h1 className="font-bold text-sm">13.3K</h1>
+              <h1 className="font-bold text-sm">{formatNumber(userdata.total_subscribers)}</h1>
               <p className="font-medium text-gray-500 text-sm">Subscribers</p>
             </span>
           </div>

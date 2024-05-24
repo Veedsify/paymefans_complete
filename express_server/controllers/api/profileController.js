@@ -37,7 +37,6 @@ class profileController {
                     .json({ message: "No file uploaded", status: false });
             }
             //convert image
-            console.log(file.filename);
             const convert = await sharp(file.path)
                 .resize(943, 270)
                 .webp({ quality: 75 })
@@ -55,7 +54,6 @@ class profileController {
                 message: "File uploaded", status: true, image: "/images/converted/" + file.filename,
             });
         } catch (error) {
-            console.log(error);
             return res
                 .status(500)
                 .json({ message: "Error uploading file", status: false });
@@ -78,7 +76,6 @@ class profileController {
                 await updateProfileInfo(res, req);
             }
         } catch (error) {
-            console.log(error);
             return res
                 .status(500)
                 .json({ message: "Error updating profile", status: false });
@@ -90,7 +87,6 @@ class profileController {
         try {
             await updateProfileInfo(res, req);
         } catch (error) {
-            console.log(error);
             return res
                 .status(500)
                 .json({ message: "Error updating profile", status: false });
@@ -123,7 +119,6 @@ class profileController {
                 .status(200)
                 .json({ message: "Hookup status updated", status: true });
         } catch (err) {
-            console.log(err);
             return res
                 .status(500)
                 .json({ message: "Error updating hookup status", status: false });

@@ -13,7 +13,6 @@ class followerController {
 
   static async CheckFollower(req, res) {
     const { userId, followerId } = req.body;
-    console.log(userId, followerId);
     res.json({ status: true, message: "Follower found" });
   }
 }

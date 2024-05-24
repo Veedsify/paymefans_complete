@@ -249,7 +249,7 @@ model PostShared {
 
 model Follow {
   id          Int      @id @default(autoincrement())
-  follow_id   String
+  follow_id   String   @unique
   user_id     Int
   follower_id Int
   created_at  DateTime @default(now())

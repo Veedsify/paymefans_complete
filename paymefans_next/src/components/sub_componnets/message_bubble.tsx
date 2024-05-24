@@ -36,7 +36,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ sender, seen, message, da
         return () => {
             fullScreenPreview({ open: false, url: "", type: "" })
         }
-    }, [])
+    }, [attachment, fullScreenPreview])
 
     return (
         <div className="flex items-center">

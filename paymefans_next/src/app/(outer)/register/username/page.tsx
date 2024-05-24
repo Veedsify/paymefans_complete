@@ -144,7 +144,7 @@ const ChooseUserName = () => {
                 <div className="h-full lg:p-14 2xl:p-28">
                     <div className="max-w-screen-xl pt-12 mx-auto mb-24 md:mt-16">
                         <Link href="/">
-                            <Image width={150} height={150} priority src="/site/logo.svg" alt="Logo" />
+                            <Image width={150} height={150} priority src="/site/logo.svg" alt="Logo" className="h-auto" />
                         </Link>
                     </div>
                     <div className="mb-3">

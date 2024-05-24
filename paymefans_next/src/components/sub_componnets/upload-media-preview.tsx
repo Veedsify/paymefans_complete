@@ -97,7 +97,7 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendNe
             setPreview(newPreviews);
         };
         generatePreviews();
-    }, [files, setMainTab, setPreview, generatePosterFromVideo, imageTypes, videoTypes]);
+    }, [files, setMainTab, setPreview]);
 
     return (
         <>
