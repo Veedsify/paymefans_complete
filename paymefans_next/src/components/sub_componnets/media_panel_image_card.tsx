@@ -24,7 +24,7 @@ const images = [
     {
         url:
             "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=300",
-        locked: false,
+        locked: true,
         type: "image",
     },
     {
@@ -36,7 +36,7 @@ const images = [
     {
         url:
             "https://images.pexels.com/photos/247322/pexels-photo-247322.jpeg?auto=compress&cs=tinysrgb&w=600",
-        locked: false,
+        locked: true,
         type: "image",
     },
     {
@@ -48,7 +48,7 @@ const images = [
     {
         url:
             "https://images.pexels.com/photos/3657429/pexels-photo-3657429.jpeg?auto=compress&cs=tinysrgb&w=600",
-        locked: false,
+        locked: true,
         type: "image",
     },
     { url: "/videos/video.mp4", locked: false, type: "video", poster: "https://images.pexels.com/photos/3657429/pexels-photo-3657429.jpeg?auto=compress&cs=tinysrgb&w=600" },
@@ -82,11 +82,13 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
             {data.map((media, index) => (
                 <div key={index} className="aspect-square overflow-hidden relative ">
                     {media.type === "video" ? (
-                        <video autoPlay={false} loop={true} poster={media.poster} className=" w-full h-full cursor-pointer object-cover transition-all duration-300 ease-in-out hover:scale-105" onClick={()=>{
-                            PreviewImageHandler(media.url, media.locked, media.type)
-                        }}>
-                            <source src={media.url} type="video/mp4" />
-                        </video>
+                        <Image
+                            src={media?.poster || ""}
+                            alt="video poster"
+                            className=" w-full h-full cursor-pointer object-cover transition-all duration-300 ease-in-out hover:scale-105" width={400}
+                            height={400}
+                            onClick={() => PreviewImageHandler(media.url, media.locked, media.type)}
+                        />
                     ) : (
                         <Image
                             width={400}

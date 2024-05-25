@@ -91,7 +91,7 @@ const SideBar = () => {
                             <LucideUser />
                             <p>Profile</p>
                         </Link>
-                        {user?.is_model && (
+                        {(user?.is_model && user?.Model?.verification_status === true) && (
                             <Link href="/mix/live"
                                 className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                                 <LucideAirplay />

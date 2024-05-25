@@ -1,5 +1,5 @@
 "use client"
-import { LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
+import { LucideHeart, LucideMessageSquare, LucidePlay, LucideRepeat2, LucideShare } from "lucide-react";
 import Link from "next/link";
 import QuickPostActions from "../sub_componnets/quick_post_actions";
 import Image from "next/image";
@@ -14,7 +14,7 @@ interface PostComponentProps {
     };
     data: {
         post: string;
-        medias: {
+        media: {
             type: string;
             poster?: string | null
             url: string;
@@ -24,7 +24,7 @@ interface PostComponentProps {
 }
 
 const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
-    const imageLength = data.medias.length;
+    const imageLength = data.media.length;
     const { fullScreenPreview } = usePostComponent();
     const setActiveImage = (url: string, type: string) => {
         fullScreenPreview({ url: url, type: type, open: true })
@@ -50,22 +50,29 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                     {data.post}
                 </p>
                 <div
-                    className={`grid gap-3 ${data.medias.length === 2 ? "grid-cols-2" : data.medias.length >= 3 ? "grid-cols-3" : "grid-cols-1"}`}>
-                    {data.medias.slice(0, 3).map((media, index) => (
+                    className={`grid gap-3 ${data.media.length === 2 ? "grid-cols-2" : data.media.length >= 3 ? "grid-cols-3" : "grid-cols-1"}`}>
+                    {data.media.slice(0, 3).map((media, index) => (
                         <div className="relative" key={index}>
                             {media.type === 'video' ? (
-                                <video
-                                    poster={`${media.poster ? media.poster : ""}`}
-                                    width={200}
-                                    height={200}
-                                    onClick={() => {
-                                        setActiveImage(media.url, media.type)
-                                    }}
-                                    className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
-                                >
-                                    {/*<source src={media.url} type="video/mp4"/>*/}
-                                    Your browser does not support the video tag.
-                                </video>
+                                <div className="relative">
+                                    <Image
+                                        alt=""
+                                        src={`${media.poster ? media.poster : ""}`}
+                                        width={200}
+                                        height={200}
+                                        onClick={() => {
+                                            setActiveImage(media.url, media.type)
+                                        }}
+                                        className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
+                                    />
+                                    <div
+                                        onClick={() => {
+                                            setActiveImage(media.url, media.type)
+                                        }}
+                                        className="absolute inset-0 m-auto text-white bg-black bg-opacity-20 rounded-lg flex items-center justify-center cursor-pointer">
+                                        <LucidePlay size={50} stroke="#fff" />
+                                    </div>
+                                </div>
                             ) : (
                                 <Image
                                     src={media.url}
@@ -79,9 +86,9 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                     className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
                                 />
                             )}
-                            {index === 2 && data.medias.length > 3 ? (
+                            {index === 2 && data.media.length > 3 ? (
                                 <Link href="/mix/posts/1"
-                                    className="flex absolute inset-0 items-center justify-center bg-black rounded-lg mt-3 aspect-square bg-opacity-70 cursor-pointer select-none">
+                                    className="flex absolute inset-0 items-center justify-center bg-black rounded-lg mt-3 aspect-square bg-opacity-40 cursor-pointer select-none">
                                     <p className="text-xl font-bold select-none text-white">+{imageLength - 3}</p>
                                 </Link>
                             ) : null}

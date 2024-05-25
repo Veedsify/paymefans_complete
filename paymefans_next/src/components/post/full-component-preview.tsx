@@ -27,32 +27,30 @@ const PostComponentPreview = () => {
         <>
             <div
                 onClick={(e) => {
-                    e.currentTarget.classList.remove("opacity-100")
                     close()
                 }}
-                className={`fixed ease-in-out inset-0 w-full flex items-center justify-center bg-slate-950 z-50 bg-opacity-95 ${open ? "opacity-100 pointer-events-all" : "opacity-0 pointer-events-none"}`}>
+                className={`fixed ease-in-out inset-0 w-full h-screen flex items-center justify-center z-50 smooth-opacity ${open ? "active" : ""}`}>
                 <div className="p-4">
-                    <div className={`max-h-[96vh] overflow-y-auto relative`} onClick={(e) => e.stopPropagation()}>
+                    <div className={`max-h-[96vh]  overflow-y-auto relative`} onClick={(e) => e.stopPropagation()}>
                         <>
                             {type === "video" && (
-                                <div>
-                                    <video
-                                        width={1000} height={1000} autoPlay loop controls
-                                        className={`w-screen md:w-[550px] lg:w-[680px] block object-cover transition-all duration-300 border-none h-auto ${open ? "scale-100" : "scale-75"}`}
-                                    >
-                                        <source src={activeMedia} type="video/mp4" />
-                                    </video>
-                                </div>
+                                <video
+                                    autoPlay controls
+                                    className={`w-screen md:w-[550px] shadow-lg shadow-primary-dark-pink lg:w-[680px] block object-cover transition-all duration-300 border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
+                                >
+                                    <source src={activeMedia} type="video/mp4" />
+                                </video>
                             )}
                             {(type === "image") && (
                                 <div className="relative">
                                     <Image
                                         onLoad={handleLoaded}
-                                        src={activeMedia} width={680} height={680} priority
-                                        className={`md:w-[550px] bg-white lg:w-[680px] block object-cover transition-all duration-200 border-none animate-in`}
+                                        quality={100}
+                                        src={activeMedia} width={1500} height={1500} priority
+                                        className={`md:w-[550px] shadow-lg shadow-primary-dark-pink bg-white lg:w-[680px] block object-cover transition-all duration-200 border-none animate-in`}
                                         alt="image preview"
                                     />
-                                    <div className="add-loaders">
+                                    <div className="add-loaders opacity-70">
                                         {!loaded ? <Loader /> : ""}
                                     </div>
                                 </div>
@@ -60,7 +58,7 @@ const PostComponentPreview = () => {
                         </>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

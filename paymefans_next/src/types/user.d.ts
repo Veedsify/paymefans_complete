@@ -55,7 +55,8 @@ export type AuthUserProps = {
   },
   following: number;
   Model?: {
-    hookup: boolean
+    hookup: boolean;
+    verification_status: boolean;
   }
 }
 

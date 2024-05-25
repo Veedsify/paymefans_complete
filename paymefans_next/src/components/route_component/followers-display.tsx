@@ -89,6 +89,11 @@ const FollowersDisplay = () => {
             className="p-2 md:p-4 overflow-y-auto max-h-[92vh]"
             ref={ref}
         >
+            {followers.length === 0 && (
+                <div>
+                    <p className="text-center font-medium text-xl">No followers</p>
+                </div>
+            )}
             {followers.map((follower, index) => (
                 <UserFollowComp key={index} follower={follower} />
             ))}

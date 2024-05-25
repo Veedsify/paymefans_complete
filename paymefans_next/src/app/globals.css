@@ -17,25 +17,69 @@
 }
 
 .animate-in {
+  transform: scale(0.8);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.smooth-opacity {
   opacity: 0;
-  transform: scale(0.9);
-  animation: fadeIn 0.3s ease-in-out forwards;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0);
+  transition: all 0.3s ease-in-out;
+}
+
+.smooth-opacity.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 1);
+  pointer-events: all;
 }
 
 .animate-out {
-  opacity: 1;
   animation: fadeOut 0.3s ease-in-out forwards;
 }
 
-@keyframes fadeIn {
+.loaderFade {
+  opacity: 0;
+  animation: fade 0.3s ease-in-out forwards;
+}
+
+@keyframes fade {
   from {
     opacity: 0;
-    transform: scale(0.9);
   }
 
   to {
     opacity: 1;
+  }
+}
+
+@keyframes fadeInBg {
+  from {
+    background: rgba(0, 0, 0, 0);
+  }
+
+  to {
+    background: rgba(0, 0, 0, 0.955);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: scale(0.8);
+  }
+
+  to {
     transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0.9);
   }
 }
 

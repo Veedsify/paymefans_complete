@@ -24,7 +24,7 @@ const getUserData = async (): Promise<AuthUserProps | null> => {
     );
 
     if (res.status === 200 && res.data?.user) {
-      return res.data.user;
+      return res.data.user as AuthUserProps;
     } else if (res.status === 401) {
       redirect("/login");
       return null;

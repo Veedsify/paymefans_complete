@@ -47,6 +47,19 @@ class modelController {
                     .json({ message: "You're already a model", status: false });
             }
 
+            let dateOfBirth = new Date(dob);
+            let currentDate = new Date();
+
+            if (dateOfBirth >= currentDate) {
+                return res
+                    .status(200)
+                    .json({ message: "Invalid date of birth", status: false });
+            }
+
+            if ((currentDate.getFullYear() - dateOfBirth.getFullYear()) < 18) {
+                return res.status(200).json({ message: "You must be 18 years and above", status: false });
+            }
+
             const referenceId = "models" + uuid().split("-").join("");
 
             let signUpUserAsModel = await prismaQuery.model.create({
@@ -69,7 +82,7 @@ class modelController {
                     id
                 },
                 data: {
-                    is_model: true
+                    is_model: true,
                 }
             })
 
