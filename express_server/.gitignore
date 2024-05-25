@@ -1,4 +1,4 @@
 node_modules
-public\images\uploads\
-public\images\converted\
-public\attachments\
+public/images/uploads/
+public/images/converted/
+public/attachments/
