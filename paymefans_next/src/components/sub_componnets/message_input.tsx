@@ -12,7 +12,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import UploadMediaComponent from "../route_component/upload-media-conponent";
-import { socket } from "./sub/socket";
 
 export interface Attachment {
   type: string;
@@ -58,7 +57,7 @@ const MessageInput = ({
   const typingTimeout = useRef<number | null>(null);
 
   const handleKeyDown = useCallback(() => {
-    if (!isTyping) {
+    if (!isTyping || message.length > 0) {
       setIsTyping(true);
       sendTyping(true);
     }
@@ -117,13 +116,14 @@ const MessageInput = ({
   const handleSendMessage = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.shiftKey && e.key === "Enter") {
       e.preventDefault();
-      sendNewMessage([]);
+      sendNewMessage([])
+      setIsTyping(false);
+      sendTyping(false);
       return;
     }
     if (e.key === "Enter") {
       return;
     }
-    handleKeyDown();
   };
 
 

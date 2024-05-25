@@ -9,12 +9,10 @@ import React, {
 import Link from "next/link";
 import Image from "next/image";
 import { LucideArrowLeft, LucideGrip } from "lucide-react";
-import socketIoClient from "socket.io-client";
 import MessageBubble from "../sub_componnets/message_bubble";
 import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { socket } from "../sub_componnets/sub/socket";
-import toast from "react-hot-toast";
 
 
 const Chats = ({

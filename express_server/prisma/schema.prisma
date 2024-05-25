@@ -342,7 +342,7 @@ model Settings {
   subscription_duration String
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt
-  user                  User     @relation(fields: [user_id], references: [id])
+  user                  User     @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([user_id], map: "Settings_user_id_fkey")
 }
@@ -444,7 +444,7 @@ model UserPoints {
   conversion_rate    Float
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt
-  user               User                 @relation(fields: [user_id], references: [id])
+  user               User                 @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   UserPointsPurchase UserPointsPurchase[]
 }
 
@@ -456,7 +456,7 @@ model UserWallet {
   created_at      DateTime          @default(now())
   updated_at      DateTime          @updatedAt
   UserTransaction UserTransaction[]
-  user            User              @relation(fields: [user_id], references: [id])
+  user            User              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([user_id], map: "UserWallet_user_id_fkey")
 }

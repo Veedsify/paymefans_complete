@@ -1,18 +1,23 @@
 "use client"
 
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import UserFollowComp from "../sub_componnets/userfollowcomp";
+import { getToken } from "@/utils/cookie.get";
 
 interface PaginateProps {
     min: number;
     max: number;
 }
 
-interface Followers {
-    id: string;
-    username: string;
-    profile_image: string;
-    name: string;
+export interface Followers {
+    user: {
+        id: string;
+        username: string;
+        fullname: string;
+        profile_image: string;
+        name: string;
+    },
+    iAmFollowing: boolean;
 }
 
 const FollowersDisplay = () => {
@@ -21,49 +26,64 @@ const FollowersDisplay = () => {
         max: 30
     });
     const [followers, setFollowers] = useState<Followers[]>([]);
-
     const ref = useRef<HTMLDivElement>(null);
-    // create a fake 300 length array
-    const arr = new Array(50).fill(0);
-
-    useEffect(() => {
-        if (ref.current) {
-            ref.current.addEventListener("scroll", () => {
-                if (ref.current) {
-                    if (
-                        ref.current.scrollTop + ref.current.clientHeight >=
-                        ref.current.scrollHeight
-                    ) {
-                        setPaginate({
-                            min: Number(paginate.min) + 30,
-                            max: Number(paginate.max) + 30
-                        })
-                    }
+    const token = getToken()
+    const arr = new Array(30).fill(0);
+    const fetchFollowers = async () => {
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/get/followers?min=${paginate.min}&max=${paginate.max}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
                 }
             });
+            const data = await response.json();
+            console.log(data);
+            setFollowers(data.followers);
+        } catch (err) {
+            console.log(err);
         }
-    }, [paginate]);
+    };
 
     useEffect(() => {
-        if (paginate.min > 1) {
-            fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/profile/followers?min=${paginate.min}&max=${paginate.max}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setFollowers([...followers, ...data.results]);
-                }).catch((err) => {
-                    console.log(err);
-                })
+        fetchFollowers();
+    }, []);
+    useEffect(() => {
+        const handleScroll = () => {
+            if (ref.current) {
+                if ((ref.current.scrollTop + ref.current.clientHeight) + 100 >= ref.current.scrollHeight) {
+                    setPaginate(prevPaginate => ({
+                        min: prevPaginate.min + 30,
+                        max: prevPaginate.max + 30
+                    }));
+                }
+            }
+        };
+
+        if (ref.current) {
+            ref.current.addEventListener("scroll", handleScroll);
         }
 
-    }, [paginate, followers, setFollowers]);
+        return () => {
+            if (ref.current) {
+                ref.current.removeEventListener("scroll", handleScroll);
+            }
+        };
+    }, [paginate]); // Include paginate in the dependency array
+
+    useEffect(() => {
+        fetchFollowers();
+    }, [paginate]); // Fetch followers whenever paginate changes
+
 
     return (
         <div
-            className="p-2 md:p-4 md:pt-6 overflow-y-auto max-h-[92vh]"
+            className="p-2 md:p-4 overflow-y-auto max-h-[92vh]"
             ref={ref}
         >
-            {arr.map((model, i) => (
-                <UserFollowComp key={i} />
+            {followers.map((follower, index) => (
+                <UserFollowComp key={index} follower={follower} />
             ))}
         </div>
     )

@@ -1,6 +1,7 @@
 const prismaQuery = require("../utils/prisma");
 const hashPassword = require("../utils/passwordHasher");
 const { v4: uuid } = require("uuid");
+const sendWelcomeEmail = require("../libs/send-welcome-email");
 module.exports = async (body) => {
   const registerData = body;
 
@@ -67,6 +68,8 @@ module.exports = async (body) => {
       }
     });
 
+    const sendMail = sendWelcomeEmail(user.email, user.username);
+    console.log(sendMail);
     return user;
 
   } catch (error) {

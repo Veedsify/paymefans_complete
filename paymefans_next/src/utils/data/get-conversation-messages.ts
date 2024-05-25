@@ -11,8 +11,8 @@ export default async function GetConversationMessages(conversationId: string) {
         cache: "no-store"
     })
     if (response.ok) {
-        const result =  await response.json()
-        
+        const result = await response.json()
+
         return result
     }
     return null

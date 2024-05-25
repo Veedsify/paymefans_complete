@@ -50,6 +50,7 @@ router.get("/wallet/transactions", checkUserIsAuthenticated, GetTransactions);
 
 // Followers
 router.post("/follow/check", checkUserIsAuthenticated, followerController.CheckFollower);
+router.post("/get/followers", checkUserIsAuthenticated, followerController.GetFollowers);
 
 // Conversations
 router.get("/conversation/get-messages/:conversation", checkUserIsAuthenticated, ConversationsController.allConversations);

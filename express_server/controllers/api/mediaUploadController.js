@@ -11,7 +11,7 @@ class uploadMediaController {
             async function addFilesToAttachments() {
                 files.forEach((file) => {
                     attachments.push({
-                        url: file.path.replace("public\\", "").replace(/\\/g, "/"),
+                        url: file.path.replace("public", "").replace(/\\/g, "/"),
                         name: file.filename,
                         size: file.size,
                         type: file.mimetype,
@@ -26,7 +26,7 @@ class uploadMediaController {
                     await prismaQuery.userAttachments.create({
                         data: {
                             user_id: Number(req.user.id),
-                            path: file.path.replace("public\\", "").replace(/\\/g, "/"),
+                            path: file.path.replace("public", "").replace(/\\/g, "/"),
                             name: file.filename,
                             size: file.size,
                             type: file.mimetype,

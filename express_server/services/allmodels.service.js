@@ -3,7 +3,7 @@ const prismaQuery = require("../utils/prisma");
 module.exports = async (limit, thisUser) => {
   const models = await prismaQuery.$queryRaw`
   SELECT *
-  FROM user
+  FROM User
   WHERE is_model = true AND id != ${thisUser.id}
   ORDER BY RAND()
   LIMIT ${limit};

@@ -7,8 +7,8 @@ class Following {
         try {
             const data = await prismaQuery.follow.findFirst({
                 where: {
-                    user_id: thisUserId,
-                    follower_id: userId
+                    user_id: userId,
+                    follower_id: thisUserId
                 }, select: {
                     follow_id: true
                 }
@@ -40,9 +40,9 @@ class Following {
             const followAction = followStatus
                 ? prismaQuery.follow.create({
                     data: {
-                        user_id: userId,
+                        user_id: profileId,
                         follow_id: followUuid,
-                        follower_id: profileId,
+                        follower_id: userId,
                     },
                 })
                 : prismaQuery.follow.delete({
