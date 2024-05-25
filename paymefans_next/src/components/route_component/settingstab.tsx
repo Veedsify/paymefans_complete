@@ -7,6 +7,7 @@ import SettingSecurity from "../sub_componnets/settingsecurity";
 import { AuthUserProps } from "@/types/user";
 import { MouseEvent, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
+import { SettingsBillingProvider } from "@/contexts/settings-billing-context";
 
 const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
     const searchParams = useSearchParams();
@@ -58,7 +59,15 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
                     <SettingSecurity />
                 </TabPanel>
                 <TabPanel>
-                    <Settingsbilling />
+                    <SettingsBillingProvider current_data={{
+                        subscription: user?.Settings?.subscription_active || false,
+                        subscription_price: user?.Settings?.subscription_price || 0,
+                        subscription_duration: user?.Settings?.subscription_duration || 0,
+                        price_per_message: user?.Settings?.price_per_message || 0,
+                        free_message: user?.Settings?.enable_free_message || false
+                    }}>
+                        <Settingsbilling />
+                    </SettingsBillingProvider>
                 </TabPanel>
             </Tabs>
         </div>

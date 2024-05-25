@@ -40,7 +40,14 @@ const FollowersDisplay = () => {
             });
             const data = await response.json();
             console.log(data);
-            setFollowers(data.followers);
+            setFollowers((prev) => {
+                const remaining = data.followers.filter((follower: Followers) => {
+                    // If the follower's id isn't found in the existing followers list, keep it
+                    return !prev.some(f => f.user.id === follower.user.id);
+                });
+                return [...prev, ...remaining];
+            });
+
         } catch (err) {
             console.log(err);
         }

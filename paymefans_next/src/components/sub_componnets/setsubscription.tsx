@@ -2,6 +2,8 @@ import { LucideAlertCircle } from "lucide-react";
 import Toggle from "./checked";
 import Image from "next/image";
 import { useUserAuthContext } from "@/lib/userUseContext";
+import React from "react";
+
 
 const SetSubscription = () => {
     const { user } = useUserAuthContext()

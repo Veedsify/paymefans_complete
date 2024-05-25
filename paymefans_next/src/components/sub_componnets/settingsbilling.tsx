@@ -1,11 +1,12 @@
+"use client"
 import Image from "next/image";
 import Toggle from "./checked";
 import SubscriptionState from "./subscriptionState";
-import { revalidatePath } from "next/cache";
 import { useUserAuthContext } from "@/lib/userUseContext";
 
 const Settingsbilling = () => {
     const { user } = useUserAuthContext()
+
     return (
         <div className="py-5">
             <h1 className="font-bold mb-5">Set your message amount</h1>
@@ -23,8 +24,8 @@ const Settingsbilling = () => {
             </div>
 
             <span className="inline-flex gap-2 my-4">
-                <Toggle state={user?.Settings?.price_per_message == 0 ? true : false} />
-                Enable free message
+                <Toggle state={user?.Settings?.price_per_message === 0 ? true : false} />
+                Free message enabled
             </span>
 
             {user?.is_model && <SubscriptionState />}

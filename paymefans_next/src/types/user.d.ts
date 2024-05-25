@@ -48,6 +48,9 @@ export type AuthUserProps = {
   }
   Settings?: {
     price_per_message: number;
+    subscription_active: boolean;
+    subscription_duration: number;
+    enable_free_message: boolean;
     subscription_price: number;
   },
   following: number;

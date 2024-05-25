@@ -24,7 +24,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ sender, seen, message, da
     const toggleLightBox = (file: Attachment) => {
         fullScreenPreview(
             {
-                url: `${server}/${file.url}`,
+                url: `${server}${file.url}`,
                 type: file.type.includes("image") ? "image" : "video",
                 open: true
             }

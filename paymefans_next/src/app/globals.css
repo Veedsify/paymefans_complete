@@ -6,6 +6,38 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
+.add-loaders {
+  position: absolute;
+  color: #000;
+  top: 50%;
+  left: 50%;
+  font-size: 2rem;
+  transform: translate(-50%, -50%);
+  z-index: inherit;
+}
+
+.animate-in {
+  opacity: 0;
+  transform: scale(0.9);
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+.animate-out {
+  opacity: 1;
+  animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 .aspect-long {
   aspect-ratio: 9/16;
