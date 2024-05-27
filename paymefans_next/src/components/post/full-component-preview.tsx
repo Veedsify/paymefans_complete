@@ -36,7 +36,7 @@ const PostComponentPreview = () => {
                             {type === "video" && (
                                 <video
                                     autoPlay controls
-                                    className={`w-screen md:w-[550px] shadow-lg shadow-primary-dark-pink lg:w-[680px] block object-cover transition-all duration-300 border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
+                                    className={`w-screen md:w-[550px] shadow-lg shadow-primary-dark-pink lg:w-[680px] block object-cover transition-all duration-300 bg-white border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
                                 >
                                     <source src={activeMedia} type="video/mp4" />
                                 </video>
