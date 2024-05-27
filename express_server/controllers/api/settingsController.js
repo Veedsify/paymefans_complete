@@ -44,6 +44,35 @@ class SettingsController {
             res.status(500).json({ message: "An error occurred", status: false });
         }
     }
+
+    static async setMessagePrice(req, res) {
+        try {
+            const user = req.user;
+            const { price_per_message, enable_free_message } = req.body;
+
+            await prismaQuery.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    Settings: {
+                        update: {
+                            price_per_message: price_per_message,
+                            enable_free_message: enable_free_message
+                        }
+                    }
+                }
+            })
+
+            prismaQuery.$disconnect();
+
+            res.status(200).json({ message: "Message price updated successfully", status: true });
+        }
+        catch (error) {
+            console.log(error);
+            res.status(500).json({ message: "An error occurred", status: false });
+        }
+    }
 }
 
 module.exports = SettingsController

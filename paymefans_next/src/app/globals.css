@@ -30,9 +30,24 @@
 
 .smooth-opacity.active {
   opacity: 1;
-  background: rgba(255, 255, 255, 1);
+  background: rgba(0, 0, 0, 0.709);
+  backdrop-filter: blur(5px);
   pointer-events: all;
 }
+
+/* .smooth-opacity.active::before {
+  content: '';
+  position: fixed;
+  aspect-ratio: 1/1;
+  height: 80%;
+  border-radius: 50%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(100px);
+  background: rgba(150, 11, 152, 0.5);
+  z-index: -1;
+} */
 
 .animate-out {
   animation: fadeOut 0.3s ease-in-out forwards;

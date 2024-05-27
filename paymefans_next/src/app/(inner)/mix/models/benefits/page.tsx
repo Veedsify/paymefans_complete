@@ -23,8 +23,13 @@ async function Models() {
                                 Sorry you are already a model
                             </h1>
                             <div className="text-center">
-                                <Link href="/mix/profile" className="bg-primary-dark-pink text-white text-sm py-3 px-4 font-bold m-3 rounded-md w-full text-center">
-                                    Go to Profile</Link>
+                                <Link href={
+                                    user?.Model?.verification_status ?
+                                        `/mix/profile` :
+                                        "/mix/verification"
+                                } className="bg-primary-dark-pink text-white text-sm py-3 px-4 font-bold m-3 rounded-md w-full text-center">
+                                    {(user?.is_model && user.Model?.verification_status) ? "Go to your profile" : "Verify your account"}
+                                </Link>
                             </div>
                         </div>
                     </div>

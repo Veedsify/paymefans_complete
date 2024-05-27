@@ -31,7 +31,7 @@ const PostComponentPreview = () => {
                 }}
                 className={`fixed ease-in-out inset-0 w-full h-screen flex items-center justify-center z-50 smooth-opacity ${open ? "active" : ""}`}>
                 <div className="p-4">
-                    <div className={`max-h-[96vh]  overflow-y-auto relative`} onClick={(e) => e.stopPropagation()}>
+                    <div className={`max-h-[96vh] overflow-y-auto relative`} onClick={(e) => e.stopPropagation()}>
                         <>
                             {type === "video" && (
                                 <video

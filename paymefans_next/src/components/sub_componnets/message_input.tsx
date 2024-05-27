@@ -70,7 +70,7 @@ const MessageInput = ({
       setIsTyping(false);
       sendTyping(false);
     }, 1000); // Adjust the timeout duration as needed
-  }, [isTyping, sendTyping]);
+  }, [isTyping, sendTyping, message.length]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);

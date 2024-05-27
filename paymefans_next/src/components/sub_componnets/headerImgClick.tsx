@@ -1,13 +1,13 @@
 "use client"
+"use client"
 import { useSideBarContext } from "@/lib/pageContexts";
+import { useUserAuthContext } from "@/lib/userUseContext";
 import { AuthUserProps } from "@/types/user";
 import Image from "next/image";
-type HeaderImgProps = {
-    user: any
-}
-const HeaderImgClick: React.FC<HeaderImgProps> = ({ user }) => {
-    const { setSideBar } = useSideBarContext()
 
+const HeaderImgClick = () => {
+    const { setSideBar } = useSideBarContext()
+    const { user } = useUserAuthContext()
     return (
         <li>
             <span

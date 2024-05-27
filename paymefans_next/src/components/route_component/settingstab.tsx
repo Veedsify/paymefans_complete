@@ -22,7 +22,7 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
         if (tab) {
             const index = ["profile", "security", "billing"].indexOf(tab);
             if (index > -1) {
-
+                // document.querySelectorAll(".react-tabs__tab")[index].click();
             }
         }
     }, [searchParams]);
@@ -64,7 +64,7 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
                         subscription_price: user?.Settings?.subscription_price || 0,
                         subscription_duration: user?.Settings?.subscription_duration || 0,
                         price_per_message: user?.Settings?.price_per_message || 0,
-                        free_message: user?.Settings?.enable_free_message || false
+                        enable_free_message: user?.Settings?.enable_free_message || false
                     }}>
                         <Settingsbilling />
                     </SettingsBillingProvider>

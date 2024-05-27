@@ -29,7 +29,7 @@ const FollowersDisplay = () => {
     const ref = useRef<HTMLDivElement>(null);
     const token = getToken()
     const arr = new Array(30).fill(0);
-    const fetchFollowers = async () => {
+    const fetchFollowers = useCallback(async () => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/get/followers?min=${paginate.min}&max=${paginate.max}`, {
                 method: "POST",
@@ -51,11 +51,11 @@ const FollowersDisplay = () => {
         } catch (err) {
             console.log(err);
         }
-    };
+    }, [paginate.min, paginate.max, token]);
 
     useEffect(() => {
         fetchFollowers();
-    }, []);
+    }, [fetchFollowers]);
     useEffect(() => {
         const handleScroll = () => {
             if (ref.current) {
@@ -68,20 +68,22 @@ const FollowersDisplay = () => {
             }
         };
 
-        if (ref.current) {
-            ref.current.addEventListener("scroll", handleScroll);
+        const scrollRef = ref.current
+
+        if (scrollRef) {
+            scrollRef.addEventListener("scroll", handleScroll);
         }
 
         return () => {
-            if (ref.current) {
-                ref.current.removeEventListener("scroll", handleScroll);
+            if (scrollRef) {
+                scrollRef.removeEventListener("scroll", handleScroll);
             }
         };
-    }, [paginate]); // Include paginate in the dependency array
+    }, [paginate, ref]); // Include paginate in the dependency array
 
     useEffect(() => {
         fetchFollowers();
-    }, [paginate]); // Fetch followers whenever paginate changes
+    }, [paginate, fetchFollowers]); // Fetch followers whenever paginate changes
 
 
     return (
