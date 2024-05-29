@@ -48,7 +48,7 @@ const PostComponentPreview = () => {
                                         quality={100}
                                         src={activeMedia} width={1500} height={1500} priority
                                         className={`md:w-[550px] shadow-lg shadow-primary-dark-pink bg-white lg:w-[680px] block object-cover transition-all duration-200 border-none animate-in`}
-                                        alt="image preview"
+                                        alt=""
                                     />
                                     <div className="add-loaders opacity-70">
                                         {!loaded ? <Loader /> : ""}

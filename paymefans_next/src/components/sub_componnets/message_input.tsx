@@ -10,7 +10,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
 import UploadMediaComponent from "../route_component/upload-media-conponent";
 
 export interface Attachment {

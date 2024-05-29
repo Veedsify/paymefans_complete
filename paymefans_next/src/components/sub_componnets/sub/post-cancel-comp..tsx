@@ -1,9 +1,11 @@
 "use client"
+import { useNewPostStore } from "@/contexts/new-post-context";
 import { useRouter } from "next/navigation";
 import swal from "sweetalert";
 
 export const PostCancelComp = () => {
     const router = useRouter()
+    const { clearAll } = useNewPostStore();
     const confirmCancel = () => {
         swal({
             title: "Are you sure?",
@@ -11,7 +13,7 @@ export const PostCancelComp = () => {
             icon: "/icons/warning.gif",
             className: "mx-auto",
             buttons: {
-                cancel: false,
+                cancel: true,
                 confirm: {
                     text: "Yes",
                     className: "bg-primary-dark-pink text-white p-2 px-8 rounded ml-auto ",
@@ -19,8 +21,9 @@ export const PostCancelComp = () => {
                 }
             }
         }).then((res) => {
-            if (res) {
+            if (res === "yes") {
                 router.push("/mix")
+                clearAll();
             }
         })
     }

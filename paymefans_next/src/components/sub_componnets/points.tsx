@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import {toast} from "sonner";
+import toast from "react-hot-toast";
 
 const PointsBuy = ({
     point
@@ -41,7 +41,7 @@ const PointsBuy = ({
                 <h2 className="font-bold text-xl text-primary-dark-pink">{point.points}</h2>
             </div>
             <div>
-                <h3 className="text-center font-bold text-sm py-3">₦{Number(point.amount).toLocaleString()}</h3>
+                <h3 className="text-center font-medium text-sm py-3">₦{Number(point.amount).toLocaleString()}</h3>
             </div>
         </div>
     );

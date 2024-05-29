@@ -2,7 +2,7 @@
 import { useUserAuthContext } from "@/lib/userUseContext"
 import { updateHookupData } from "@/utils/data/update-hookup-data"
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import toast from "react-hot-toast";
 
 const SettingsHookupCheck = () => {
     const router = useRouter()
