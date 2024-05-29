@@ -27,7 +27,7 @@ class pointsController {
   // Callback
   static async Callback(req, res) {
     const { reference } = req.query;
-
+    // Verify Payment on Paystack
     const getUser = await prismaQuery.userPointsPurchase.findFirst({
       where: { purchase_id: reference },
     });
@@ -40,7 +40,24 @@ class pointsController {
       return res.status(200).json({ status: false, message: "These points are already updated" });
     }
 
-    if (getUser) {
+    async function verifyPayment(reference) {
+      const response = await fetch(
+        `https://api.paystack.co/transaction/verify/${reference}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+          },
+        }
+      )
+
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        return null
+      }
+    }
+
+    if (getUser && verifyPayment(reference)) {
       await prismaQuery.userPointsPurchase.update({
         where: { purchase_id: reference },
         data: { success: true },

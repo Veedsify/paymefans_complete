@@ -118,9 +118,10 @@ const ConversationCard = ({ conversation }: {
                                         </div>
                                         <>
                                             {conversation?.lastMessage?.attachment?.length > 0 && <div className="flex gap-1">
-                                                {conversation?.lastMessage?.attachment.map((file, index) => (
-                                                    <LucideLink2 className="text-gray-500" key={index} />
-                                                ))}
+                                                {conversation?.lastMessage?.attachment.map((file, index) => {
+                                                    if (index > 5) return
+                                                    return <LucideLink2 className="text-gray-500" key={index} />
+                                                })}
                                             </div>}
                                         </>
                                     </div>) : "New Conversation"}

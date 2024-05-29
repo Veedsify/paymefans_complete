@@ -4,7 +4,9 @@ const jwt = require("../utils/jsonwebtoken");
 const prismaQuery = require("../utils/prisma");
 
 module.exports = async ({ data }) => {
-  const { email, password: userpassword } = data;
+
+  const { email = null, password: userpassword = null } = data;
+
   if (!email || !userpassword) {
     return { error: "Email and password are required", status: false };
   }
@@ -20,7 +22,7 @@ module.exports = async ({ data }) => {
   }
 
   const match = bcrypt.compare(userpassword, user.password);
-  
+
   if (!match) {
     return { error: "Invalid email or password", status: false };
   }

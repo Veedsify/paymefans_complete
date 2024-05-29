@@ -2,10 +2,10 @@ import ModelsSubscription from "@/components/sub_componnets/models_subscription"
 import { AllModelsProps, AuthUserProps } from "@/types/user";
 import getSideModels from "@/utils/data/get-sidemodels";
 import getUserData from "@/utils/data/user-data";
-import { LucideSearch } from "lucide-react";
+import { LucideArrowUp, LucideSearch } from "lucide-react";
 
 const ModelsPage = async () => {
-    const models: AllModelsProps[] = await getSideModels({ limit: 4 })
+    const models: AllModelsProps[] = await getSideModels({ limit: 3 })
     const user = await getUserData()
     return (
         <>
@@ -18,8 +18,10 @@ const ModelsPage = async () => {
                         <input type="search" name="Search" id="search" className="w-full p-4 outline-none" placeholder="Search" />
                         <LucideSearch className="self-center pr-2 cursor-pointer" size={30} />
                     </label>
-
                 </div>
+                <h1 className="font-bold text-2xl mb-5 flex items-center gap-1">
+                    Search for Models/Creators <LucideArrowUp />
+                </h1>
                 <div className="py-6">
                     <div className="grid grid-cols-3 gap-4 lg:gap-6">
                         {models.map((model, index) => {

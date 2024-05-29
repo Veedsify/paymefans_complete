@@ -14,7 +14,6 @@ import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { socket } from "../sub_componnets/sub/socket";
 
-
 const Chats = ({
   allmessages,
   lastMessage,
@@ -30,6 +29,7 @@ const Chats = ({
   const [typing, setTyping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { user } = useUserAuthContext();
+  const heighRef = useRef<HTMLDivElement>(null);
 
   const handleJoined = useCallback((message: { message: string }) => {
     // toast.success(message.message);
@@ -125,10 +125,17 @@ const Chats = ({
       conversationId,
     });
   };
+  useEffect(() => {
+    if (heighRef.current) {
+      heighRef.current.scrollTop = heighRef.current.scrollHeight;
+    }
 
-  useLayoutEffect(() => {
-    ref.current?.scrollIntoView({ behavior: "auto" });
-  }, [messages]);
+    return () => {
+      if (heighRef.current) {
+        heighRef.current.scrollBy(0, heighRef.current.scrollHeight);
+      }
+    }
+  }, [heighRef, messages]);
 
   useEffect(() => {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
@@ -188,7 +195,7 @@ const Chats = ({
           <LucideGrip size={30} className="cursor-pointer" />
         </div>
       </div>
-      <div className="max-h-[80vh] overflow-auto pb-5" ref={ref}>
+      <div className="max-h-[80vh] overflow-auto pb-5" ref={heighRef}>
         {messages?.map((message: Message, index: number) => (
           <div
             key={index}

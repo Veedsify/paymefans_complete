@@ -140,15 +140,16 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendNe
                 <div className='mt-5'>
                     <form action="" onSubmit={e => e.preventDefault()}>
                         <div className='flex items-center gap-3'>
-                            <div
+                            {/* <div
                                 ref={ref as RefObject<HTMLDivElement>}
                                 contentEditable={true}
                                 id="message-input"
                                 className="bg-gray-100 rounded-md flex-1 outline-none p-4 font-semibold"
-                            ></div>
+                            ></div> */}
                             <button
                                 onClick={handleAttachmentUpload}
-                                className='h-12 w-12 rounded-full flex items-center justify-center bg-primary-dark-pink cursor-pointer'>
+                                className='h-12 px-8 text-white font-bold rounded-full flex items-center justify-center bg-primary-dark-pink cursor-pointer ml-auto'>
+                                Send
                                 <LucideChevronRight stroke='#fff' />
                             </button>
                         </div>

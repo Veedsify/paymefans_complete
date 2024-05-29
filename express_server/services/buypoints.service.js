@@ -30,6 +30,7 @@ async function PaystackPayment(price, req) {
             },
         });
         prismaQuery.$disconnect();
+
         const CreateOrder = await fetch(
             "https://api.paystack.co/transaction/initialize",
             {

@@ -1,5 +1,5 @@
 "use client"
-import { SetStateAction, useCallback, useEffect, useRef, useState } from 'react';
+import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import toast from 'react-hot-toast';
@@ -21,16 +21,38 @@ const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, set
     const handleMultipleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const imageTypes = ["image/png", "image/jpeg", "image/jpg", "image/gif", "image/svg+xml", "image/webp", "image/bmp", "image/tiff", "image/ico"];
         const videoTypes = ["video/mp4", "video/webm", "video/ogg"];
+
         if (e.target.files) {
-            const isValidType = imageTypes.includes(e.target.files[0].type) || videoTypes.includes(e.target.files[0].type);
-            if (!isValidType) {
+            const selectedFiles = Array.from(e.target.files);
+            const validFiles = selectedFiles.filter(file =>
+                imageTypes.includes(file.type) || videoTypes.includes(file.type)
+            );
+
+            if (validFiles.length !== selectedFiles.length) {
                 toast.error("Invalid file type, please select an image or video file");
                 return;
             }
+
             setFiles(e.target.files);
         }
-    }, []);
+    }, [setFiles]);
 
+    // Use a useMemo to avoid recreating URLs on every render
+    const fileUrls = useMemo(() => {
+        if (!files) return [];
+
+        const urls = Array.from(files).map(file => URL.createObjectURL(file));
+
+        // Cleanup function to revoke the object URLs
+        return urls;
+    }, [files]);
+
+    // Cleanup object URLs on unmount or when files change
+    useEffect(() => {
+        return () => {
+            fileUrls.forEach(url => URL.revokeObjectURL(url));
+        };
+    }, [fileUrls]);
     const closeModal = useCallback(() => {
         setFiles(null);
         close()

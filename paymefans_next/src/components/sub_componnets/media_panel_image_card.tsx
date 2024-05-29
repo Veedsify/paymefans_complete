@@ -1,7 +1,6 @@
 "use client"
-import { LucideLock } from "lucide-react";
-import { SetStateAction, useEffect, useState } from "react";
-import VideoPlayer from "./videoplayer";
+import { LucideLock, LucidePlay } from "lucide-react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
 
@@ -51,7 +50,7 @@ const images = [
         locked: true,
         type: "image",
     },
-    { url: "/videos/video.mp4", locked: false, type: "video", poster: "https://images.pexels.com/photos/3657429/pexels-photo-3657429.jpeg?auto=compress&cs=tinysrgb&w=600" },
+    { url: "/videos/video.mp4", locked: false, type: "video", poster: "https://images.pexels.com/photos/19674422/pexels-photo-19674422/free-photo-of-woman-in-a-red-sequin-dress-posing.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" },
 ];
 const MediaPanelImageCard = ({ sort }: { sort: string }) => {
     const [data, setData] = useState<MediaDataType[]>(images);
@@ -82,13 +81,21 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
             {data.map((media, index) => (
                 <div key={index} className="aspect-square overflow-hidden relative ">
                     {media.type === "video" ? (
-                        <Image
-                            src={media?.poster || ""}
-                            alt="video poster"
-                            className=" w-full h-full cursor-pointer object-cover transition-all duration-300 ease-in-out hover:scale-105" width={400}
-                            height={400}
-                            onClick={() => PreviewImageHandler(media.url, media.locked, media.type)}
-                        />
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={media?.poster || ""}
+                                alt="video poster"
+                                priority
+                                className=" w-[400px] h-[400px] cursor-pointer object-cover transition-all duration-300 ease-in-out" width={400}
+                                height={400}
+                                onClick={() => PreviewImageHandler(media.url, media.locked, media.type)}
+                            />
+                            <div
+                                onClick={() => PreviewImageHandler(media.url, media.locked, media.type)}
+                                className="absolute bg-black w-full h-full inset-0 bg-opacity-20 cursor-pointer flex items-center justify-center">
+                                <LucidePlay stroke="white" size={30} strokeWidth={2} />
+                            </div>
+                        </div>
                     ) : (
                         <Image
                             width={400}

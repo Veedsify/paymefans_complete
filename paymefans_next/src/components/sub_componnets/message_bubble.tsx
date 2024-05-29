@@ -41,7 +41,7 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ sender, seen, message, da
     return (
         <div className="flex items-center">
             {sender === user?.user_id ? (
-                <div className="ml-auto max-w-[85%] md:max-w-[60%]">
+                <div className="ml-auto max-w-[85%] md:max-w-[70%]">
                     {
                         attachment && attachment.length > 0 ? (
                             <div className="grid grid-auto-columns">

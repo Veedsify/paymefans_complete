@@ -8,7 +8,9 @@ module.exports = async (body) => {
   if (!registerData) return { error: "Invalid request", status: false };
 
   if (!registerData?.name || !registerData?.username || !registerData?.email || !registerData?.phone || !registerData?.password || !registerData?.location) {
-    return { error: "All fields are required", status: false };
+    return {
+      error: `Sorry ${!registerData?.name ? 'name' : !registerData?.username ? 'username' : !registerData?.email ? 'email' : !registerData?.phone ? 'phone' : !registerData?.password ? 'password' : !registerData.location ? "location" : "fullname"} feild is missing`, status: false
+    };
   }
 
   const checkPhone = await prismaQuery.user.findUnique({
@@ -18,7 +20,7 @@ module.exports = async (body) => {
     where: { email: registerData?.email },
   });
   if (checkPhone) {
-    return { error: "Phone number already exists", status: false };
+    return { error: "Sorry this user already exists", status: false };
   }
   if (checkEmail) {
     return { error: "Email Address already exists", status: false };
@@ -35,7 +37,7 @@ module.exports = async (body) => {
         fullname: registerData?.name,
         user_id: uniqueUserId,
         username: `@${registerData?.username}`,
-        name: registerData?.fullname,
+        name: registerData?.name,
         email: registerData?.email,
         phone: registerData?.phone,
         location: registerData?.location,
@@ -69,7 +71,6 @@ module.exports = async (body) => {
     });
 
     const sendMail = sendWelcomeEmail(user.email, user.username);
-    console.log(sendMail);
     return user;
 
   } catch (error) {
