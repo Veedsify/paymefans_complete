@@ -30,8 +30,7 @@
 
 .smooth-opacity.active {
   opacity: 1;
-  background: rgba(0, 0, 0, 0.709);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.909);
   pointer-events: all;
 }
 
