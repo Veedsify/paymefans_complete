@@ -10,8 +10,10 @@ const followerController = require("../controllers/api/followerController");
 const ConversationsController = require("../controllers/api/conversationsController");
 const { changePassword, setMessagePrice } = require("../controllers/api/settingsController");
 const uploadAttachmentMulterMiddleware = require("../middlewares/uploadAttachmentMulter.middleware");
+const multerPostMiddleware = require("../middlewares/multerPostMiddleware.middleware");
 const uploadMediaController = require("../controllers/api/mediaUploadController");
 const { GetTransactions } = require("../controllers/api/transactionsController");
+const { CreatePost } = require("../controllers/api/postController");
 
 // Authentication
 router.post("/auth/signup", authController.Register);
@@ -27,6 +29,8 @@ router.post("/profile/banner/change", checkUserIsAuthenticated, multerImageMiddl
 router.post("/profile/image/change", checkUserIsAuthenticated, multerImageMiddleware("profile_image"), profileController.ProfileChange);
 // router.post("/profile/settings/update/password", checkUserIsAuthenticated, profileController.SettingsPasswordChange);
 
+// Post & Home 
+router.post("/post/create", checkUserIsAuthenticated, multerPostMiddleware.array("media[]"), CreatePost);
 
 // Settngs and Configs
 router.post("/profile/settings/update", checkUserIsAuthenticated, profileController.SettingsProfileChange);

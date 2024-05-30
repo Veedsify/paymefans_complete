@@ -4,6 +4,7 @@ import { HiCamera, HiVideoCamera } from 'react-icons/hi';
 import { PostCancelComp } from '@/components/sub_componnets/sub/post-cancel-comp.';
 import PostEditor from '@/components/route_component/post-editor';
 import { Metadata } from 'next';
+import NewPostMediaAdd from "@/components/sub_componnets/sub/new-post-media-add";
 
 export const metadata: Metadata = {
     title: "Create Post",
@@ -13,32 +14,7 @@ export const metadata: Metadata = {
 const NewPost = () => {
     return (
         <div className="h-full">
-            <div className="flex items-center md:p-8 p-4">
-                <PostCancelComp />
-                <Link href=""
-                    className="bg-primary-dark-pink text-white p-2 px-8 rounded ml-auto ">
-                    Post
-                </Link>
-            </div>
             <PostEditor />
-            <PostMediaPreview />
-            <div className="md:px-8 px-4 w-full flex md:justify-start gap-3 items-center">
-                <label htmlFor="attachments" className='cursor-pointer'>
-                    <HiCamera size={50}
-                        className='border border-gray-400 p-2 rounded-lg'
-                    />
-                </label>
-                <input type="text" id="attachments" className="hidden" name="attachments" />
-
-                <input type="file" className="hidden" id="flie" capture="environment" />
-                <label htmlFor="flie" className='cursor-pointer'>
-                    <HiVideoCamera size={50} strokeWidth={1}
-                        className="border border-gray-400 p-2 rounded-lg"
-                    />
-                </label>
-                {/* <Toggle />
-                    <span className="text-sm font-medium">Enable watermark</span> */}
-            </div>
         </div >
     );
 };

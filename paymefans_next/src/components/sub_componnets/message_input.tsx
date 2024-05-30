@@ -90,7 +90,7 @@ const MessageInput = ({
           ref.current.innerHTML = "";
           ref.current.focus();
         }
-        return toast.info(`Sorry, You need to have at least ${receiver?.Settings?.price_per_message} paypoints to send a message to ${(receiver?.name).charAt(0).toUpperCase() + (receiver?.name).slice(1)}`);
+        return toast.error(`Sorry, You need to have at least ${receiver?.Settings?.price_per_message} paypoints to send a message to ${(receiver?.name).charAt(0).toUpperCase() + (receiver?.name).slice(1)}`);
       }
     }
     const trimmedMessage = message.trim();

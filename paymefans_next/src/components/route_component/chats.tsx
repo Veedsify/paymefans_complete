@@ -29,7 +29,7 @@ const Chats = ({
   const [typing, setTyping] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { user } = useUserAuthContext();
-  const heighRef = useRef<HTMLDivElement>(null);
+  const heightRef = useRef<HTMLDivElement>(null);
 
   const handleJoined = useCallback((message: { message: string }) => {
     // toast.success(message.message);
@@ -126,16 +126,18 @@ const Chats = ({
     });
   };
   useEffect(() => {
-    if (heighRef.current) {
-      heighRef.current.scrollTop = heighRef.current.scrollHeight;
+
+    const height_ref = heightRef.current;
+    if (height_ref) {
+      height_ref.scrollTop = height_ref.scrollHeight;
     }
 
     return () => {
-      if (heighRef.current) {
-        heighRef.current.scrollBy(0, heighRef.current.scrollHeight);
+      if (height_ref) {
+        height_ref.scrollBy(0, height_ref.scrollHeight);
       }
     }
-  }, [heighRef, messages]);
+  }, [heightRef, messages]);
 
   useEffect(() => {
     ref.current?.scrollTo(0, ref.current.scrollHeight);
@@ -195,7 +197,7 @@ const Chats = ({
           <LucideGrip size={30} className="cursor-pointer" />
         </div>
       </div>
-      <div className="max-h-[80vh] overflow-auto pb-5" ref={heighRef}>
+      <div className="max-h-[80vh] overflow-auto pb-5" ref={heightRef}>
         {messages?.map((message: Message, index: number) => (
           <div
             key={index}

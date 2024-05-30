@@ -68,6 +68,7 @@ model User {
   Messages                  Messages[]
   Model                     Model?
   UserAttachments           UserAttachments[]
+  Post                      Post[]
 }
 
 model Participants {
@@ -188,13 +189,11 @@ model Post {
   id              Int           @id @default(autoincrement())
   post_id         String
   was_repost      Boolean       @default(false)
-  user_id         String
-  title           String
-  description     String
-  post_type       String
-  image           String        @db.LongText
-  video           String        @db.LongText
+  user_id         Int
+  content         String
+  media           Json?
   post_status     String
+  post_audience   PostAudience
   post_is_visible Boolean       @default(true)
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
@@ -203,6 +202,8 @@ model Post {
   PostShared      PostShared[]
   ReportPost      ReportPost[]
   UserRepost      UserRepost[]
+
+  user User @relation(fields: [user_id], references: [id])
 }
 
 model PostComment {
@@ -336,7 +337,7 @@ model Settings {
   id                    Int      @id @default(autoincrement())
   user_id               Int      @unique
   price_per_message     Float
-  subscription_active   Boolean @default(false)
+  subscription_active   Boolean  @default(false)
   enable_free_message   Boolean
   subscription_price    Float
   subscription_type     String
@@ -563,4 +564,11 @@ model UserAttachments {
 enum UserRole {
   fan
   model
+}
+
+enum PostAudience {
+  public
+  private
+  followers
+  subscribers
 }
