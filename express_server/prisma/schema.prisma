@@ -195,6 +195,9 @@ model Post {
   post_status     String
   post_audience   PostAudience
   post_is_visible Boolean       @default(true)
+  post_likes      Int           @default(0)
+  post_comments   Int           @default(0)
+  post_reposts    Int           @default(0)
   created_at      DateTime      @default(now())
   updated_at      DateTime      @updatedAt
   PostComment     PostComment[]

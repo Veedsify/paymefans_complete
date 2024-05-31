@@ -2,6 +2,7 @@ import UserNotFound from "@/components/route_component/usernotfound";
 import CreateConversationButton from "@/components/sub_componnets/create-conversation-button";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
 import ProfileTabs from "@/components/sub_componnets/profile_tabs";
+import ProfileTabsOther from "@/components/sub_componnets/profile_tabs_other";
 import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
 
@@ -139,7 +140,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-      <ProfileTabs />
+      <ProfileTabsOther />
     </>
   );
 };

@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Post` ADD COLUMN `post_comments` INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN `post_likes` INTEGER NOT NULL DEFAULT 0,
+    ADD COLUMN `post_shares` INTEGER NOT NULL DEFAULT 0;

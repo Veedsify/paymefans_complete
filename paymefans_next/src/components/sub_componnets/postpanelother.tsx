@@ -4,7 +4,6 @@ import PostComponent from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserPosts } from "@/utils/data/get-user-post";
-import { formatDate } from "@/utils/format-date";
 
 type UserPostProps = {
     content: string;
@@ -22,7 +21,7 @@ type UserPostProps = {
     created_at: Date;
 }
 
-const PostPanel = () => {
+const PostPanelOther = () => {
     const { user } = useUserAuthContext()
     const [posts, setPosts] = useState<UserPostProps[]>([]);
     const [loading, setLoading] = useState(false);
@@ -45,6 +44,7 @@ const PostPanel = () => {
         };
         fetchPosts();
     }, [page, setPosts, setLoading]);
+
 
     const handleScroll = useCallback((): void => {
         const { innerHeight, pageYOffset } = window;
@@ -72,7 +72,7 @@ const PostPanel = () => {
                         ...post,
                         post: "crafting is my passion and I love to make new things everyday. I hope you like my work. #crafting #art #handmade",
                         media: post.media,
-                        time: formatDate(new Date(post.created_at))
+                        time: new Date(post.created_at).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).replace(',', '')
                     }}
                 />
             ))}
@@ -86,4 +86,4 @@ const PostPanel = () => {
     );
 }
 
-export default PostPanel;
+export default PostPanelOther;

@@ -1,3 +1,4 @@
+"use client"
 import { LucideEye, LucideMoreVertical, LucidePen, LucideTrash } from "lucide-react";
 import { RefObject, useEffect, useRef, useState } from "react";
 import Link from "next/link";

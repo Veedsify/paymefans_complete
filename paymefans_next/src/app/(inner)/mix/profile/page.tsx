@@ -26,12 +26,11 @@ const ProfilePage = async () => {
     return (
         <>
             <div className="overflow-hidden">
-                <BannerComponent profile_banner={user?.profile_banner || "/site/banner.png"} />
+                <BannerComponent profile_banner={user ? user.profile_banner : "/site/banner.png"} />
                 <div className="relative flex w-full px-2 md:px-5">
                     <Image
-                        src={user?.profile_image || "/site/avatar.png"}
-                        alt=""
-                        priority
+                        src={user ? user.profile_image : "/site/avatar.png"}
+                        alt="proile image"
                         height={100}
                         width={100}
                         className="absolute object-cover md:w-24 md:h-24 w-20 h-20 sm:border-4 border-2 rounded-full md:-top-12  -top-6 border-primary-dark-pink "

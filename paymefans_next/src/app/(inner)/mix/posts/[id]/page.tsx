@@ -1,34 +1,57 @@
-"use client"
+import { PostPageImage } from "@/components/sub_componnets/postpage-image";
 import QuickPostActions from "@/components/sub_componnets/quick_post_actions";
+import { formatDate } from "@/utils/format-date";
+import axios from "axios";
 import { LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import { SetStateAction, useState } from "react";
+import { redirect } from "next/navigation";
 
+interface PostPageprops {
+    params: {
+        id: string;
+    }
+}
+async function getPost(id: string) {
+    try {
+        const token = cookies().get("token")?.value;
+        const getpost = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/posts/${id}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        return getpost.data.data
 
-const Post = () => {
-    const [activeImage, setActiveImage] = useState<string | null>(null)
-
+    } catch (error) {
+        console.log(error);
+        redirect("/mix")
+    }
+}
+const Post = async ({ params: { id } }: PostPageprops) => {
+    const post = await getPost(id);
     return (
-        <div className="p-4">
+        <div className="p-4 mt-8">
             <div className="mb-10">
                 <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-3">
                         <Image width={40} height={40} src="/images/login_image.png" alt="" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
-                        <Link href="/" className="flex items-center gap-1">
-                            <p className="text-black font-bold">Jenna</p>@jenna
+                        <Link href={`/mix/${[post.user.username]}`} className="flex items-center gap-1">
+                            <p className="text-black font-bold">{post?.user.name}</p>{post.user.username}
                         </Link>
-                        <small className="ml-auto">3h</small>
+                        <small className="ml-auto">
+                            {formatDate(new Date(post.created_at))}
+                        </small>
                     </div>
-
                     <QuickPostActions />
                 </div>
 
-                <p className="text-sm font-medium py-2 leading-loose text-gray-700">
-                    Months on ye at by esteem desire warmth former. Sure that that way gave any fond now. His boy middleton sir nor engrossed affection excellent. Dissimilar compliment cultivated preference eat sufficient may. Well next door soon we mr he four. Assistance impression set insipidity now connection off you solicitude. Under as seems we me stuff those style at. Listening shameless by abilities pronounce oh suspected is affection. Next it draw in draw much bred.
-                </p>
+                <div className="text-sm font-medium py-2 leading-loose text-gray-700"
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                >
+                </div>
 
-                <PostComponentPreview image={activeImage} close={setActiveImage} />
                 <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-1 mb-5">
                     <span className="flex items-center gap-1 text-xs cursor-pointer font-medium ">
                         <LucideHeart size={14} />
@@ -46,62 +69,14 @@ const Post = () => {
                         <LucideShare size={14} />
                     </span>
                 </div>
-                <div className={`grid gap-3 grid-cols-1`}>
-                    <div className="relative">
-                        <Image
-                            height={200}
-                            width={200}
-                            priority
-                            src="/images/login_image.png"
-                            alt=""
-                            onClick={() => setActiveImage("/images/login_image.png")}
-                            className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
-                        />
-                    </div>
-                    <div className="relative">
-                        <Image
-                            height={200}
-                            width={200}
-                            priority
-                            src="/images/login_image.png"
-                            alt=""
-                            onClick={() => setActiveImage("/images/login_image.png")}
-                            className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
-                        />
-                    </div>
-                    <div className="relative">
-                        <Image
-                            height={200}
-                            width={200}
-                            priority
-                            src="/images/login_image.png"
-                            alt=""
-                            onClick={() => setActiveImage("/images/login_image.png")}
-                            className="w-full rounded-lg mt-3 aspect-square object-cover cursor-pointer"
-                        />
-                    </div>
+                <div className={`grid gap-3 grid-cols-1 md:grid-cols-2`}>
+                    {post.media.map((media: any, index: number) => (
+                        <PostPageImage key={index} media={media} />
+                    ))}
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
 
 export default Post;
-
-const PostComponentPreview = ({ image, close }: { image: string | null, close: React.Dispatch<SetStateAction<string | null>> }) => {
-
-    return (
-        <div
-            onClick={() => {
-                close(null)
-            }}
-            className={`fixed transition-all ease-in-out duration-300 inset-0 w-full flex items-center justify-center bg-black z-50 bg-opacity-90
-            ${image ? "opacity-100 pointer-events-all" : "opacity-0 pointer-events-none"}`}>
-            <div className="p-4">
-                {image && (
-                    <Image width={1200} height={1200} priority src={image} className={`w-screen xl:w-[550px] block object-cover transition-all duration-300 ${image ? "translate-y-0" : "translate-y-3"}`} alt="" />
-                )}
-            </div>
-        </div>
-    )
-}

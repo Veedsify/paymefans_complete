@@ -36,7 +36,7 @@ const PostComponentPreview = () => {
                             {type === "video" && (
                                 <video
                                     autoPlay controls
-                                    className={`w-screen md:w-[550px] shadow-lg shadow-primary-dark-pink lg:w-[480px]  2xl:w-[650px] block object-cover transition-all duration-300 bg-white border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
+                                    className={`w-screen md:w-[550px] shadow-lg shadow-primary-dark-pink lg:w-[480px] 2xl:w-[700px] block object-cover transition-all duration-300 bg-black border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
                                 >
                                     <source src={activeMedia} type="video/mp4" />
                                 </video>
@@ -47,7 +47,7 @@ const PostComponentPreview = () => {
                                         onLoad={handleLoaded}
                                         quality={100}
                                         src={activeMedia} width={1500} height={1500} priority
-                                        className={`md:w-[550px] shadow-lg shadow-primary-dark-pink bg-white lg:w-[480px] 2xl:w-[700px] block object-cover transition-all duration-200 border-none animate-in`}
+                                        className={`md:w-[550px] shadow-lg shadow-primary-dark-pink bg-black lg:w-[480px] 2xl:w-[700px] block object-cover transition-all duration-200 border-none animate-in`}
                                         alt=""
                                     />
                                     <div className="add-loaders opacity-70">
