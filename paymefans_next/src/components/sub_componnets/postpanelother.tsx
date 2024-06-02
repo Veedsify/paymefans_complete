@@ -4,6 +4,7 @@ import PostComponent from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserPosts } from "@/utils/data/get-user-post";
+import { formatDate } from "@/utils/format-date";
 
 type UserPostProps = {
     content: string;
@@ -18,11 +19,20 @@ type UserPostProps = {
         poster?: string | null
         url: string;
     }[];
+    user: {
+        name: string;
+        username: string;
+        user_id: string;
+        profile_image: string;
+    }
     created_at: Date;
 }
 
-const PostPanelOther = () => {
-    const { user } = useUserAuthContext()
+const PostPanelOther = ({
+    userdata
+}: {
+    userdata: any
+}) => {
     const [posts, setPosts] = useState<UserPostProps[]>([]);
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
@@ -31,7 +41,7 @@ const PostPanelOther = () => {
         // Simulating fetching posts from an API
         const fetchPosts = async () => {
             setLoading(true);
-            const { data } = await getUserPosts(page)
+            const { data } = await getUserPosts({ page: page, userid: userdata.id })
             setPosts(prevPosts => {
                 const filteredPosts = prevPosts.filter(prevPost => {
                     // Check if any post in data has the same post_id as the current prevPost
@@ -43,7 +53,7 @@ const PostPanelOther = () => {
             setLoading(false);
         };
         fetchPosts();
-    }, [page, setPosts, setLoading]);
+    }, [page, setPosts, setLoading, userdata]);
 
 
     const handleScroll = useCallback((): void => {
@@ -65,23 +75,25 @@ const PostPanelOther = () => {
     return (
         <div className="py-6 mt-3 mb-12 select-none"
         >
-            {user && posts.map((post, index) => (
+            {posts.map((post, index) => (
                 <PostComponent key={index}
-                    user={{ name: user.name, link: `/mix/profile/${user.username}`, username: user.username, image: user.profile_image }}
+                    user={{ name: post.user.name, link: `/mix/profile/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
                     data={{
                         ...post,
-                        post: "crafting is my passion and I love to make new things everyday. I hope you like my work. #crafting #art #handmade",
+                        post: post.content,
                         media: post.media,
-                        time: new Date(post.created_at).toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }).replace(',', '')
+                        time: formatDate(new Date(post.created_at))
                     }}
                 />
             ))}
             {posts.length === 0 && !loading && <p className="text-center text-gray-500">No posts found</p>}
-            {loading && <div className="py-10 mb-7">
-                <h1 className="text-xl text-center font-medium">
-                    Loading posts...
-                </h1>
-            </div>}
+            <div className=" my-3">
+                {loading &&
+                    <h1 className="text-xl text-center font-medium">
+                        Loading posts...
+                    </h1>
+                }
+            </div>
         </div>
     );
 }

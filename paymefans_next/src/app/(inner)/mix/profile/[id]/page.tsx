@@ -140,7 +140,9 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-      <ProfileTabsOther />
+      <ProfileTabsOther
+        userdata={userdata}
+      />
     </>
   );
 };

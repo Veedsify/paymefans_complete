@@ -5,7 +5,7 @@ import PostPanel from "./postpanel";
 import MediaPanel from "./mediapanel";
 import LoadingPost from "./loading_post";
 import PostPanelOther from "./postpanelother";
-const ProfileTabsOther = () => {
+const ProfileTabsOther = ({ userdata }: { userdata: any }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
     <div className="px-2 md:px-5">
@@ -46,7 +46,9 @@ const ProfileTabsOther = () => {
           </Tab>
         </TabList>
         <TabPanel>
-          <PostPanelOther />
+          <PostPanelOther
+            userdata={userdata}
+          />
         </TabPanel>
         <TabPanel>
           <MediaPanel />

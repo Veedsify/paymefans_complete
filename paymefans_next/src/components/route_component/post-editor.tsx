@@ -117,15 +117,15 @@ const PostEditor = () => {
                     <PostCancelComp />
                     <button
                         onClick={handlePostSubmit}
-                        className="bg-primary-dark-pink text-white p-2 px-8 rounded ml-auto ">
+                        className="bg-primary-dark-pink text-white p-1 px-6 rounded ml-auto text-sm font-medium">
                         Post
                     </button>
                 </div>
                 <div className="flex items-center gap-2">
                     <Image src={user?.profile_image || "/site/avatar.png"} alt="" width={56} height={56} className="w-14 border border-gray-800 inline-block rounded-full" />
                     <button
-                        className="border inline-block border-gray-400 ml-2 rounded-3xl px-3 text-gray-800 text-sm relative">
-                        <span className="flex gap-2 items-center font-medium text-sm p-2"
+                        className="border inline-block border-gray-800 ml-2 rounded-3xl px-3 text-gray-800 text-sm relative">
+                        <span className="flex gap-2 items-center font-medium text-sm p-2 transition-all duration-300 cursor-pointer"
                             onClick={() => setDropdown(!dropdown)}
                         >
                             {postAudience.icon} {postAudience.name}
@@ -133,7 +133,7 @@ const PostEditor = () => {
                         </span>
                         <div className={`absolute w-full left-0 mt-0 transition-all duration-300 ${dropdown ? "opacity-100 -translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"}`}>
                             <ul
-                                className="bg-white rounded-2xl overflow-hidden mt-2 border border-gray-400 text-left w-full">
+                                className="bg-white rounded-2xl overflow-hidden mt-2 border border-gray-800 text-left w-full">
                                 {
                                     postAudienceData.map((audience) => (
                                         <li key={audience.id}
@@ -149,7 +149,7 @@ const PostEditor = () => {
                     </button>
                 </div>
                 <textarea
-                    className="block border border-gray-100 rounded-md mb-3 leading-relaxed text-gray-700 font-medium w-full resize-none p-6 outline-none mt-3 overflow-auto h-[40vh]"
+                    className="block border border-gray-500 rounded-md mb-3 leading-relaxed text-gray-700 font-medium w-full resize-none p-3 outline-none mt-3 overflow-auto h-[40vh]"
                     placeholder="What’s on your mind?"
                     defaultValue={postText}
                     onChange={checkLimit}></textarea>

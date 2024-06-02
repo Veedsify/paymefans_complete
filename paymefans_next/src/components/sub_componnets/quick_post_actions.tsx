@@ -1,11 +1,51 @@
 "use client"
-import { LucideEye, LucideMoreVertical, LucidePen, LucideTrash } from "lucide-react";
+import { LucideEye, LucideEyeOff, LucideMoreVertical, LucidePen, LucideTrash } from "lucide-react";
 import { RefObject, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useUserAuthContext } from "@/lib/userUseContext";
 
-const QuickPostActions = () => {
+type QuickPostActionsProps = {
+    options: {
+        post_id: string;
+        username: string;
+    }
+}
+
+const QuickPostActions = ({ options }: QuickPostActionsProps) => {
     const [open, setOpen] = useState(false);
     const quickMenuRef = useRef(null) as RefObject<HTMLDivElement>;
+    const { user } = useUserAuthContext();
+
+    const ownerOptions = [
+        {
+            name: "Edit",
+            icon: <LucidePen className="mr-2" size={16} />,
+            link: "/edit-post"
+        },
+        {
+            name: "Set visibility",
+            icon: <LucideEye className="mr-2" size={16} />,
+            link: "/edit-post"
+        },
+        {
+            name: "Delete",
+            icon: <LucideTrash className="mr-2" size={16} />,
+            link: "/edit-post"
+        }
+    ]
+
+    const publicOptions = [
+        {
+            name: "Report",
+            icon: <LucideTrash className="mr-2" size={16} />,
+            link: "/edit-post"
+        },
+        {
+            name: "Hide",
+            icon: <LucideEyeOff className="mr-2" size={16} />,
+            link: "/edit-post"
+        }
+    ]
 
     useEffect(() => {
         if (open) {
@@ -29,24 +69,25 @@ const QuickPostActions = () => {
             </span>
             <div className={`absolute right-0 py-3 z-20 duration-300 transition-all ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
                 <ul className="bg-white border shadow-2xl overflow-hidden rounded-lg w-52 py-1">
-                    <li className="py-2 hover:bg-gray-50 border-b">
-                        <Link href="/edit-post" className="font-medium text-black flex items-center text-sm py-1 px-3">
-                            <LucidePen className="mr-2" size={16} />
-                            Edit
-                        </Link>
-                    </li>
-                    <li className="py-2 hover:bg-gray-50 border-b">
-                        <Link href="/edit-post" className="font-medium text-black flex items-center text-sm py-1 px-3">
-                            <LucideEye className="mr-2" size={16} />
-                            Set visibility
-                        </Link>
-                    </li>
-                    <li className="py-2 hover:bg-gray-50">
-                        <Link href="/edit-post" className="font-medium text-black flex items-center text-sm py-1 px-3">
-                            <LucideTrash className="mr-2" size={16} />
-                            Delete
-                        </Link>
-                    </li>
+                    {user?.username === options.username ? (
+                        ownerOptions.map((option, index) => (
+                            <li key={index} className="py-2 hover:bg-gray-50 border-b">
+                                <Link href={option.link} className="font-medium text-black flex items-center text-sm py-1 px-3">
+                                    {option.icon}
+                                    {option.name}
+                                </Link>
+                            </li>
+                        ))
+                    ) : (
+                        publicOptions.map((option, index) => (
+                            <li key={index} className="py-2 hover:bg-gray-50 border-b">
+                                <Link href={option.link} className="font-medium text-black flex items-center text-sm py-1 px-3">
+                                    {option.icon}
+                                    {option.name}
+                                </Link>
+                            </li>
+                        ))
+                    )}
                 </ul>
             </div>
         </div>

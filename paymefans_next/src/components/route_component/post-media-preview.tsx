@@ -76,7 +76,7 @@ const Media = ({ file, removeThisMedia, index }: {
             {file.type.includes("image") && (
                 <Image src={url || "/site/loading.gif"}
                     unoptimized
-                    alt="1" width={150} height={150} className="object-cover h-auto aspect-square shadow-lg border block rounded-xl" />
+                    alt="1" width={200} height={200} className="object-cover h-auto aspect-square shadow-lg border block rounded-xl" />
             )}
             <div className="absolute top-0 right-0 bg-black bg-opacity-50 text-white p-1 w-full h-full rounded-xl flex items-center justify-center">
                 <span onClick={() => removeThisMedia(index)} className="cursor-pointer">

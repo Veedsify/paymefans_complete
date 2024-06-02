@@ -32,14 +32,16 @@ const PostPanel = () => {
         // Simulating fetching posts from an API
         const fetchPosts = async () => {
             setLoading(true);
-            const { data } = await getUserPosts(page)
-            setPosts(prevPosts => {
-                const filteredPosts = prevPosts.filter(prevPost => {
-                    // Check if any post in data has the same post_id as the current prevPost
-                    return !data.some((newPost: UserPostProps) => newPost.post_id === prevPost.post_id);
+            const res = await getUserPosts({ page })
+            if (res) {
+                setPosts(prevPosts => {
+                    const filteredPosts = prevPosts.filter(prevPost => {
+                        // Check if any post in data has the same post_id as the current prevPost
+                        return !res.data.some((newPost: UserPostProps) => newPost.post_id === prevPost.post_id);
+                    });
+                    return [...filteredPosts, ...res.data];
                 });
-                return [...filteredPosts, ...data];
-            });
+            }
 
             setLoading(false);
         };
@@ -70,7 +72,7 @@ const PostPanel = () => {
                     user={{ name: user.name, link: `/mix/profile/${user.username}`, username: user.username, image: user.profile_image }}
                     data={{
                         ...post,
-                        post: "crafting is my passion and I love to make new things everyday. I hope you like my work. #crafting #art #handmade",
+                        post: post.content,
                         media: post.media,
                         time: formatDate(new Date(post.created_at))
                     }}

@@ -22,7 +22,9 @@ class PostController {
                     };
                 }
                 const ext = path.extname(file.originalname);
-                const filename = Date.now() + 'post-media' + ext;
+                const timestamp = new Date().toISOString().replace(/:/g, '-'); // Using ISO format and replacing colons
+                const uniqueSuffix = req.user.user_id + "-" + timestamp + '-' + Math.round(Math.random() * 1E9);
+                const filename = uniqueSuffix + ext;
                 sharp(file.path)
                     .resize(700)
                     .webp({ quality: 80 })
@@ -116,15 +118,72 @@ class PostController {
         }
     }
 
+    static async GetUserPostByID(req, res) {
+        try {
+            const userid = parseInt(req.params.userid)
+
+            const { page, limit } = req.query
+            // Parse limit to an integer or default to 5 if not provided
+            const parsedLimit = limit ? parseInt(limit) : 5;
+
+            // Parse page to an integer or default to 0 if not provided
+            const parsedPage = parseInt(page) == 1 ? 0 : parseInt(page) * parsedLimit - parsedLimit;
+
+            const posts = await prismaQuery.post.findMany({
+                where: {
+                    user_id: userid,
+                    NOT: {
+                        post_audience: "private"
+                    }
+                },
+                orderBy: {
+                    created_at: "desc"
+                },
+                select: {
+                    content: true,
+                    post_id: true,
+                    post_audience: true,
+                    media: true,
+                    created_at: true,
+                    post_likes: true,
+                    post_comments: true,
+                    post_reposts: true,
+                    user: {
+                        select: {
+                            username: true,
+                            profile_image: true,
+                            name: true,
+                            user_id: true,
+                        }
+                    }
+                },
+                take: parsedLimit,
+                skip: parsedPage  // Adjusted logic for skipping records
+            });
+
+            console.log(posts);
+
+            return res.status(200).json({
+                status: true,
+                message: "Posts retrieved successfully",
+                data: posts
+            })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                message: "An error occurred while retrieving posts",
+                error: error
+            })
+            console.log(error);
+        }
+    }
+
     static async GetCurrentUserPost(req, res) {
         try {
-            const user = req.user;
             const { post_id } = req.params;
-
             const post = await prismaQuery.post.findFirst({
                 where: {
                     post_id: post_id,
-                    user_id: user.id
                 }, select: {
                     user: {
                         select: {

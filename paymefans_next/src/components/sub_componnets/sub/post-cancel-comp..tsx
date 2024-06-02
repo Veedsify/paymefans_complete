@@ -28,6 +28,6 @@ export const PostCancelComp = () => {
         })
     }
     return (
-        <button onClick={confirmCancel} >Cancel</button>
+        <button onClick={confirmCancel} className="text-sm font-medium">Cancel</button>
     );
 }
