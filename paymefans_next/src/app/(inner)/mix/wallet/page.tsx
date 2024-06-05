@@ -64,7 +64,7 @@ const page = async () => {
                     </div>
                 </div>
             </div>
-            {user?.is_model && (
+            {user?.is_model && user?.Model?.verification_status && (
                 <>
                     <div className=" bg-black text-white p-5 rounded-xl">
                         <small className="text-md">Your Ballance</small>

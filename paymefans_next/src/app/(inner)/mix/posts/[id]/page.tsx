@@ -16,7 +16,8 @@ interface PostPageprops {
 async function getPost(id: string) {
     try {
         const token = cookies().get("token")?.value;
-        const getpost = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/posts/${id}`, {
+        const secure_id = encodeURIComponent(id)
+        const getpost = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/posts/${secure_id}`, {
             headers: {
                 "Content-Type": "application/json",
             }
@@ -24,7 +25,6 @@ async function getPost(id: string) {
         return getpost.data.data
 
     } catch (error) {
-        console.log(error);
         redirect("/mix")
     }
 }
@@ -72,7 +72,7 @@ const Post = async ({ params: { id } }: PostPageprops) => {
                         <LucideShare size={14} />
                     </span>
                 </div>
-                <div className={`grid gap-3 grid-cols-1 md:grid-cols-2`}>
+                <div className={`grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
                     {post.media.map((media: any, index: number) => (
                         <PostPageImage key={index} media={media} />
                     ))}

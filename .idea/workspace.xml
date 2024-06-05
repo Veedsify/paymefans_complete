@@ -5,27 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="083c7743-4b21-413c-af78-59f2187f061e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/express_server/controllers/api/settingsController.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/express_server/libs/get-user-conversations.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/express_server/public/images/converted/1715859437971.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/express_server/public/images/converted/1715872491131.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/express_server/public/images/uploads/1715859437971.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/express_server/public/images/uploads/1715872491131.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/fetch-chat-data.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/express_server/.env" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/express_server/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/express_server/controllers/api/conversationsController.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/controllers/api/conversationsController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/express_server/routes/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/routes/api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/chats/[string_id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/chats/[string_id]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/points/callback/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/points/callback/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/chats.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/chats.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/side_models.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/side_models.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/conversation-components.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/conversation-components.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/points.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/points.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/contexts/messages-conversation-context.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/contexts/messages-conversation-context.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/utils/data/get-conversation-messages.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/utils/data/get-conversation-messages.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/wallet/add/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/mix/wallet/add/page.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +59,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Dike Wisdom/Desktop/Files/Documents/Active Website Projects/PAYMEFANS/Source_Code/newcode/paymefans_next",
+    "last_opened_file_path": "C:/Users/Dike Wisdom/Desktop/react_project",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -89,7 +70,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Node.js.ExpressServer">
+  <component name="RunManager" selected="Node.js.Paymefans">
     <configuration name="ExpressServer" type="NodeJSConfigurationType" node-parameters="npm run dev" working-dir="$PROJECT_DIR$/express_server">
       <method v="2" />
     </configuration>
@@ -100,6 +81,13 @@
       <item itemvalue="Node.js.Paymefans" />
       <item itemvalue="Node.js.ExpressServer" />
     </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -114,6 +102,9 @@
       <workItem from="1713095910388" duration="1886000" />
       <workItem from="1713169707146" duration="581000" />
       <workItem from="1715870238220" duration="3731000" />
+      <workItem from="1717367815182" duration="89000" />
+      <workItem from="1717367929340" duration="302000" />
+      <workItem from="1717407746131" duration="24000" />
     </task>
     <servers />
   </component>

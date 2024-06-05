@@ -14,6 +14,8 @@ const multerPostMiddleware = require("../middlewares/multerPostMiddleware.middle
 const uploadMediaController = require("../controllers/api/mediaUploadController");
 const { GetTransactions } = require("../controllers/api/transactionsController");
 const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID } = require("../controllers/api/postController");
+const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
+
 
 // Authentication
 router.post("/auth/signup", authController.Register);
@@ -22,6 +24,7 @@ router.post("/auth/login", authController.Login);
 router.post("/auth/points", checkUserIsAuthenticated, authController.Points);
 router.post("/auth/wallet", checkUserIsAuthenticated, authController.Wallet);
 router.get("/retrieve", checkUserIsAuthenticated, authController.Retrieve);
+
 
 // Profile
 router.post("/profile/user", profileController.Profile);

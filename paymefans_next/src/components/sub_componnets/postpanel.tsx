@@ -32,6 +32,7 @@ const PostPanel = () => {
         // Simulating fetching posts from an API
         const fetchPosts = async () => {
             setLoading(true);
+            await new Promise(resolve => setTimeout(resolve, 1000));
             const res = await getUserPosts({ page })
             if (res) {
                 setPosts(prevPosts => {
@@ -51,7 +52,6 @@ const PostPanel = () => {
     const handleScroll = useCallback((): void => {
         const { innerHeight, pageYOffset } = window;
         const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-
         if (Math.round(innerHeight + pageYOffset) !== scrollHeight) {
             return;
         }
@@ -79,7 +79,7 @@ const PostPanel = () => {
                 />
             ))}
             {posts.length === 0 && !loading && <p className="text-center text-gray-500">No posts found</p>}
-            {loading && <div className="py-10 mb-7">
+            {loading && <div>
                 <h1 className="text-xl text-center font-medium">
                     Loading posts...
                 </h1>

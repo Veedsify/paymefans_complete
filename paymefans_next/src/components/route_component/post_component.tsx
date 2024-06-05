@@ -5,7 +5,7 @@ import QuickPostActions from "../sub_componnets/quick_post_actions";
 import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
 import { HiPlay } from "react-icons/hi";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface PostComponentProps {
     user: {
@@ -33,16 +33,39 @@ interface PostComponentProps {
 
 const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
     const imageLength = data.media.length;
+    const [playing, setPlaying] = useState<boolean>(false);
     const { fullScreenPreview } = usePostComponent();
     const setActiveImage = (url: string, type: string) => {
         fullScreenPreview({ url: url, type: type, open: true })
     }
     const formattedText = data.post.replace(/\r?\n/g, '<br/>');
-
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     const clickImageEvent = useCallback((media: { url: string; type: string }) => {
         setActiveImage(media.url, media.type)
     }, [fullScreenPreview, setActiveImage])
+
+    const playMediaAndActivateControls = useCallback(() => {
+        videoRef.current?.play();
+        videoRef.current?.setAttribute("controls", "controls");
+        setPlaying(true);
+    }, [videoRef, setPlaying])
+
+    useEffect(() => {
+        videoRef.current?.addEventListener("ended", () => {
+            videoRef.current?.removeAttribute("controls");
+            setPlaying(false);
+        })
+
+        return () => {
+            videoRef.current?.removeEventListener("ended", () => {
+                videoRef.current?.removeAttribute("controls");
+                setPlaying(false);
+            })
+        }
+    }, [videoRef])
+
+
 
     return (
         <>
@@ -82,19 +105,20 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                             {media.type === 'video' ? (
                                 <div className="relative">
                                     <video
-                                        src={`${media.poster ? media.poster : ""}`}
+                                        ref={videoRef}
+                                        controlsList="nodownload"
+                                        src={`${media.url ? media.url : ""}`}
                                         width={200}
                                         height={200}
-                                        onClick={() => clickImageEvent(media)}
                                         className="w-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer"
                                     ></video>
-                                    <div
-                                        onClick={() => clickImageEvent(media)}
+                                    {!playing && <div
+                                        onClick={playMediaAndActivateControls}
                                         className="absolute inset-0 text-white bg-black bg-opacity-20 rounded-lg flex items-center justify-center cursor-pointer">
                                         <button className="h-12 w-12 p-1 inline-block flex-shrink-0 rounded-full flex items-center justify-center bg-primary-dark-pink aspect-square">
                                             <HiPlay className="text-white" size={50} />
                                         </button>
-                                    </div>
+                                    </div>}
                                 </div>
                             ) : (
                                 <Image
@@ -103,6 +127,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                     width={400}
                                     height={400}
                                     priority
+                                    blurDataURL={media.poster ? media.poster : ""}
                                     onClick={() => clickImageEvent(media)}
                                     className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer"
                                 />
