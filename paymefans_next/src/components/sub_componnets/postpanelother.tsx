@@ -41,7 +41,7 @@ const PostPanelOther = ({
         // Simulating fetching posts from an API
         const fetchPosts = async () => {
             setLoading(true);
-            const { data } = await getUserPosts({ page: page, userid: userdata.id })
+            const { data } = await getUserPosts({ pageParam: page, userid: userdata.id })
             setPosts(prevPosts => {
                 const filteredPosts = prevPosts.filter(prevPost => {
                     // Check if any post in data has the same post_id as the current prevPost

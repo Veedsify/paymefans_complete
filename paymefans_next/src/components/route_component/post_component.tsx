@@ -5,7 +5,8 @@ import QuickPostActions from "../sub_componnets/quick_post_actions";
 import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
 import { HiPlay } from "react-icons/hi";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface PostComponentProps {
     user: {
@@ -35,13 +36,14 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
     const imageLength = data.media.length;
     const [playing, setPlaying] = useState<boolean>(false);
     const { fullScreenPreview } = usePostComponent();
+    const router = useRouter();
     const setActiveImage = (url: string, type: string) => {
         fullScreenPreview({ url: url, type: type, open: true })
     }
     const formattedText = data.post.replace(/\r?\n/g, '<br/>');
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    const clickImageEvent = useCallback((media: { url: string; type: string }) => {
+    const clickImageEvent = useCallback(async (media: { url: string; type: string }) => {
         setActiveImage(media.url, media.type)
     }, [fullScreenPreview, setActiveImage])
 
@@ -65,11 +67,18 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
         }
     }, [videoRef])
 
+    const redirecToPost = (e: MouseEvent) => {
+        if (e.target instanceof HTMLAnchorElement) return;
+        if (e.target instanceof HTMLButtonElement) return;
+        router.push(`/mix/posts/${data.post_id}`)
+    }
 
 
     return (
         <>
-            <div className="mb-10">
+            <div className="mb-10 cursor-pointer"
+                onClick={redirecToPost}
+            >
                 <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-3">
                         <Image width={50} height={50} priority src={user?.image} alt=""
@@ -101,7 +110,9 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                 <div
                     className={`grid gap-3 ${data.media.length === 2 ? "grid-cols-2" : data.media.length >= 3 ? "grid-cols-3" : "grid-cols-1"}`}>
                     {data.media.slice(0, 3).map((media, index) => (
-                        <div className="relative" key={index}>
+                        <div className="relative" key={index}
+                            onClick={e => e.stopPropagation()}
+                        >
                             {media.type === 'video' ? (
                                 <div className="relative">
                                     <video
@@ -128,7 +139,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                     height={400}
                                     priority
                                     blurDataURL={media.poster ? media.poster : ""}
-                                    onClick={() => clickImageEvent(media)}
+                                    onClick={(e) => clickImageEvent(media)}
                                     className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer"
                                 />
                             )}

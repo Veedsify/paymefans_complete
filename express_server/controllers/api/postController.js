@@ -24,11 +24,11 @@ class PostController {
                 const ext = path.extname(file.originalname);
                 const timestamp = new Date().toISOString().replace(/:/g, '-'); // Using ISO format and replacing colons
                 const uniqueSuffix = req.user.user_id + "-" + timestamp + '-' + Math.round(Math.random() * 1E9);
-                const filename = uniqueSuffix + ext;
+                const filename = uniqueSuffix
                 sharp(file.path)
-                    .resize(700)
-                    .webp({ quality: 80 })
-                    .toFile(`./public/posts/converted/${filename}`, (err, info) => {
+                    .resize(1080)
+                    .webp({ quality: 100 })
+                    .toFile(`./public/posts/converted/${filename}.webp`, (err, info) => {
                         if (err) {
                             console.log(err);
                         }
@@ -36,7 +36,7 @@ class PostController {
                     });
                 return {
                     type: "image",
-                    url: `${SERVER_ORIGINAL_URL}/posts/converted/${filename}`
+                    url: `${SERVER_ORIGINAL_URL}/posts/converted/${filename}.webp`
                 };
             })
             const postId = uuid()

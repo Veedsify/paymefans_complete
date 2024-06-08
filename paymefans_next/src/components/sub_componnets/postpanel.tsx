@@ -29,40 +29,32 @@ const PostPanel = () => {
     const [page, setPage] = useState(1);
 
     useEffect(() => {
-        // Simulating fetching posts from an API
+        let isCancelled = false;
         const fetchPosts = async () => {
             setLoading(true);
             await new Promise(resolve => setTimeout(resolve, 1000));
-            const res = await getUserPosts({ page })
-            if (res) {
+            const res = await getUserPosts({ pageParam: page })
+            if (!isCancelled && res && res.data) {
+                const myposts = [...res.data]
                 setPosts(prevPosts => {
-                    const filteredPosts = prevPosts.filter(prevPost => {
-                        // Check if any post in data has the same post_id as the current prevPost
-                        return !res.data.some((newPost: UserPostProps) => newPost.post_id === prevPost.post_id);
-                    });
-                    return [...filteredPosts, ...res.data];
+                    return [...prevPosts, ...myposts.flat()]
                 });
             }
-
-            setLoading(false);
+            if (!isCancelled) {
+                setLoading(false);
+            }
         };
         fetchPosts();
-    }, [page, setPosts, setLoading]);
 
-    const handleScroll = useCallback((): void => {
-        const { innerHeight, pageYOffset } = window;
-        const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-        if (Math.round(innerHeight + pageYOffset) !== scrollHeight) {
-            return;
-        }
+        return () => {
+            isCancelled = true;
+        };
+    }, [page]);
 
+
+    const handleClickToFetch = useCallback((): void => {
         setPage((prevPage: number) => prevPage + 1);
     }, [setPage]);
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [handleScroll]);
 
     return (
         <div className="py-6 mt-3 mb-12 select-none"
@@ -79,11 +71,16 @@ const PostPanel = () => {
                 />
             ))}
             {posts.length === 0 && !loading && <p className="text-center text-gray-500">No posts found</p>}
-            {loading && <div>
-                <h1 className="text-xl text-center font-medium">
-                    Loading posts...
-                </h1>
-            </div>}
+
+            <div className="py-6">
+                <button
+                    onClick={handleClickToFetch}
+                    className="block mx-auto mt-6 px-4 py-2 bg-primary-dark-pink text-white rounded-md disabled:bg-gray-300"
+                    disabled={loading}
+                >
+                    {loading ? "Loading..." : "Load more"}
+                </button>
+            </div>
         </div>
     );
 }

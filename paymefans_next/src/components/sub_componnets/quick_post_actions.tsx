@@ -63,7 +63,9 @@ const QuickPostActions = ({ options }: QuickPostActionsProps) => {
 
 
     return (
-        <div className="relative" id="quick_menu" ref={quickMenuRef}>
+        <div className="relative" id="quick_menu" ref={quickMenuRef}
+            onClick={(e) => e.stopPropagation()}
+        >
             <span onClick={() => setOpen(true)}>
                 <LucideMoreVertical className="cursor-pointer" size={20} />
             </span>

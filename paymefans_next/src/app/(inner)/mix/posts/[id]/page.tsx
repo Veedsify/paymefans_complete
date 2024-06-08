@@ -1,12 +1,14 @@
+"use client"
 import { PostPageImage } from "@/components/sub_componnets/postpage-image";
 import QuickPostActions from "@/components/sub_componnets/quick_post_actions";
+import { getToken } from "@/utils/cookie.get";
 import { formatDate } from "@/utils/format-date";
 import axios from "axios";
 import { LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface PostPageprops {
     params: {
@@ -15,38 +17,57 @@ interface PostPageprops {
 }
 async function getPost(id: string) {
     try {
-        const token = cookies().get("token")?.value;
+        const token = getToken()
         const secure_id = encodeURIComponent(id)
         const getpost = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/posts/${secure_id}`, {
             headers: {
                 "Content-Type": "application/json",
             }
         })
-        return getpost.data.data
+        return getpost?.data.data
 
     } catch (error) {
-        redirect("/mix")
+        console.log(error)
     }
 }
-const Post = async ({ params: { id } }: PostPageprops) => {
-    const post = await getPost(id);
-    const formattedText = post.content.replace(/\r?\n/g, '<br/>');
+const Post = ({ params: { id } }: PostPageprops) => {
+    const [post, setPost] = useState<any>(null)
+    const router = useRouter();
+    const [formattedText, setFormattedText] = useState<string>('')
+    useEffect(() => {
+        getPost(id).then((data) => {
+            setPost(data)
+        }).catch((error) => {
+            console.log(error.response);
+
+            if (error.response.status === 404) {
+                router.push("/404")
+            }
+        })
+    }, [id])
+
+    useEffect(() => {
+        if (post) {
+            setFormattedText(post?.content.replace(/(?:\r\n|\r|\n)/g, '<br>'))
+        }
+    }, [post])
+
     return (
         <div className="p-4 mt-8">
             <div className="mb-10">
                 <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-3">
-                        <Image width={40} height={40} src={post.user.profile_image} alt="" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
-                        <Link href={`/mix/profile/${[post.user.username]}`} className="flex items-center gap-1">
-                            <p className="text-black font-bold">{post?.user.name}</p>{post.user.username}
+                        <Image width={40} height={40} src={post ? post.user.profile_image : "/site/avatar.png"} alt="" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
+                        <Link href={`/mix/profile/${[post?.user.username]}`} className="flex items-center gap-1">
+                            <p className="text-black font-bold">{post?.user.name}</p>{post?.user.username}
                         </Link>
                         <small className="ml-auto">
-                            {formatDate(new Date(post.created_at))}
+                            {formatDate(new Date(post?.created_at))}
                         </small>
                     </div>
                     <QuickPostActions options={{
-                        post_id: post.post_id,
-                        username: post.user.username,
+                        post_id: post?.post_id,
+                        username: post?.user.username,
                     }} />
                 </div>
 
@@ -73,7 +94,7 @@ const Post = async ({ params: { id } }: PostPageprops) => {
                     </span>
                 </div>
                 <div className={`grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
-                    {post.media.map((media: any, index: number) => (
+                    {post?.media.map((media: any, index: number) => (
                         <PostPageImage key={index} media={media} />
                     ))}
                 </div>
