@@ -9,7 +9,7 @@ const SettingSecurity = () => {
             <h1 className="font-bold mb-4">Privacy</h1>
             <div>
                 <Link
-                    className="flex gap-4 items-center border rounded-lg py-4 px-6 hover:bg-gray-100 transition-all duration-200 cursor-pointer mb-4" href="/mix/settings/followers">
+                    className="flex gap-4 items-center border rounded-lg py-4 px-6 hover:bg-gray-100 transition-all duration-200 cursor-pointer mb-4" href="/settings/followers">
                     <span>
                         <LucideUsers />
                     </span>

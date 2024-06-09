@@ -77,7 +77,7 @@ const PostPanelOther = ({
         >
             {posts.map((post, index) => (
                 <PostComponent key={index}
-                    user={{ name: post.user.name, link: `/mix/profile/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
+                    user={{ name: post.user.name, link: `/profile/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
                     data={{
                         ...post,
                         post: post.content,

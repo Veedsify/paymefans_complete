@@ -40,7 +40,11 @@ class ConversationsController {
                 conversation_id: conversation
             },
             select: {
-                messages: true,
+                messages: {
+                    orderBy: {
+                        created_at: "asc"
+                    }
+                },
                 participants: true
             }
         });

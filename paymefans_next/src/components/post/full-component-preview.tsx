@@ -74,6 +74,7 @@ const PostComponentPreview = () => {
                         <video
                             controlsList="nodownload"
                             autoPlay controls
+                            playsInline
                             className={`w-screen md:w-[550px] lg:w-[650px] 2xl:w-[700px] block object-cover transition-all duration-300 bg-black border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
                         >
                             <source src={activeMedia} type="video/mp4" />

@@ -42,6 +42,9 @@ export type AuthUserProps = {
   updated_at: Date;
   iat: number;
   exp: number;
+  UserPoints: {
+    points: number;
+  };
   _count: {
     Follow: number;
     Subscribers: number

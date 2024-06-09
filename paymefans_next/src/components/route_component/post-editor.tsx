@@ -93,7 +93,7 @@ const PostEditor = () => {
             const res = await SavePost(formData);
 
             if (res && res.status === true) {
-                router.push(`/mix/posts/${res.data.post_id}`)
+                router.push(`/posts/${res.data.post_id}`)
                 setPostText("");
                 setVisibility("Public")
                 toast.dismiss()

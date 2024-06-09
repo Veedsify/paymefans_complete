@@ -77,22 +77,22 @@ const SideBar = () => {
                         <span className="text-sm font-medium text-gray-600">Your Balance</span>
                     </div>
                     <div className="flex gap-3 pt-4 mb-5 ">
-                        <Link href="/mix/points" className="p-2 px-8 text-xs font-semibold text-white bg-black rounded">
+                        <Link href="/points" className="p-2 px-8 text-xs font-semibold text-white bg-black rounded">
                             Add Funds
                         </Link>
-                        <Link href="/mix/wallet"
+                        <Link href="/wallet"
                             className="p-2 px-8 text-xs font-semibold text-black bg-white border border-gray-600 rounded">
                             Wallet
                         </Link>
                     </div>
                     <div className="pt-6">
-                        <Link href="/mix/profile"
+                        <Link href="/profile"
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                             <LucideUser />
                             <p>Profile</p>
                         </Link>
                         {(user?.is_model && user?.Model?.verification_status === true) && (
-                            <Link href="/mix/live"
+                            <Link href="/live"
                                 className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                                 <LucideAirplay />
                                 <p>Go Live</p>
@@ -103,12 +103,12 @@ const SideBar = () => {
                             <LucideHeart />
                             <p>Hook Up</p>
                         </Link>
-                        <Link href="/mix/"
+                        <Link href="/"
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                             <LucideStore />
                             <p>Store</p>
                         </Link>
-                        <Link href="/mix/messages"
+                        <Link href="/messages"
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                             <LucideMessageSquare />
                             <p>Messages</p>
@@ -117,19 +117,19 @@ const SideBar = () => {
                             </span>
                         </Link>
                         {!user?.is_model && (
-                            <Link href="/mix/models/benefits"
+                            <Link href="/models/benefits"
                                 className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                                 <LucideUserPlus />
                                 <p>Become A Model</p>
                             </Link>
                         )}
                         <hr className="mt-8 mb-8" />
-                        <Link href="/mix/"
+                        <Link href="/"
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                             <LucideHelpCircle />
                             <p>Help</p>
                         </Link>
-                        <Link href="/mix/settings"
+                        <Link href="/settings"
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
                             <LucideSettings />
                             <p>Settings & Privacy</p>

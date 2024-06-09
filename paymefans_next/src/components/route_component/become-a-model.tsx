@@ -75,7 +75,7 @@ const BecomeAModel = () => {
 
         if (res && res.status === true) {
             toast.dismiss(loadingToast)
-            router.push("/mix/verification")
+            router.push("/verification")
         } else {
             toast.dismiss(loadingToast)
             swal({
@@ -98,7 +98,7 @@ const BecomeAModel = () => {
                                 Sorry you are already a verified model <br /> on Paymefans
                             </h1>
                             <div className="text-center">
-                                <Link href="/mix/profile" className="bg-primary-dark-pink text-white text-sm py-3 px-4 font-bold m-3 rounded-md w-full text-center">
+                                <Link href="/profile" className="bg-primary-dark-pink text-white text-sm py-3 px-4 font-bold m-3 rounded-md w-full text-center">
                                     Go to Profile</Link>
                             </div>
                         </div>

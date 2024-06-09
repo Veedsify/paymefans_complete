@@ -6,16 +6,29 @@ export function middleware(req: NextRequest) {
   const token = cookies.get("token")?.value;
   req.headers.set("Authorization", `Bearer ${token}`);
   if (token && token.length > 0) {
-    if (req.nextUrl.pathname.includes("/login")) {
-      return NextResponse.redirect(new URL("/mix", req.url));
-    } else {
-      return NextResponse.next();
-    }
+    return NextResponse.next();
   }
-
-  return NextResponse.redirect(new URL("/login", req.url));
+  return NextResponse.redirect(new URL("/login", req.nextUrl))
 }
 
 export const config = {
-  matcher: ["/mix/:path*", "/hookup/:path*"],
+  matcher: [
+    "/",
+    "/hookup/:path*",
+    "/profile/:path*",
+    "/models/:path*",
+    "/subscribe/:path*",
+    "/settings/:path*",
+    "/verification/:path*",
+    "/wallet/:path*",
+    "/posts/:path*",
+    // "/search/:path*",
+    // "/notifications/:path*",
+    "/messages/:path*",
+    // "/support/:path*",
+    // "/terms/:path*",
+    "/chats/:path*",
+    "/live/:path*",
+    "/points/:path*",
+  ],
 };

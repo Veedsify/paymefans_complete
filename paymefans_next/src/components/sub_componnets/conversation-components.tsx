@@ -81,24 +81,24 @@ const ConversationCard = ({ conversation }: {
 
     const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         if ((e.target as HTMLElement).tagName === "A") return;
-        router.push(`/mix/chats/${conversation?.conversation_id}`)
+        router.push(`/chats/${conversation?.conversation_id}`)
     }
 
     return (
         <>
             <div
                 onClick={handleClick}
-                className={`block ${!conversation?.lastMessage?.seen && conversation?.lastMessage?.sender_id !== user?.user_id ? "bg-messages-unread" : ""} mb-3 rounded cursor-pointer`} data-link="/mix/chats/1" >
+                className={`block ${!conversation?.lastMessage?.seen && conversation?.lastMessage?.sender_id !== user?.user_id ? "bg-messages-unread" : ""} mb-3 rounded cursor-pointer`} data-link="/chats/1" >
                 <div className="flex items-center gap-2 md:gap-5 p-3">
                     <Link
                         onClick={(e) => e.stopPropagation()}
-                        href={`/mix/profile/${conversation?.receiver?.username}`}>
+                        href={`/profile/${conversation?.receiver?.username}`}>
                         <Image width={65} height={65} src={conversation?.receiver?.profile_image} alt="user messages" className="object-cover rounded-full w-12  md:w-16 aspect-square" />
                     </Link>
                     <div className="flex-1">
                         <div className="flex flex-1 text-sm gap-4 mb-2 w-full">
-                            <Link onClick={(e) => e.stopPropagation()} href={`/mix/profile/${conversation?.receiver?.username}`}><h1 className="font-bold">{conversation?.receiver?.name}</h1></Link>
-                            <Link onClick={(e) => e.stopPropagation()} href={`/mix/profile/${conversation?.receiver?.username}`}>
+                            <Link onClick={(e) => e.stopPropagation()} href={`/profile/${conversation?.receiver?.username}`}><h1 className="font-bold">{conversation?.receiver?.name}</h1></Link>
+                            <Link onClick={(e) => e.stopPropagation()} href={`/profile/${conversation?.receiver?.username}`}>
                                 <p className="hidden md:block">{conversation?.receiver?.username}</p>
                             </Link>
                             <div className="flex items-center gap-2 ml-auto">
@@ -109,7 +109,7 @@ const ConversationCard = ({ conversation }: {
                             </div>
                         </div>
                         <div className="text-sm">
-                            <Link href={`/mix/chats/${conversation?.conversation_id}`}>
+                            <Link href={`/chats/${conversation?.conversation_id}`}>
                                 {conversation?.lastMessage?.created_at ? (
                                     <div>
                                         <div className="text-xs md:text-sm"

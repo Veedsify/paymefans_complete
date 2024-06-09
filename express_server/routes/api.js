@@ -15,6 +15,7 @@ const uploadMediaController = require("../controllers/api/mediaUploadController"
 const { GetTransactions } = require("../controllers/api/transactionsController");
 const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID } = require("../controllers/api/postController");
 const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
+const { GetSubscriptionData } = require("../controllers/api/subscriberController");
 
 
 // Authentication
@@ -59,6 +60,12 @@ router.get("/global/points", pointsController.GetGlobalPoints);
 
 // Wallet & Transactions
 router.get("/wallet/transactions", checkUserIsAuthenticated, GetTransactions);
+
+// Subscribers
+// router.post("/subscribe", checkUserIsAuthenticated, subscriberController.Subscribe);
+// router.post("/unsubscribe", checkUserIsAuthenticated, subscriberController.Unsubscribe);
+// router.post("/get/subscribers", checkUserIsAuthenticated, subscriberController.GetSubscribers);
+router.post("/user/subscription-data/:userid", checkUserIsAuthenticated, GetSubscriptionData);
 
 // Followers
 router.post("/follow/check", checkUserIsAuthenticated, followerController.CheckFollower);

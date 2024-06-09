@@ -1,5 +1,6 @@
 import UserNotFound from "@/components/route_component/usernotfound";
 import CreateConversationButton from "@/components/sub_componnets/create-conversation-button";
+import CreateSubscriptionButton from "@/components/sub_componnets/create-subscription-button";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
 import ProfileTabs from "@/components/sub_componnets/profile_tabs";
 import ProfileTabsOther from "@/components/sub_componnets/profile_tabs_other";
@@ -38,7 +39,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const user = await getUserData();
   const userdata = await getUserProfile({ user_id: id });
-  if (user?.id === userdata.id) redirect("/mix/profile");
+  if (user?.id === userdata.id) redirect("/profile");
   if (!userdata) return <UserNotFound userid={id} />;
 
   return (
@@ -63,11 +64,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
           />
           <div className="flex items-center gap-3 sm:p-3 ml-auto p-3  ">
             <FollowUserComponent thisuser={user} profileuser={userdata} />
-            <button>
-              <p className="sm:px-4 py-1 px-2 text-sm font-semibold text-white bg-black border border-black rounded text-color">
-                Subscribe
-              </p>
-            </button>
+            {userdata?.is_model && <CreateSubscriptionButton user_id={userdata?.user_id} />}
             <CreateConversationButton profileId={userdata?.user_id} />
           </div>
         </div>

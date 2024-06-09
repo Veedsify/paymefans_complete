@@ -16,7 +16,7 @@ const FetchChatData = ({ stringId }: { stringId: string }) => {
         const fetchData = async () => {
             const data = await GetConversationMessages(conversationId);
             if (data?.invalid_conversation === true && data?.status === false) {
-                return router.push("/mix/messages")
+                return router.push("/messages")
             }
 
             setMessages(data?.messages)

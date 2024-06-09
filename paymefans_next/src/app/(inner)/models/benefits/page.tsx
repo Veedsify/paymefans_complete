@@ -25,8 +25,8 @@ async function Models() {
                             <div className="text-center">
                                 <Link href={
                                     user?.Model?.verification_status ?
-                                        `/mix/profile` :
-                                        "/mix/verification"
+                                        `/profile` :
+                                        "/verification"
                                 } className="bg-primary-dark-pink text-white text-sm py-3 px-4 font-bold m-3 rounded-md w-full text-center">
                                     {(user?.is_model && user.Model?.verification_status) ? "Go to your profile" : "Verify your account"}
                                 </Link>
@@ -69,7 +69,7 @@ async function Models() {
                 </ul>
             </div>
             <div className="flex align-middle justify-center">
-                <Link href="/mix/models/become-a-model" className="bg-primary-dark-pink text-white text-sm p-4 font-bold m-3 rounded-xl w-full text-center">
+                <Link href="/models/become-a-model" className="bg-primary-dark-pink text-white text-sm p-4 font-bold m-3 rounded-xl w-full text-center">
                     Sign Up
                 </Link>
             </div>

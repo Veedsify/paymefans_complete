@@ -156,7 +156,7 @@ const Chats = ({
     <div className="relative chat_height">
       <div className="flex items-center border-b py-6 px-5 pb-6">
         <div className="mr-6 sm:mr-10">
-          <Link href="/mix/messages">
+          <Link href="/messages">
             <LucideArrowLeft size={30} className="cursor-pointer" />
           </Link>
         </div>
@@ -178,7 +178,7 @@ const Chats = ({
           <div className="">
             <div className="font-bold text-sm md:text-base">
               <Link
-                href={`/mix/profile/${receiver.username}`}
+                href={`/profile/${receiver.username}`}
                 className="flex gap-3 duration-300 items-center"
               >
                 <span>{receiver ? receiver.name : ""}</span>

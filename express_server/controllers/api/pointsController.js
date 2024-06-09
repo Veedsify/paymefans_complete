@@ -72,7 +72,7 @@ class pointsController {
         },
       });
 
-      res.redirect(process.env.APP_URL + "/mix/wallet/");
+      res.redirect(process.env.APP_URL + "/wallet/");
     } else {
       res.status(400).json({ status: false });
     }

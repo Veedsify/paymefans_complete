@@ -44,7 +44,7 @@ const page = async () => {
                     </div>
                 </div>
                 <div>
-                    <Link href="/mix/points" className="p-3 px-8 text-xs font-semibold text-white bg-black rounded">
+                    <Link href="/points" className="p-3 px-8 text-xs font-semibold text-white bg-black rounded">
                         Add Funds
                     </Link>
                 </div>
@@ -74,7 +74,7 @@ const page = async () => {
                         </button>
                     </div>
                     <div>
-                        <Link href="/mix/wallet/add"
+                        <Link href="/wallet/add"
                             className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">SET
                             WITHDRAWAL BANK ACCOUNT</Link>
                     </div>

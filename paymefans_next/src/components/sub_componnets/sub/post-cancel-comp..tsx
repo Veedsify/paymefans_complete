@@ -22,7 +22,7 @@ export const PostCancelComp = () => {
             }
         }).then((res) => {
             if (res === "yes") {
-                router.push("/mix")
+                router.push("/")
                 clearAll();
             }
         })

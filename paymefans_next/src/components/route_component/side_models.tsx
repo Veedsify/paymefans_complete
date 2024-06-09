@@ -52,7 +52,7 @@ const SideModels = () => {
           <div className="flex align-middle justify-between pb-6">
             <span className="font-bold">Models/Creators</span>
             <span>
-              <Link href="/mix/models" className="bg-primary-dark-pink text-white px-3 text-sm py-1 font-semibold rounded-md">View All</Link>
+              <Link href="/models" className="bg-primary-dark-pink text-white px-3 text-sm py-1 font-semibold rounded-md">View All</Link>
             </span>
           </div>
           <div className="py-6 mb-6">

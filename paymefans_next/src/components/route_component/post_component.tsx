@@ -70,7 +70,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
     const redirecToPost = (e: MouseEvent) => {
         if (e.target instanceof HTMLAnchorElement) return;
         if (e.target instanceof HTMLButtonElement) return;
-        router.push(`/mix/posts/${data.post_id}`)
+        router.push(`/posts/${data.post_id}`)
     }
 
 
@@ -144,7 +144,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                 />
                             )}
                             {index === 2 && data.media.length > 3 ? (
-                                <Link href={`/mix/posts/${data.post_id}`}
+                                <Link href={`/posts/${data.post_id}`}
                                     className="flex flex-col absolute inset-0 items-center justify-center bg-black rounded-lg aspect-[3/4] md:aspect-square bg-opacity-40 cursor-pointer select-none">
                                     <div>
                                         <LucidePlus size={40} stroke="#fff" className="border-4 rounded-full" />

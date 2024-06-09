@@ -21,7 +21,7 @@ const NavigationBar = () => {
     return (
         <div className="fixed bottom-0 right-0 flex pointer-events-none w-full lg:justify-end">
             <div className="flex py-7 border-t items-center justify-between px-8 md:px-16 bg-white w-full lg:w-[33.3%] pointer-events-auto">
-                <Link href="/mix" className="cursor-pointer">
+                <Link href="/" className="cursor-pointer">
                     <LucideHome />
                 </Link>
                 <span className="cursor-pointer">
@@ -33,7 +33,7 @@ const NavigationBar = () => {
                 <Link href="/models" className="cursor-pointer">
                     <LucideUser2 />
                 </Link>
-                <Link href="/mix/messages" className="cursor-pointer">
+                <Link href="/messages" className="cursor-pointer">
                     <LucideMail />
                 </Link>
             </div>
@@ -47,7 +47,7 @@ const NavigationBarSlide = () => {
     return (
         <div className={`fixed  duration-300 transition-all right-0 flex pointer-events-all w-full lg:justify-end z-50 md:-bottom-0 pointer-events-none ${openMenu ? "-bottom-0" : "-bottom-20"}`}>
             <div className="flex py-7 items-center justify-between px-8 md:px-16 bg-white w-full lg:w-[33.3%] pointer-events-auto">
-                <Link href="/mix" className="cursor-pointer">
+                <Link href="/" className="cursor-pointer">
                     <LucideHome />
                 </Link>
                 <span className="cursor-pointer">
@@ -59,7 +59,7 @@ const NavigationBarSlide = () => {
                 <Link href="/models" className="cursor-pointer">
                     <LucideUser2 />
                 </Link>
-                <Link href="/mix/messages" className="cursor-pointer">
+                <Link href="/messages" className="cursor-pointer">
                     <LucideMail />
                 </Link>
             </div>

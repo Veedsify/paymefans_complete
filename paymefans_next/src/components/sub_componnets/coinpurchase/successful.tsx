@@ -8,7 +8,7 @@ const CoinPurchaseSuccessful = () => {
             <h1 className="text-3xl font-bold mb-5">Purchase Successful</h1>
             <p>Points Has Been Added, Successfully</p>
             <div className="py-5">
-                <Link href="/mix/wallet" className="block px-5 py-3 rounded-md bg-primary-dark-pink text-white font-medium">
+                <Link href="/wallet" className="block px-5 py-3 rounded-md bg-primary-dark-pink text-white font-medium">
                     Go to wallet
                 </Link>
             </div>

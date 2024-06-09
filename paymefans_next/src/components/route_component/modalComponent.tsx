@@ -17,7 +17,7 @@ const ModalComponent = () => {
 
       <div className={`px-2 xl:w-4/12 md:w-6/12 w-full rounded-tr-xl rounded-tl-xl transition-all duration-300 ease-in-out left-1/2 -translate-x-1/2 absolute ${modalState ? "bottom-0" : "-bottom-full"}`}>
         <div className='p-5 bg-white rounded-tr-xl rounded-tl-xl'>
-          <Link href="/mix/posts/new" className='flex items-center gap-4 px-3 py-5 duration-300 border-b hover:bg-messages-unread'>
+          <Link href="/posts/new" className='flex items-center gap-4 px-3 py-5 duration-300 border-b hover:bg-messages-unread'>
             <LucideSquarePen />
             <p>Post</p>
           </Link>

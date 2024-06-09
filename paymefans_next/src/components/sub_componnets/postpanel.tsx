@@ -32,7 +32,6 @@ const PostPanel = () => {
         let isCancelled = false;
         const fetchPosts = async () => {
             setLoading(true);
-            await new Promise(resolve => setTimeout(resolve, 1000));
             const res = await getUserPosts({ pageParam: page })
             if (!isCancelled && res && res.data) {
                 const myposts = [...res.data]
@@ -53,6 +52,7 @@ const PostPanel = () => {
 
 
     const handleClickToFetch = useCallback((): void => {
+        if (posts.length === 0) return;
         setPage((prevPage: number) => prevPage + 1);
     }, [setPage]);
 
@@ -61,7 +61,7 @@ const PostPanel = () => {
         >
             {user && posts.map((post, index) => (
                 <PostComponent key={index}
-                    user={{ name: user.name, link: `/mix/profile/${user.username}`, username: user.username, image: user.profile_image }}
+                    user={{ name: user.name, link: `/profile/${user.username}`, username: user.username, image: user.profile_image }}
                     data={{
                         ...post,
                         post: post.content,
@@ -72,11 +72,13 @@ const PostPanel = () => {
             ))}
             {posts.length === 0 && !loading && <p className="text-center text-gray-500">No posts found</p>}
 
+            {loading && <LoadingPost />}
+
             <div className="py-6">
                 <button
                     onClick={handleClickToFetch}
                     className="block mx-auto mt-6 px-4 py-2 bg-primary-dark-pink text-white rounded-md disabled:bg-gray-300"
-                    disabled={loading}
+                    disabled={loading || posts.length === 0}
                 >
                     {loading ? "Loading..." : "Load more"}
                 </button>

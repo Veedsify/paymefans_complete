@@ -26,7 +26,7 @@ const Login = () => {
             toast.success("Login successful");
             document.cookie = `token=${loginThisUser.data.token}`;
             setUser(loginThisUser.data.user)
-            return router.push("/mix");
+            return router.push("/");
         } else if (loginThisUser.data.status === false) {
             toast.error("Invalid Login credentials");
             return;
