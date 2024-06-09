@@ -12,12 +12,12 @@ export const PostPageImage = ({ media }: {
     }
 }) => {
     const { fullScreenPreview } = usePostComponent();
-    const setActiveImage = (url: string, type: string) => {
+    const setActiveImage = useCallback((url: string, type: string) => {
         fullScreenPreview({ url: url, type: type, open: true })
-    }
+    }, [fullScreenPreview])
     const clickImageEvent = useCallback((media: { url: string; type: string }) => {
         setActiveImage(media.url, media.type)
-    }, [fullScreenPreview, setActiveImage])
+    }, [setActiveImage])
 
     return (
         <div className="relative">

@@ -62,7 +62,7 @@ const Subscribe = ({ params }: SubscribeProps) => {
         }
         fetchUserSubscription()
 
-    }, [user_id])
+    }, [user_id, router, token])
 
     useEffect(() => {
 

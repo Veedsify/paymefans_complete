@@ -41,7 +41,7 @@ export default async function RootLayout({
                     <MessagesConversationProvider>
                         <UserPointsContextProvider>
                             <body className={GeistSans.className}>
-                                <Loader />
+                                {/* <Loader /> */}
                                 <Toaster />
                                 <SonnerToast richColors position="top-center"
                                     toastOptions={{

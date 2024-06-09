@@ -74,7 +74,9 @@ const BecomeAModel = () => {
         })
 
         if (res && res.status === true) {
-            toast.dismiss(loadingToast)
+            setTimeout(() => {
+                toast.dismiss(loadingToast)
+            }, 2000);
             router.push("/verification")
         } else {
             toast.dismiss(loadingToast)

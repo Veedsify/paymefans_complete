@@ -4,12 +4,18 @@ import axiosServer from "@/utils/axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import toast from "react-hot-toast";
 
 const Login = () => {
     const { setUser } = getUser()
     const router = useRouter()
+    useEffect(() => {
+        document.title = "Login | Paymefans";
+        if (document.cookie.includes("token")) {
+            router.push("/");
+        }
+    }, [router])
     const [loginCredentials, setLoginCredentials] = useState({
         email: "",
         password: ""
@@ -26,7 +32,7 @@ const Login = () => {
             toast.success("Login successful");
             document.cookie = `token=${loginThisUser.data.token}`;
             setUser(loginThisUser.data.user)
-            return router.push("/");
+            router.push("/");
         } else if (loginThisUser.data.status === false) {
             toast.error("Invalid Login credentials");
             return;

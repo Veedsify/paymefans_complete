@@ -44,7 +44,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                 router.push("/404")
             }
         })
-    }, [id])
+    }, [id, router])
 
     useEffect(() => {
         if (post) {

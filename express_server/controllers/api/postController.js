@@ -97,11 +97,9 @@ class PostController {
                     post_comments: true,
                     post_reposts: true,
                 },
-                take: parsedLimit,
-                skip: parsedPage  // Adjusted logic for skipping records
+                // take: parsedLimit,
+                // skip: parsedPage  // Adjusted logic for skipping records
             });
-
-            console.log(posts);
 
             return res.status(200).json({
                 status: true,
@@ -157,8 +155,8 @@ class PostController {
                         }
                     }
                 },
-                take: parsedLimit,
-                skip: parsedPage  // Adjusted logic for skipping records
+                // take: parsedLimit,
+                // skip: parsedPage  // Adjusted logic for skipping records
             });
 
             console.log(posts);

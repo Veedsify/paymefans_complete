@@ -6,6 +6,7 @@ import { LucidePlay } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import path from "path";
+import { HiPlay } from "react-icons/hi";
 
 type MessageBubbleProps = {
     message?: string | TrustedHTML;
@@ -61,7 +62,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ sender, seen, message, da
                                         ) : (
                                             <div className="relative">
                                                 <div className="bg-black bg-opacity-20 absolute indent-0 w-full h-full flex items-center justify-center">
-                                                    <LucidePlay className="text-white" />
+                                                    <button className="h-12 w-12 p-1 flex-shrink-0 rounded-full flex items-center justify-center bg-primary-dark-pink aspect-square">
+                                                        <HiPlay className="text-white" size={50} />
+                                                    </button>
                                                 </div>
                                                 <video
                                                     src={`${server}/${file.url}`}
@@ -107,7 +110,9 @@ const MessageBubble: React.FC<MessageBubbleProps> = ({ sender, seen, message, da
                                         ) : (
                                             <div className="relative">
                                                 <div className="bg-black bg-opacity-20 absolute indent-0 w-full h-full flex items-center justify-center">
-                                                    <LucidePlay className="text-white" />
+                                                    <button className="h-12 w-12 p-1 flex-shrink-0 rounded-full flex items-center justify-center bg-primary-dark-pink aspect-square">
+                                                        <HiPlay className="text-white" size={50} />
+                                                    </button>
                                                 </div>
                                                 <video
                                                     src={`${server}/${file.url}`}

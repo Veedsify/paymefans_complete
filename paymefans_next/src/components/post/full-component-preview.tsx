@@ -71,14 +71,16 @@ const PostComponentPreview = () => {
                         <X size={40} />
                     </button>
                     {type === "video" && (
-                        <video
-                            controlsList="nodownload"
-                            autoPlay controls
-                            playsInline
-                            className={`w-screen md:w-[550px] lg:w-[650px] 2xl:w-[700px] block object-cover transition-all duration-300 bg-black border-none h-auto animate-in ${open ? "scale-100" : "scale-75"}`}
+                        <div className="relative w-fit h-screen"
                         >
-                            <source src={activeMedia} type="video/mp4" />
-                        </video>
+                            <video
+                                controlsList="nodownload"
+                                autoPlay controls
+                                className={` h-full object-contain flex-grow-0 transition-all duration-200 border-none animate-in ${open ? "scale-100" : "scale-75"}`}
+                            >
+                                <source src={activeMedia} type="video/mp4" />
+                            </video>
+                        </div>
                     )}
                     {(type === "image") && (
                         <div className="relative w-fit h-screen"

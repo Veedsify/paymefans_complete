@@ -74,7 +74,7 @@ const PostEditor = () => {
         setMedia(files);
     }, [setMedia])
 
-    const handlePostSubmit = useCallback(async () => {
+    const handlePostSubmit = async () => {
         if (!postText || postText.trim() === "") {
             toast.error("Post is empty, Please write something.");
             return;
@@ -108,7 +108,7 @@ const PostEditor = () => {
             toast.dismiss()
             toast.error("Something went wrong, Please try again later.");
         }
-    }, [postText, media, visibility])
+    }
 
     return (
         <>
