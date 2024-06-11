@@ -1,7 +1,9 @@
 "use client"
 import { socket } from "@/components/sub_componnets/sub/socket"
+import { useUserPointsContext } from "@/contexts/user-points-context"
 import { useUserAuthContext } from "@/lib/userUseContext"
 import { getToken } from "@/utils/cookie.get"
+import { SubscribeToUser } from "@/utils/data/subscribe-to-user"
 import axios from "axios"
 import Image from "next/image"
 import Link from "next/link"
@@ -16,7 +18,9 @@ type SubscribeProps = {
 }
 
 type ProfileUser = {
+    user_id: string
     profile_image: string
+    username: string
     name: string
     Model: {
         gender: string
@@ -33,6 +37,7 @@ const Subscribe = ({ params }: SubscribeProps) => {
     const token = getToken()
     const [profileUser, setProfileUser] = useState<ProfileUser>()
     const router = useRouter()
+    const { points } = useUserPointsContext()
     if (user?.user_id === user_id) {
         router.push("/profile")
     }
@@ -65,7 +70,6 @@ const Subscribe = ({ params }: SubscribeProps) => {
     }, [user_id, router, token])
 
     useEffect(() => {
-
         socket.on("subscription_added", () => {
             console.log("subscription_added")
         })
@@ -77,13 +81,18 @@ const Subscribe = ({ params }: SubscribeProps) => {
 
     const subscribeToUser = () => {
         if (user && profileUser) {
-            if (user?.UserPoints?.points < profileUser?.Settings?.subscription_price) {
-                toast.error("You don't have enough points to subscribe to this user")
-                return
+            const subscribeUser = async () => {
+                return await SubscribeToUser(profileUser.user_id)
             }
-            toast.success("Subscribed successfully")
-            socket.emit("subscribe", {
-                user_id: user_id
+            subscribeUser().then((res) => {
+                if (res.status === true) {
+                    toast.success("You have successfully subscribed to this user")
+                    socket.emit("subscription_added", { user_id: profileUser.user_id })
+                    router.push(`/profile/${profileUser.username}`)
+                } else {
+                    toast.error(res.message)
+                    router.push(`/profile/${profileUser.username}`)
+                }
             })
         }
     }

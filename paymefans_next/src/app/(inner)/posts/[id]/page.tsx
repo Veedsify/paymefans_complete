@@ -38,8 +38,6 @@ const Post = ({ params: { id } }: PostPageprops) => {
         getPost(id).then((data) => {
             setPost(data)
         }).catch((error) => {
-            console.log(error.response);
-
             if (error.response.status === 404) {
                 router.push("/404")
             }

@@ -165,7 +165,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                     {(!isSubscriber && data.post_audience === "subscribers") ? (
                                         <Image src={"/site/blur.jpg"} alt={data.post} width={1} height={1} priority blurDataURL={"/site/blur.jpg"} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
                                     ) : (
-                                        <Image src={media.url} alt={data.post} width={400} height={400} priority blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
+                                        <Image src={media.url} alt={data.post} width={400} height={400} unoptimized unselectable="on" blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
                                     )}
                                 </>
                             )}

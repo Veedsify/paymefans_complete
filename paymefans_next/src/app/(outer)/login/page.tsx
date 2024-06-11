@@ -4,41 +4,48 @@ import axiosServer from "@/utils/axios";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import toast from "react-hot-toast";
 
 const Login = () => {
-    const { setUser } = getUser()
-    const router = useRouter()
+    const { setUser } = getUser();
+    const router = useRouter();
+    const [loginCredentials, setLoginCredentials] = useState({
+        email: "",
+        password: ""
+    });
+
     useEffect(() => {
         document.title = "Login | Paymefans";
         if (document.cookie.includes("token")) {
             router.push("/");
         }
-    }, [router])
-    const [loginCredentials, setLoginCredentials] = useState({
-        email: "",
-        password: ""
-    });
-    const handleLoginInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setLoginCredentials({ ...loginCredentials, [e.target.name]: e.target.value });
-    }
-    const submitLoginForm = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const loginThisUser = await axiosServer.post("/auth/login", {
-            data: loginCredentials
-        });
-        if (loginThisUser?.data?.status === true) {
-            toast.success("Login successful");
-            document.cookie = `token=${loginThisUser.data.token}`;
-            setUser(loginThisUser.data.user)
-            router.push("/");
-        } else if (loginThisUser.data.status === false) {
-            toast.error("Invalid Login credentials");
-            return;
-        }
-    }
+    }, [router]);
 
+    const handleLoginInput = (e: ChangeEvent<HTMLInputElement>) => {
+        setLoginCredentials({ ...loginCredentials, [e.target.name]: e.target.value });
+    };
+
+    const submitLoginForm = async (e: FormEvent) => {
+        e.preventDefault();
+        try {
+            const loginThisUser = await axiosServer.post("/auth/login", {
+                data: loginCredentials
+            });
+
+            if (loginThisUser?.data?.status === true) {
+                toast.success("Login successful");
+                document.cookie = `token=${loginThisUser.data.token}`;
+                setUser(loginThisUser.data.user);
+                router.push("/");
+            } else {
+                toast.error("Invalid Login credentials");
+            }
+        } catch (error) {
+            console.error("Error while logging in:", error);
+            toast.error("An error occurred while logging in");
+        }
+    };
     return (
         <div className="min-h-screen lg:p-0 bg-black p-5">
             <div className="lg:grid grid-cols-2 items-start justify-center mx-auto">

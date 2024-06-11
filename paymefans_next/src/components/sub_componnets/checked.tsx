@@ -2,13 +2,20 @@
 import { useEffect, useState } from "react";
 
 const Toggle = ({ state, set }: { state?: boolean, set?: (value: boolean) => void }) => {
-    const [isChecked, setIsChecked] = useState<boolean>();
-    useEffect(() => { setIsChecked(state) }, [state]);
+    const [isChecked, setIsChecked] = useState<boolean>(state || false);
+
+    useEffect(() => {
+        setIsChecked(state || false);
+    }, [state]);
+
     const newId = Math.random().toString(36).substring(7);
+
     const toggleSwitch = () => {
-        setIsChecked(!isChecked);
-        if (set) set(!isChecked)
+        const newValue = !isChecked;
+        setIsChecked(newValue);
+        if (set) set(newValue);
     };
+
     return (
         <div>
             <input
@@ -20,19 +27,19 @@ const Toggle = ({ state, set }: { state?: boolean, set?: (value: boolean) => voi
             />
             <label
                 htmlFor={newId}
-                className="flex items-center cursor-pointer  duration-300"
+                className="flex items-center cursor-pointer duration-300"
             >
                 <div className="relative">
                     <div className={`w-12 h-7 flex items-center border rounded-full shadow-inner ${isChecked
-                        ? "bg-primary-dark-pink "
+                        ? "bg-primary-dark-pink"
                         : ""
-                        }transition-transform duration-300`}>
+                        } transition-transform duration-300`}>
 
                         <div
-                            className={` w-[18px] h-[18px]  bg-gray-200 ml-1 rounded-full insect-y-0 left-0 ${isChecked
-                                ? "transform translate-x-full "
+                            className={`w-[18px] h-[18px] bg-gray-200 ml-1 rounded-full insect-y-0 left-0 ${isChecked
+                                ? "transform translate-x-full"
                                 : ""
-                                }transition-transform duration-300`}
+                                } transition-transform duration-300`}
                         ></div>
                     </div>
                 </div>

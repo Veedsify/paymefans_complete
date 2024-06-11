@@ -2,7 +2,6 @@ import UserNotFound from "@/components/route_component/usernotfound";
 import CreateConversationButton from "@/components/sub_componnets/create-conversation-button";
 import CreateSubscriptionButton from "@/components/sub_componnets/create-subscription-button";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
-import ProfileTabs from "@/components/sub_componnets/profile_tabs";
 import ProfileTabsOther from "@/components/sub_componnets/profile_tabs_other";
 import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
@@ -11,7 +10,6 @@ import {
   LucideCalendar,
   LucideLink,
   LucideLock,
-  LucideMail,
   LucideMapPin,
 } from "lucide-react";
 import { Metadata } from "next";
@@ -64,7 +62,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
           />
           <div className="flex items-center gap-3 sm:p-3 ml-auto p-3  ">
             <FollowUserComponent thisuser={user} profileuser={userdata} />
-            {userdata?.is_model && <CreateSubscriptionButton user_id={userdata?.user_id} />}
+            {userdata?.is_model && <CreateSubscriptionButton userdata={userdata} />}
             <CreateConversationButton profileId={userdata?.user_id} />
           </div>
         </div>

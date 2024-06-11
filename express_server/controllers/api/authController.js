@@ -80,46 +80,49 @@ class authController {
      * @returns {Object} The response containing the user information.
      */
     static async Retrieve(req, res) {
-        const user = await prismaQuery.user.findUnique({
-            where: {
-                id: req.user.id,
-            },
-            include: {
-                UserPoints: true,
-                UserWallet: true,
-                Settings: true,
-                Model: true,
-                _count: {
-                    select: {
-                        Follow: {
-                            where: {
-                                user_id: req.user.id
-                            }
-                        }
-                        , Subscribers: {
-                            where: {
-                                user_id: req.user.id
-                            }
-                        }
-                    },
+        try {
+            const user = await prismaQuery.user.findUnique({
+                where: {
+                    id: req.user.id,
                 },
-            }
-        });
-        const following = await prismaQuery.user.count({
-            where: {
-                Follow: {
-                    some: {
-                        follower_id: req.user.id
+                include: {
+                    UserPoints: true,
+                    UserWallet: true,
+                    Settings: true,
+                    Model: true,
+                    _count: {
+                        select: {
+                            Follow: {
+                                where: {
+                                    user_id: req.user.id
+                                }
+                            }
+                            , Subscribers: {
+                                where: {
+                                    user_id: req.user.id
+                                }
+                            }
+                        },
+                    },
+                }
+            });
+            const following = await prismaQuery.user.count({
+                where: {
+                    Follow: {
+                        some: {
+                            follower_id: req.user.id
+                        }
                     }
                 }
-            }
-        })
+            })
 
-        if (user) {
-            const { password, ...rest } = user;
-            return res.status(200).json({ user: { ...rest, following }, status: true });
+            if (user) {
+                const { password, ...rest } = user;
+                return res.status(200).json({ user: { ...rest, following }, status: true });
+            }
+        } catch (error) {
+            return res.status(500).json({ message: "No user found", status: false });
         }
-        return res.status(401).json({ message: "No user found", status: false });
     }
 
     /**

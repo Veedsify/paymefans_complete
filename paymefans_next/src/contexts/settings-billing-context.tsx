@@ -18,6 +18,7 @@ export interface Settings {
 
 export interface SettingsBillingContextProps {
     settings: Settings;
+    saveSettings: () => void;
     setSubscription: (state: Settings) => void;
 }
 
@@ -38,10 +39,14 @@ export const SettingsBillingProvider: React.FC<SettingsBillingProps> = ({ childr
     const token = getToken();
 
     const setSubscription = async (subscription: Settings) => {
+        setSettings(subscription);
+    };
+
+    const saveSettings = async () => {
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/settings/billings/message-price`, {
                 method: "POST",
-                body: JSON.stringify(subscription),
+                body: JSON.stringify(settings),
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
@@ -49,7 +54,6 @@ export const SettingsBillingProvider: React.FC<SettingsBillingProps> = ({ childr
             });
 
             if (res.ok) {
-                setSettings(subscription);
                 toast.success("Settings saved successfully")
             } else {
                 console.log("Error: ", res.status, res.statusText);
@@ -57,16 +61,27 @@ export const SettingsBillingProvider: React.FC<SettingsBillingProps> = ({ childr
         } catch (error) {
             console.error("Error setting subscription: ", error);
         }
-    };
+    }
 
     useEffect(() => {
         if (current_data) {
             setSettings(current_data);
         }
+
+        return () => {
+            setSettings({
+                subscription: false,
+                subscription_price: 0,
+                subscription_duration: 0,
+                price_per_message: 0,
+                enable_free_message: false
+            });
+        }
     }, [current_data]);
 
     const value = {
         settings,
+        saveSettings,
         setSubscription
     };
 

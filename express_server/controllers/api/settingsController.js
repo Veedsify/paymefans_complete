@@ -48,21 +48,24 @@ class SettingsController {
     static async setMessagePrice(req, res) {
         try {
             const user = req.user;
-            const { price_per_message, enable_free_message } = req.body;
+            const { price_per_message, enable_free_message, subscription_price, subscription_duration } = req.body;
 
-            await prismaQuery.user.update({
+            const updateSettings = await prismaQuery.user.update({
                 where: {
                     id: user.id
                 },
                 data: {
                     Settings: {
                         update: {
-                            price_per_message: price_per_message,
+                            subscription_price: parseFloat(subscription_price),
+                            subscription_duration: subscription_duration,
+                            price_per_message: parseFloat(price_per_message),
                             enable_free_message: enable_free_message
                         }
                     }
                 }
             })
+
 
             prismaQuery.$disconnect();
 

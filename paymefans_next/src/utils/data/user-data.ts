@@ -7,9 +7,12 @@ import { AxiosResponse } from "axios";
 const getUserData = async (): Promise<AuthUserProps | null> => {
   const token = cookies().get("token")?.value;
 
+  const removeToken = () => {
+    redirect("/login");
+  }
+
   if (!token) {
     redirect("/login");
-    return null;
   }
 
   try {
@@ -25,14 +28,15 @@ const getUserData = async (): Promise<AuthUserProps | null> => {
 
     if (res.status === 200 && res.data?.user) {
       return res.data.user as AuthUserProps;
-    } else if (res.status === 401) {
-      redirect("/login");
-      return null;
-    } else {
-      return null;
     }
+
+    return null;
+
   } catch (error) {
-    console.error('Error fetching user data:', error);
+    // console.error('Error fetching user data:', error);
+    await fetch(`${process.env.NEXT_SERVER_URL}`, {
+      method: "GET",
+    });
     return null;
   }
 };

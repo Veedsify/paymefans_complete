@@ -4,24 +4,30 @@ import Toggle from "./checked";
 import SubscriptionState from "./subscriptionState";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { useSettingsBillingContext } from "@/contexts/settings-billing-context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 const Settingsbilling = () => {
     const { user } = useUserAuthContext()
     const [price, setPrice] = useState<number>(0)
-    const { settings, setSubscription } = useSettingsBillingContext()
+
+    const { settings, setSubscription, saveSettings } = useSettingsBillingContext()
 
     const handlePriceSet = (e: any) => {
-        setPrice(Number(e.target.value))
+        const newprice = Number(e.target.value)
+        setSubscription({
+            ...settings
+            , price_per_message: newprice, enable_free_message: settings.enable_free_message
+        })
     }
 
     const handleSave = async () => {
-        const setPrice = price === 0 ? settings.price_per_message : price
-        setSubscription({ ...settings, price_per_message: setPrice, enable_free_message: settings.enable_free_message })
+        saveSettings()
     }
 
     const handleToggle = (value: boolean) => {
+        setPrice
+        setPrice
         setSubscription({ ...settings, enable_free_message: value })
     }
 
