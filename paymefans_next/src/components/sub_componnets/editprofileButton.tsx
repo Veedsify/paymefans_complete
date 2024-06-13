@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import BannerComponent from "../lib_components/banner_component";
 
 const EditProfileButton = ({ user }: { user: any }) => {
     const [open, setOpen] = useState(false);
@@ -74,11 +75,14 @@ const EditProfileButton = ({ user }: { user: any }) => {
                     onClick={() => setOpen(false)}>
                     <X />
                 </span>
-                <div className="bg-white p-5 rounded-md shadow-lg md:min-w-[550px] max-h-[600px] overflow-y-auto"
+                <div className="bg-white m-2 md:m-3 p-5 rounded-md shadow-lg md:min-w-[550px] max-h-[600px] overflow-y-auto"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <h1 className="font-bold text-lg md:text-xl mb-5">Edit Profile</h1>
                     <label htmlFor="imageUpload">
+                        <div className="mb-3 rounded-xl overflow-hidden">
+                            <BannerComponent profile_banner={user ? user.profile_banner : "/site/banner.png"} />
+                        </div>
                         <div className="relative border-[3px] mb-3 inline-block p-2 rounded-full border-dotted group">
                             <Image
                                 src={file ? URL.createObjectURL(file) : user?.profile_image || "/site/avatar.png"}
@@ -88,8 +92,8 @@ const EditProfileButton = ({ user }: { user: any }) => {
                                 height={100}
                                 className="object-cover w-20 h-20 rounded-full lg:w-24 lg:h-24 aspect-square "
                             />
-                            <div className="opacity-0 absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full cursor-pointer group-hover:opacity-100 transition-all duration-200">
-                                <LucideCamera size={30} className="text-white" />
+                            <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center rounded-full cursor-pointer transition-all duration-200">
+                                <LucideCamera size={20} className="text-white" />
                             </div>
                         </div>
                     </label>

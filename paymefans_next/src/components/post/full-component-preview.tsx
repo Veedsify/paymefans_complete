@@ -85,6 +85,9 @@ const PostComponentPreview = () => {
                     {(type === "image") && (
                         <div className="relative w-fit h-screen"
                         >
+                            <div className="add-loaders opacity-70">
+                                {!loaded ? <Loader /> : ""}
+                            </div>
                             <Image
                                 onLoad={handleLoaded}
                                 width={2000}

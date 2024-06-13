@@ -8,14 +8,15 @@ import { AuthUserProps } from "@/types/user";
 import { MouseEvent, useEffect, useState } from "react";
 import { useSearchParams } from 'next/navigation';
 import { SettingsBillingProvider } from "@/contexts/settings-billing-context";
+import { useUserAuthContext } from "@/lib/userUseContext";
 
 const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
     const searchParams = useSearchParams();
+    const { user: authuser } = useUserAuthContext()
     const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
         const tab = e.currentTarget.getAttribute("data-tab");
         window.history.pushState({}, "", `?tab=${tab}`);
     }
-
 
     useEffect(() => {
         const tab = searchParams.get("tab");
@@ -45,12 +46,14 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
                             data-tab="security"
                             className="text-black font-bold py-2">Security</button>
                     </Tab>
-                    <Tab>
-                        <button
-                            onClick={handleClick}
-                            data-tab="billing"
-                            className="text-black font-bold py-2">Billing</button>
-                    </Tab>
+                    {authuser?.is_model && (
+                        <Tab>
+                            <button
+                                onClick={handleClick}
+                                data-tab="billing"
+                                className="text-black font-bold py-2">Billing</button>
+                        </Tab>
+                    )}
                 </TabList>
                 <TabPanel >
                     <ProfileSettings user={user} />
@@ -58,7 +61,7 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
                 <TabPanel>
                     <SettingSecurity />
                 </TabPanel>
-                <TabPanel>
+                {user?.is_model && (<TabPanel>
                     <SettingsBillingProvider current_data={{
                         subscription: user?.Settings?.subscription_active || false,
                         subscription_price: user?.Settings?.subscription_price || 0,
@@ -68,7 +71,7 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
                     }}>
                         <Settingsbilling />
                     </SettingsBillingProvider>
-                </TabPanel>
+                </TabPanel>)}
             </Tabs>
         </div>
     );

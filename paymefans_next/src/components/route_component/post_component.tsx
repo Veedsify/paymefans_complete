@@ -100,6 +100,37 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
         return () => {
             videoReff?.removeEventListener("ended", handleVideoEnd);
         };
+    }, [videoRef]);
+
+    // start playing video if its interacting
+    useEffect(() => {
+        const videoRefs = videoRef.current;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    videoRefs?.setAttribute("muted", "muted");  // Mute the video
+                    videoRefs?.play().then(() => {
+                        videoRefs?.setAttribute("controls", "controls");
+                        setPlaying(true);
+                    }).catch((error) => {
+                        console.error("Error attempting to play the video:", error);
+                    });
+                } else {
+                    videoRefs?.pause();
+                    videoRefs?.removeAttribute("controls");
+                    setPlaying(false);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if (videoRefs) {
+            observer.observe(videoRefs as HTMLVideoElement);
+        }
+
+        return () => {
+            observer.disconnect();
+        };
     }, []);
 
     const redirecToPost = useCallback((e: MouseEvent) => {
@@ -133,7 +164,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                 <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg overflow-hidden flex items-center justify-center z-10">
                                     <Image src={"/site/blur.jpg"} alt="" width={1} height={1} className="w-full h-full brightness-50 aspect-square object-cover absolute inset-0" />
                                     <Link href="/subscribe" className="text-white absolute text-lg font-bold">
-                                        Subscribe to view
+                                        <LucideLock />
                                     </Link>
                                 </div>
                             )}
@@ -159,7 +190,6 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                                     </div>
                                 </>
                             )}
-
                             {media.type !== "video" && (
                                 <>
                                     {(!isSubscriber && data.post_audience === "subscribers") ? (

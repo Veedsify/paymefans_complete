@@ -1,8 +1,6 @@
 "use client"
-import { useUserAuthContext } from "@/lib/userUseContext";
 import PostComponent from "../route_component/post_component";
 import LoadingPost from "./loading_post";
-import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserPosts } from "@/utils/data/get-user-post";
 import { formatDate } from "@/utils/format-date";
 import { useQuery } from "@tanstack/react-query";
@@ -56,6 +54,7 @@ const PostPanelOther = ({
                 />
             ))}
             {isLoading && <LoadingPost />}
+            {isFetched && data.data.length == 0 && <p className="text-center">No post found</p>}
         </div>
     );
 }

@@ -2,6 +2,7 @@
 import axiosInstance from "@/utils/axios";
 import { LucideCamera } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import toast from "react-hot-toast";
@@ -10,6 +11,7 @@ interface BannerComponentProps {
     profile_banner?: string
 }
 const BannerComponent = ({ profile_banner }: BannerComponentProps) => {
+    const router = useRouter()
     const [file, setFile] = useState<File | null>(null)
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0] !== undefined) {
@@ -33,10 +35,9 @@ const BannerComponent = ({ profile_banner }: BannerComponentProps) => {
                     "Authorization": `Bearer ${document.cookie.split("token=")[1].split(";")[0]}`,
                 },
             })
-            if (response.data.success) {
+            if (response.data) {
+                router.refresh();
                 return response.data
-            } else {
-                throw new Error('Failed to upload banner image')
             }
         } catch (error) {
             console.error(error)
@@ -45,7 +46,7 @@ const BannerComponent = ({ profile_banner }: BannerComponentProps) => {
 
 
     return (
-        <div className="relative">
+        <div className="relative max-w-[600px]">
             <Image
                 src={file ? URL.createObjectURL(file) : profile_banner || "/site/banner.png"}
                 alt="Home Banner"

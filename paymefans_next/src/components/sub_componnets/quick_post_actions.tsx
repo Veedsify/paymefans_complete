@@ -18,11 +18,6 @@ const QuickPostActions = ({ options }: QuickPostActionsProps) => {
 
     const ownerOptions = [
         {
-            name: "Edit",
-            icon: <LucidePen className="mr-2" size={16} />,
-            link: "/edit-post"
-        },
-        {
             name: "Set visibility",
             icon: <LucideEye className="mr-2" size={16} />,
             link: "/edit-post"
@@ -73,7 +68,7 @@ const QuickPostActions = ({ options }: QuickPostActionsProps) => {
                 <ul className="bg-white border shadow-2xl overflow-hidden rounded-lg w-52 py-1">
                     {user?.username === options.username ? (
                         ownerOptions.map((option, index) => (
-                            <li key={index} className="py-2 hover:bg-gray-50 border-b">
+                            <li key={index} className={`py-2 hover:bg-gray-50 ${index == ownerOptions.length - 1 ? "" : "border-b"}`}>
                                 <Link href={option.link} className="font-medium text-black flex items-center text-sm py-1 px-3">
                                     {option.icon}
                                     {option.name}

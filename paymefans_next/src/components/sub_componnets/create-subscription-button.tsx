@@ -21,7 +21,7 @@ const CreateSubscriptionButton = ({ userdata }: CreateSubscriptionButtonProps) =
             return res;
         }
         checkSubscription(userdata, authUser)
-    }, [])
+    }, [authUser, userdata])
 
     const handleIfSubscriber = (e: any) => {
         if (isSubscriber) {
