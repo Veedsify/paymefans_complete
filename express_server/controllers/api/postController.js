@@ -1,45 +1,25 @@
 const sharp = require("sharp");
 const { v4: uuid } = require("uuid")
 const prismaQuery = require("../../utils/prisma");
-const path = require("path")
+const path = require("path");
+const { processPostMedia } = require("../../utils/cloudflare");
 const { SERVER_ORIGINAL_URL } = process.env;
+require("dotenv").config();
 
 class PostController {
     static async CreatePost(req, res) {
         try {
             const validVideoMimetypes = ["video/mp4", "video/quicktime", "video/3gpp", "video/x-msvideo", "video/x-ms-wmv", "video/x-flv", "video/webm", "video/x-matroska", "video/avi", "video/mpeg", "video/ogg", "video/x-ms-asf", "video/x-m4v"];
 
+            const postId = uuid()
             const files = req.files;
             const user = req.user;
             const { content, visibility } = req.body;
-            const media = files.map((file) => {
-                if (validVideoMimetypes.includes(file.mimetype)) {
-                    // CreatePosterImage here
-                    return {
-                        type: "video",
-                        poster: SERVER_ORIGINAL_URL + file.path.replace("public", ""),
-                        url: SERVER_ORIGINAL_URL + file.path.replace("public", "")
-                    };
-                }
-                const ext = path.extname(file.originalname);
-                const timestamp = new Date().toISOString().replace(/:/g, '-'); // Using ISO format and replacing colons
-                const uniqueSuffix = req.user.user_id + "-" + timestamp + '-' + Math.round(Math.random() * 1E9);
-                const filename = uniqueSuffix
-                sharp(file.path)
-                    .resize(1080)
-                    .webp({ quality: 100 })
-                    .toFile(`./public/posts/converted/${filename}.webp`, (err, info) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                        console.log(info);
-                    });
-                return {
-                    type: "image",
-                    url: `${SERVER_ORIGINAL_URL}/posts/converted/${filename}.webp`
-                };
-            })
-            const postId = uuid()
+            const media = await processPostMedia(files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, process.env.CLOUDFLARE_API_KEY);
+
+            console.log(JSON.stringify(media, null, 2));
+
+
 
             const post = await prismaQuery.post.create({
                 data: {
@@ -50,7 +30,31 @@ class PostController {
                     post_status: "published",
                     post_is_visible: true,
                     user_id: user.id,
-                    media: media ? media : null
+                    media: [],
+                    UserMedia: {
+                        createMany: {
+                            data: [
+                                ...media.images.map((image) => ({
+                                    media_id: image.response.result.id,
+                                    media_type: "image",
+                                    url: (image.response.result.variants[0].includes("/public")) ? image.response.result.variants[0] : image.response.result.variants[1],
+                                    blur: (image.response.result.variants[0].includes("/blur")) ? image.response.result.variants[0] : image.response.result.variants[1],
+                                    poster: (image.response.result.variants[0].includes("/public")) ? image.response.result.variants[0] : image.response.result.variants[1],
+                                    accessible_to: visibility,
+                                    locked: visibility === "subscribers" ? true : false,
+                                })),
+                                ...media.videos.map((video) => ({
+                                    media_id: video.response.result.uid,
+                                    media_type: "video",
+                                    url: video.response.result.playback.hls,
+                                    blur: "",
+                                    poster: video.response.result.thumbnail,
+                                    accessible_to: visibility,
+                                    locked: visibility === "subscribers" ? true : false,
+                                }))
+                            ]
+                        }
+                    }
                 }
             })
 
@@ -96,6 +100,21 @@ class PostController {
                     post_likes: true,
                     post_comments: true,
                     post_reposts: true,
+                    UserMedia: {
+                        select: {
+                            id: true,
+                            media_id: true,
+                            post_id: true,
+                            poster: true,
+                            url: true,
+                            blur: true,
+                            media_type: true,
+                            locked: true,
+                            accessible_to: true,
+                            created_at: true,
+                            updated_at: true
+                        }
+                    },
                 },
                 // take: parsedLimit,
                 // skip: parsedPage  // Adjusted logic for skipping records
@@ -146,6 +165,21 @@ class PostController {
                     post_likes: true,
                     post_comments: true,
                     post_reposts: true,
+                    UserMedia: {
+                        select: {
+                            id: true,
+                            media_id: true,
+                            post_id: true,
+                            poster: true,
+                            url: true,
+                            blur: true,
+                            media_type: true,
+                            locked: true,
+                            accessible_to: true,
+                            created_at: true,
+                            updated_at: true
+                        }
+                    },
                     user: {
                         select: {
                             username: true,
@@ -199,12 +233,27 @@ class PostController {
                     content: true,
                     post_id: true,
                     post_audience: true,
-                    media: true,
                     created_at: true,
                     post_likes: true,
                     post_comments: true,
                     post_reposts: true,
-                }
+                    UserMedia: {
+                        select: {
+                            id: true,
+                            media_id: true,
+                            post_id: true,
+                            poster: true,
+                            url: true,
+                            blur: true,
+                            media_type: true,
+                            locked: true,
+                            accessible_to: true,
+                            created_at: true,
+                            updated_at: true
+                        }
+                    },
+                },
+
             });
 
             if (!post) {

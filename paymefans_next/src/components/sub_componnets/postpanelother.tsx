@@ -1,5 +1,5 @@
 "use client"
-import PostComponent from "../route_component/post_component";
+import PostComponent, { UserMediaProps } from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import { getUserPosts } from "@/utils/data/get-user-post";
 import { formatDate } from "@/utils/format-date";
@@ -13,11 +13,7 @@ type UserPostProps = {
     post_comments: number;
     post_shares: number;
     post_reposts: number;
-    media: {
-        type: string;
-        poster?: string | null
-        url: string;
-    }[];
+    media: UserMediaProps[];
     user: {
         id: number;
         name: string;

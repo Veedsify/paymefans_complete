@@ -4,26 +4,26 @@ import { HiPlay } from "react-icons/hi";
 import usePostComponent from "@/contexts/post-component-preview";
 import Image from "next/image";
 
-export const PostPageImage = ({ media: { type, poster, url } }: {
+export const PostPageImage = ({ media: { media_type, poster, url } }: {
     media: {
-        type: string;
+        media_type: string;
         poster?: string | null;
         url: string;
     }
 }) => {
     const { fullScreenPreview } = usePostComponent();
-
     const handleClick = useCallback(() => {
-        fullScreenPreview({ url, type, open: true });
-    }, [fullScreenPreview, type, url]);
+        fullScreenPreview({ url, type: media_type, open: true });
+    }, [fullScreenPreview, media_type, url]);
 
     return (
         <div className="relative">
-            {type === "video" ? (
+            {media_type === "video" ? (
                 <div className="relative">
                     <video
                         onClick={handleClick}
                         className="w-full rounded-lg mt-3 block aspect-square object-cover cursor-pointer"
+                        poster={poster ?? ""}
                     >
                         <source src={url} />
                     </video>

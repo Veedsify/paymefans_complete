@@ -56,8 +56,6 @@ model User {
   ReportUser                ReportUser[]
   Settings                  Settings?
   Subscribers               Subscribers[]
-  UserLockedMedia           UserLockedMedia[]
-  UserMedia                 UserMedia[]
   UserPoints                UserPoints?
   UserRepost                UserRepost[]
   UserStory                 UserStory[]
@@ -127,20 +125,20 @@ model Model {
 }
 
 model UserMedia {
-  id              Int               @id @default(autoincrement())
-  media_id        String
-  user_id         Int
-  media_type      String
-  media           String            @db.LongText
-  post_image      String            @db.LongText
-  locked          Boolean           @default(false)
-  accessible_to   String
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  UserLockedMedia UserLockedMedia[]
-  user            User              @relation(fields: [user_id], references: [id])
+  id            Int      @id @default(autoincrement())
+  media_id      String
+  post_id       Int
+  media_type    String
+  url           String   @db.LongText
+  blur          String   @db.LongText
+  poster        String   @db.LongText
+  locked        Boolean  @default(false)
+  accessible_to String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  post          Post     @relation(fields: [post_id], references: [id])
 
-  @@index([user_id], map: "UserMedia_user_id_fkey")
+  @@index([post_id], map: "UserMedia_user_id_fkey")
 }
 
 model UserRepost {
@@ -155,19 +153,6 @@ model UserRepost {
 
   @@index([post_id], map: "UserRepost_post_id_fkey")
   @@index([user_id], map: "UserRepost_user_id_fkey")
-}
-
-model UserLockedMedia {
-  id         Int       @id @default(autoincrement())
-  user_id    Int
-  media_id   Int
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
-  media      UserMedia @relation(fields: [media_id], references: [id])
-  user       User      @relation(fields: [user_id], references: [id])
-
-  @@index([media_id], map: "UserLockedMedia_media_id_fkey")
-  @@index([user_id], map: "UserLockedMedia_user_id_fkey")
 }
 
 model UserStory {
@@ -190,7 +175,7 @@ model Post {
   post_id         String
   was_repost      Boolean       @default(false)
   user_id         Int
-  content         String
+  content         String        @db.LongText
   media           Json?
   post_status     String
   post_audience   PostAudience
@@ -206,7 +191,8 @@ model Post {
   ReportPost      ReportPost[]
   UserRepost      UserRepost[]
 
-  user User @relation(fields: [user_id], references: [id])
+  user      User        @relation(fields: [user_id], references: [id])
+  UserMedia UserMedia[]
 }
 
 model PostComment {

@@ -1,3 +1,4 @@
+"use client"
 import axios from "axios"
 import { getToken } from "../cookie.get"
 
@@ -14,7 +15,6 @@ export const getUserPosts = async ({ pageParam, userid }: { pageParam: number; u
                 'Authorization': `Bearer ${token}`,
             }
         })
-
         return res.data
     } catch (error) {
         console.error(error)

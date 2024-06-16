@@ -1,5 +1,8 @@
 ﻿"use client"
 import usePostComponent from "@/contexts/post-component-preview";
+// import '@vidstack/react/player/styles/base.css';
+import { MediaPlayer, MediaPlayerInstance, MediaProvider, isHTMLVideoElement } from '@vidstack/react';
+import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default';
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import Image from "next/image";
 import Loader from "../lib_components/loading-animation";
@@ -72,14 +75,16 @@ const PostComponentPreview = () => {
                     </button>
                     {type === "video" && (
                         <div className="relative w-fit h-screen"
+                            onClick={e => e.stopPropagation()}
                         >
-                            <video
-                                controlsList="nodownload"
-                                autoPlay controls
-                                className={` h-full object-contain flex-grow-0 transition-all duration-200 border-none animate-in ${open ? "scale-100" : "scale-75"}`}
-                            >
-                                <source src={activeMedia} type="video/mp4" />
-                            </video>
+                            <MediaPlayer
+                                // ref={videoRef}
+                                className='h-full'
+                                autoPlay
+                                controls
+                                title="Sprite Fight" src={activeMedia}>
+                                <MediaProvider className=' h-full object-contain flex-grow-0 transition-all duration-200 border-none animate-in ${open ? "scale-100" : "scale-75"} fullscreen-video' />
+                            </MediaPlayer>
                         </div>
                     )}
                     {(type === "image") && (
@@ -96,12 +101,9 @@ const PostComponentPreview = () => {
                                 src={activeMedia}
                                 unoptimized
                                 onClick={e => e.stopPropagation()}
-                                className={`h-full object-contain flex-grow-0 transition-all duration-200 border-none animate-in`}
+                                className={`h-full object-contain flex-grow-0 transition-all duration-200 border-none animate-in z-10`}
                                 alt=""
                             />
-                            <div className="add-loaders opacity-70">
-                                {!loaded ? <Loader /> : ""}
-                            </div>
                         </div>
                     )}
                 </>

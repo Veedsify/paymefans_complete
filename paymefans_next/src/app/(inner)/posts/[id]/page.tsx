@@ -92,7 +92,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                     </span>
                 </div>
                 <div className={`grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
-                    {post?.media.map((media: any, index: number) => (
+                    {post?.UserMedia.map((media: any, index: number) => (
                         <PostPageImage key={index} media={media} />
                     ))}
                 </div>

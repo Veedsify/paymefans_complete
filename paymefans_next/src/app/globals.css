@@ -221,3 +221,22 @@ img {
 .min-h-screen-custom {
   height: max(calc(100dvh - 3px), 100vh);
 }
+
+.video-stream-player video {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  aspect-ratio: 3/4 !important;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 768px) {
+  .video-stream-player video {
+    aspect-ratio: 1/1 !important;
+  }
+}
+
+.fullscreen-video video {
+  height: 100vh;
+}

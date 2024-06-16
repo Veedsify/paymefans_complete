@@ -1,6 +1,6 @@
 "use client"
 import { useUserAuthContext } from "@/lib/userUseContext";
-import PostComponent from "../route_component/post_component";
+import PostComponent, { UserMediaProps } from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getUserPosts } from "@/utils/data/get-user-post";
@@ -15,11 +15,7 @@ type UserPostProps = {
     post_comments: number;
     post_shares: number;
     post_reposts: number;
-    media: {
-        type: string;
-        poster?: string | null
-        url: string;
-    }[];
+    UserMedia: UserMediaProps[];
     created_at: Date;
 }
 
@@ -42,7 +38,7 @@ const PostPanel = () => {
                     data={{
                         ...post,
                         post: post.content,
-                        media: post.media,
+                        media: post.UserMedia,
                         time: formatDate(new Date(post.created_at))
                     }}
                 />
