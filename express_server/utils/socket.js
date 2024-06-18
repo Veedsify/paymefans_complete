@@ -28,10 +28,16 @@ const serverSocket = (http) => {
         const handleMessage = async (data) => {
             // Save messages here if needed
             const message = await SaveMessageToDb.saveMessage(data);
-            socket.to(room).emit("message", {
-                ...data,
-                message_id: message.message_id,
-            });
+            if (message) {
+                socket.to(room).emit("message", {
+                    ...data,
+                    message_id: message.message_id,
+                });
+            } else {
+                socket.emit("message-error", {
+                    message: "An error occurred while saving message",
+                });
+            }
         };
 
         // Event handler for marking messages as seen

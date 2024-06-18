@@ -51,7 +51,7 @@ const Settingsbilling = () => {
             <span className="inline-flex gap-2 my-4">
                 <Toggle
                     set={handleToggle}
-                    state={settings?.enable_free_message} />
+                    state={settings.price_per_message == 0 ? true : false} />
                 Free message enabled
             </span>
 

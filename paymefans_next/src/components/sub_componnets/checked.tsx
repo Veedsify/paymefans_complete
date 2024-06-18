@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 const Toggle = ({ state, set }: { state?: boolean, set?: (value: boolean) => void }) => {
     const [isChecked, setIsChecked] = useState<boolean>(state || false);
-
+    const [newId, setNewId] = useState(0);
     useEffect(() => {
         setIsChecked(state || false);
     }, [state]);
 
-    const newId = Math.random().toString(36).substring(7);
+    useEffect(() => { setNewId(Math.floor(Math.random() * 100000)); }, []);
 
     const toggleSwitch = () => {
         const newValue = !isChecked;
@@ -22,11 +22,11 @@ const Toggle = ({ state, set }: { state?: boolean, set?: (value: boolean) => voi
                 type="checkbox"
                 checked={isChecked}
                 onChange={toggleSwitch}
-                id={newId}
+                id={newId.toString()}
                 className="hidden"
             />
             <label
-                htmlFor={newId}
+                htmlFor={newId.toString()}
                 className="flex items-center cursor-pointer duration-300"
             >
                 <div className="relative">

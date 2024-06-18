@@ -4,17 +4,32 @@ import { LucidePaperclip } from "lucide-react";
 import toast from "react-hot-toast";
 import { HiCamera, HiUser, HiVideoCamera } from "react-icons/hi"
 import Toggle from "../checked";
+import { imageTypes, videoTypes } from "@/lib/filetypes";
 
 const NewPostMediaAdd = ({
     handleFileSelect
 }: {
-    handleFileSelect: (files: FileList) => void
+    handleFileSelect: (files: File[]) => void
 }) => {
-    const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files
+    const handleImageSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files as FileList
         if (files) {
-            handleFileSelect(files)
-            toast.success('Media added successfully')
+            let validFiles: File[] = [];
+
+            Array.from(files).forEach((file) => {
+                if (file.size > 10000000 && imageTypes.includes(file.type)) { // 10MB = 10,000,000 bytes
+                    return toast.error("File size should not exceed 10MB");; // Skip further processing for this file
+                }
+                if (!imageTypes.includes(file.type) && !videoTypes.includes(file.type)) {
+                    return toast.error("Invalid file type");; // Skip further processing for this file
+                }
+                // If the file passes all checks, add it to the valid files array
+                validFiles.push(file);
+            });
+
+            if (validFiles.length > 0) {
+                handleFileSelect(validFiles); // Process only the valid files
+            }
         }
     }
     return (

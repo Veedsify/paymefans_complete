@@ -13,12 +13,12 @@ function PostMediaPreview({
 }) {
     const [media, setMedia] = React.useState<File[] | null>(null)
 
-    const handleFileSelect = useCallback((files: FileList) => {
+    const handleFileSelect = (files: File[]) => {
         if (files) {
             const allFiles = Array.from(files)
             setMedia([...allFiles, ...media || []])
         }
-    }, [media, setMedia])
+    }
 
     const removeThisMedia = (index: number) => {
         if (media) {

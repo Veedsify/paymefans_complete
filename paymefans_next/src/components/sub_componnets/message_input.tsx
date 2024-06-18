@@ -12,6 +12,8 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import UploadMediaComponent from "../route_component/upload-media-conponent";
+import swal from "sweetalert";
+import { useConversationsContext } from "@/contexts/messages-conversation-context";
 
 export interface Attachment {
   type: string;
@@ -49,6 +51,7 @@ const MessageInput = ({
   const { points } = useUserPointsContext()
   const openAttachmentModal = () => setAttachmentModal(!attachmentModal)
   const closeAttachmentModal = () => setAttachmentModal(false)
+  const { lastMessage } = useConversationsContext()
   const insertNewMessageFromPreview = (message: string) => {
     setMessage(message)
   }
@@ -83,35 +86,59 @@ const MessageInput = ({
   }, [isTyping, handleKeyDown]);
 
   const sendNewMessage = (attachment: Attachment[]) => {
-    if (user) {
-      if (points < Number(receiver?.Settings?.price_per_message)) {
-        setMessage("");
-        if (ref.current) {
-          ref.current.innerHTML = "";
-          ref.current.focus();
+    if (!user) return;
+
+    const pricePerMessage = Number(receiver?.Settings?.price_per_message);
+    const receiverName = receiver?.name ? (receiver.name.charAt(0).toUpperCase() + receiver.name.slice(1)) : '';
+
+    if (points < pricePerMessage) {
+      resetMessageInput();
+      return swal({
+        icon: "info",
+        title: "Insufficient Paypoints",
+        text: `Sorry, you need to have at least ${pricePerMessage.toLocaleString()} paypoints to send a message to ${receiverName}`
+      });
+    }
+
+    if (!lastMessage && pricePerMessage !== 0) {
+      resetMessageInput();
+      return swal({
+        icon: "info",
+        title: "Notice from PayMeFans",
+        text: `Take note sending a message to ${receiverName} would cost you ${pricePerMessage.toLocaleString()} paypoints`
+      }).then((isToSend) => {
+        if (isToSend) {
+          sendMessageWithAttachment(message, attachment);
         }
-        return toast.error(`Sorry, You need to have at least ${receiver?.Settings?.price_per_message} paypoints to send a message to ${(receiver?.name).charAt(0).toUpperCase() + (receiver?.name).slice(1)}`);
-      }
+      });
     }
+
     const trimmedMessage = message.trim();
-    if ((trimmedMessage.length === 0) && attachment.length === 0) {
-      return;
-    }
-    const id = Math.floor(Math.random() * (100000 - 1 + 1) + 1) + Date.now();
-    sendMessage({
-      message_id: id,
-      message: trimmedMessage,
-      attachment: attachment,
-      sender_id: user?.user_id as string,
-      seen: false,
-      created_at: new Date().toString(),
-    });
+    if (trimmedMessage.length === 0 && attachment.length === 0) return;
+
+    sendMessageWithAttachment(trimmedMessage, attachment);
+    resetMessageInput();
+  };
+
+  const resetMessageInput = () => {
     setMessage("");
     if (ref.current) {
       ref.current.innerHTML = "";
       ref.current.focus();
     }
-  }
+  };
+
+  const sendMessageWithAttachment = (message: string, attachment: Attachment[]) => {
+    const id = Math.floor(Math.random() * 100000 + 1) + Date.now();
+    sendMessage({
+      message_id: id,
+      message: message,
+      attachment: attachment,
+      sender_id: user?.user_id as string,
+      seen: false,
+      created_at: new Date().toString(),
+    });
+  };
 
   const handleSendMessage = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.shiftKey && e.key === "Enter") {

@@ -9,6 +9,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import swal from "sweetalert";
 
 interface PostPageprops {
     params: {
@@ -16,32 +18,31 @@ interface PostPageprops {
     }
 }
 async function getPost(id: string) {
-    try {
-        const token = getToken()
-        const secure_id = encodeURIComponent(id)
-        const getpost = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/posts/${secure_id}`, {
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-        return getpost?.data.data
-
-    } catch (error) {
-        console.log(error)
-    }
+    const token = getToken()
+    const secure_id = encodeURIComponent(id)
+    const getpost = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/posts/${secure_id}`, {
+        headers: {
+            "Content-Type": "application/json",
+        }
+    })
+    return getpost
 }
+
 const Post = ({ params: { id } }: PostPageprops) => {
     const [post, setPost] = useState<any>(null)
     const router = useRouter();
     const [formattedText, setFormattedText] = useState<string>('')
     useEffect(() => {
-        getPost(id).then((data) => {
-            setPost(data)
-        }).catch((error) => {
-            if (error.response.status === 404) {
-                router.push("/404")
+        const fetchPost = async (id: string) => {
+            try {
+                const post = await getPost(id)
+                setPost(post)
+            } catch (error) {
+                toast.error("Post not found")
+                router.push("/")
             }
-        })
+        }
+        fetchPost(id)
     }, [id, router])
 
     useEffect(() => {

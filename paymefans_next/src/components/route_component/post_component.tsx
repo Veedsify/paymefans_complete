@@ -14,7 +14,8 @@ import { checkUserIsSubscriber } from "@/utils/data/check-user-is-subscriber";
 import { AuthUserProps } from "@/types/user";
 import toast from "react-hot-toast";
 import QuickPostActions from "../sub_componnets/quick_post_actions";
-import { M } from '@vidstack/react/types/vidstack-framework.js';
+import { Stream } from "@cloudflare/stream-react";
+import swal from 'sweetalert';
 
 export interface UserMediaProps {
     id: number;
@@ -46,6 +47,7 @@ interface PostData {
 interface PostComponentProps {
     user: {
         id: number;
+        user_id: string;
         name: string;
         link: string;
         username: string;
@@ -66,7 +68,17 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
         fullScreenPreview({ url, type, open: true });
     }, [fullScreenPreview]);
 
-    const formattedText = data.post.replace(/\r?\n/g, '<br/>');
+    const formattedText = () => {
+        const text = data.post.replace(/\r?\n/g, '<br/>');
+
+        if (data.post_audience === "subscribers" && !isSubscriber) {
+            return "<p class='text-sm text-red-500'>This post is only available to subscribers</p>";
+        }
+
+        if (data.post.length > 200) {
+            return text.slice(0, 200) + "...";
+        }
+    }
 
     const clickImageEvent = useCallback((media: { url: string; media_type: string }) => {
         if (data.post_audience === "subscribers" && !isSubscriber) {
@@ -95,9 +107,39 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
     }, [user, authUser, data.post_audience]);
 
     const redirectToPost = useCallback((e: MouseEvent) => {
-        if (e.target instanceof HTMLAnchorElement || e.target instanceof HTMLButtonElement) return;
-        router.push(`/posts/${data.post_id}`);
-    }, [router, data.post_id]);
+        const target = e.target as HTMLElement;
+
+        if (!(target instanceof HTMLAnchorElement) && !(target instanceof HTMLButtonElement)) {
+            e.preventDefault();
+            if (data.post_audience === "subscribers" && !isSubscriber) {
+                return;
+            } else {
+                router.push(`/posts/${data.post_id}`);
+            }
+        }
+    }, [router, data.post_id, data.post_audience, isSubscriber]);
+
+    const handleNonSubscriberClick = (e: MouseEvent) => {
+        e.stopPropagation()
+        if (data.post_audience === "subscribers" && !isSubscriber) {
+            e.preventDefault();
+            swal({
+                title: "You need to be a subscriber to view this post",
+                icon: "warning",
+                buttons: {
+                    cancel: true,
+                    confirm: {
+                        text: "Subscribe",
+                        className: "bg-primary-dark-pink text-white",
+                    }
+                },
+            }).then((willSubscribe) => {
+                if (willSubscribe) {
+                    router.push(`/subscribe/${user.user_id}`);
+                }
+            });
+        }
+    }
 
     return (
         <div className="mb-10 cursor-pointer" onClick={redirectToPost}>
@@ -116,13 +158,13 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                 <QuickPostActions options={{ post_id: data.post_id, username: user.username }} />
             </div>
 
-            <div className="py-2 leading-loose text-gray-700" dangerouslySetInnerHTML={{ __html: formattedText }}></div>
+            <div className="py-2 leading-loose text-gray-700" dangerouslySetInnerHTML={{ __html: formattedText() as TrustedHTML }}></div>
             <div className={`grid gap-3 ${data.media.length === 2 ? "grid-cols-2" : data.media.length >= 3 ? "grid-cols-3" : "grid-cols-1"}`}>
                 {data.media.slice(0, 3).map((media, index) => (
-                    <div className="relative" key={index} onClick={e => e.stopPropagation()}>
+                    <div className="relative" key={index} onClick={handleNonSubscriberClick}>
                         {(!isSubscriber && data.post_audience === "subscribers") && (
                             <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg overflow-hidden flex items-center justify-center z-10">
-                                <Image src={media.blur} alt="" width={1} height={1} className="w-full h-full brightness-50 aspect-square object-cover absolute inset-0" />
+                                <Image src={media.blur ? media.blur : "/site/blur.jpg"} alt="" width={30} height={30} className="w-full h-full brightness-50 aspect-square object-cover absolute inset-0" />
                                 <Link href="/subscribe" className="text-white absolute text-lg font-bold">
                                     <LucideLock />
                                 </Link>
@@ -131,7 +173,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                         {media.media_type === 'video' && (
                             <>
                                 {(!isSubscriber && data.post_audience === "subscribers") ? (
-                                    <Image src={media.blur} alt={data.post} width={1} height={1} priority blurDataURL={media.blur} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
+                                    <Image src={"/site/blur.jpg"} alt={data.post} width={30} height={30} priority blurDataURL={media.blur} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
                                 ) : (
                                     <div className="relative">
                                         <VideoComponent media={media} data={data} clickImageEvent={clickImageEvent} isSubscriber={isSubscriber} />
@@ -142,7 +184,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
                         {media.media_type !== "video" && (
                             <>
                                 {(!isSubscriber && data.post_audience === "subscribers") ? (
-                                    <Image src={"/site/blur.jpg"} alt={data.post} width={1} height={1} priority blurDataURL={"/site/blur.jpg"} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
+                                    <Image src={media.blur} alt={data.post} width={30} height={30} priority blurDataURL={media.blur} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
                                 ) : (
                                     <ImageComponent media={media} data={data} clickImageEvent={clickImageEvent} />
                                 )}
@@ -179,7 +221,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data }) => {
 const ImageComponent: React.FC<{ media: UserMediaProps, data: PostData, clickImageEvent: (media: UserMediaProps) => void }> = ({ media, data, clickImageEvent }) => {
     return (
         <>
-            <Image src={media.url} alt={data.post} width={400} height={400} unoptimized unselectable="on" blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
+            <Image src={media.url} alt={data.post} width={500} height={500} unoptimized unselectable="on" blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
         </>
     )
 }
@@ -231,35 +273,21 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImage
         };
     }, []);
 
-    // useEffect(() => {
-    //     const videoElement = videoRef.current as unknown as HTMLVideoElement;
-
-    //     if (!videoElement) return;
-
-    //     const observer = new IntersectionObserver(
-    //         ([entry]) => {
-    //             if (entry.isIntersecting) {
-    //                 videoElement.play();
-    //             } else {
-    //                 videoElement.pause();
-    //             }
-    //         },
-    //         {
-    //             threshold: 0.5, // Adjust threshold as needed
-    //         }
-    //     );
-
-    //     observer.observe(videoElement);
-
-    //     return () => {
-    //         observer.unobserve(videoElement);
-    //     };
-    // }, [videoRef]);
-
     return (
         <>
-            <MediaPlayer
+
+            <div style={{ position: "relative", paddingTop: "56.25%", background: "black" }}>
+                <iframe
+                    src={`${media.url.replace("manifest/video.m3u8", "")}iframe?muted=true&poster=${encodeURIComponent(media.poster)}`}
+                    loading="lazy"
+                    style={{ border: "none", position: "absolute", top: 0, left: 0, height: " 100%", width: " 100%", aspectRatio: "1/1" }}
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                    allowFullScreen={true}
+                ></iframe>
+            </div >
+            {/* <MediaPlayer
                 ref={videoRef}
+                playsInline
                 className="h-full"
                 onClick={(e: MouseEvent<HTMLVideoElement>) => {
                     clickImageEvent(media);
@@ -272,14 +300,14 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImage
                 controls={playing}
             >
                 <MediaProvider className='video-stream-player' />
-            </MediaPlayer>
-            {!playing && (
+            </MediaPlayer> */}
+            {/* {!playing && (
                 <div onClick={playPauseVideo} className="absolute inset-0 text-white bg-black bg-opacity-20 rounded-lg flex items-center justify-center cursor-pointer">
                     <button className="h-12 w-12 p-1 flex-shrink-0 rounded-full flex items-center justify-center bg-primary-dark-pink bg-opacity-30 aspect-square">
                         <HiPlay className="text-white" size={50} />
                     </button>
                 </div>
-            )}
+            )} */}
         </>
     );
 }

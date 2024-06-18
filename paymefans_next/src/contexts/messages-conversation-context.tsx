@@ -19,6 +19,7 @@ interface UserConversations {
 export interface MessagesConversationContextValue {
     count?: number;
     conversations: UserConversations[];
+    lastMessage?: LastMessage;
     addConversations?: (conversations: Conversation) => void;
 }
 
@@ -61,6 +62,7 @@ export const MessagesConversationProvider = ({ children }: { children: ReactNode
 
     const value: MessagesConversationContextValue = {
         conversations: data || [],
+        lastMessage: data[data.length - 1]?.lastMessage,
         count: countUnreadMessages.length
     };
 

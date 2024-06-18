@@ -3,7 +3,7 @@ const { v4: uuid } = require("uuid")
 const prismaQuery = require("../../utils/prisma");
 const path = require("path");
 const { processPostMedia } = require("../../utils/cloudflare");
-const { SERVER_ORIGINAL_URL } = process.env;
+const { SERVER_ORIGINAL_URL, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_CUSTOMER_CODE } = process.env;
 require("dotenv").config();
 
 class PostController {
@@ -17,9 +17,7 @@ class PostController {
             const { content, visibility } = req.body;
             const media = await processPostMedia(files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, process.env.CLOUDFLARE_API_KEY);
 
-            console.log(JSON.stringify(media, null, 2));
-
-
+            console.log(JSON.stringify(media, null, 2) + 'in PostController');
 
             const post = await prismaQuery.post.create({
                 data: {
@@ -44,11 +42,11 @@ class PostController {
                                     locked: visibility === "subscribers" ? true : false,
                                 })),
                                 ...media.videos.map((video) => ({
-                                    media_id: video.response.result.uid,
+                                    media_id: video.id,
                                     media_type: "video",
-                                    url: video.response.result.playback.hls,
+                                    url: `https://${CLOUDFLARE_CUSTOMER_CODE}/${video.id}/manifest/video.m3u8`,
                                     blur: "",
-                                    poster: video.response.result.thumbnail,
+                                    poster: `https://${CLOUDFLARE_CUSTOMER_CODE}/${video.id}/thumbnails/thumbnail.jpg`,
                                     accessible_to: visibility,
                                     locked: visibility === "subscribers" ? true : false,
                                 }))
@@ -149,6 +147,7 @@ class PostController {
             const posts = await prismaQuery.post.findMany({
                 where: {
                     user_id: userid,
+                    post_status: "published",
                     NOT: {
                         post_audience: "private"
                     }
@@ -216,6 +215,7 @@ class PostController {
             const post = await prismaQuery.post.findFirst({
                 where: {
                     post_id: post_id,
+                    post_status: "published",
                 }, select: {
                     user: {
                         select: {
@@ -256,7 +256,7 @@ class PostController {
 
             });
 
-            if (!post) {
+            if (!post || post.length === 0) {
                 return res.status(404).json({
                     status: false,
                     message: "Post not found"

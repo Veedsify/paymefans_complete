@@ -13,6 +13,7 @@ import MessageBubble from "../sub_componnets/message_bubble";
 import MessageInput, { Message } from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { socket } from "../sub_componnets/sub/socket";
+import swal from "sweetalert";
 
 const Chats = ({
   allmessages,
@@ -102,10 +103,30 @@ const Chats = ({
       }
     };
 
+    const handMessageError = () => {
+      swal({
+        title: "Error",
+        text: "The Last Message You Sent Didn't go through, refresh the page and try again.",
+        icon: "error",
+        buttons: {
+          cancel: true,
+          confirm: {
+            text: "Refresh",
+            className: "bg-primary-dark-pink text-white",
+          }
+        }
+      }).then((value) => {
+        if (value) {
+          window.location.reload();
+        }
+      });
+    }
+
     socket.emit("join", conversationId);
     socket.on("joined", handleJoined);
     socket.on("message", handleMessageReceived);
     socket.on("message-seen-updated", handleSeenByReceiver);
+    socket.on("message-error", handMessageError);
     socket.on("sender-typing", (data: any) => {
       if (data.sender_id === user?.user_id) return;
       setTyping(data.value);
@@ -114,6 +135,7 @@ const Chats = ({
       socket.off("message", handleMessageReceived);
       socket.off("joined", handleJoined);
       socket.off("sender-typing");
+      socket.off("message-error");
       socket.off("message-seen-updated", handleSeenByReceiver);
     };
   }, [conversationId, setMessages, messages, user, handleJoined]);

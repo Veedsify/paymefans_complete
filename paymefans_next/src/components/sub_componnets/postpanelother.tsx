@@ -13,7 +13,7 @@ type UserPostProps = {
     post_comments: number;
     post_shares: number;
     post_reposts: number;
-    media: UserMediaProps[];
+    UserMedia: UserMediaProps[];
     user: {
         id: number;
         name: string;
@@ -40,11 +40,11 @@ const PostPanelOther = ({
         >
             {isFetched && data.data.map((post: UserPostProps, index: number) => (
                 <PostComponent key={index}
-                    user={{ id: post.user.id, name: post.user.name, link: `/profile/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
+                    user={{ id: post.user.id, user_id: post.user.user_id, name: post.user.name, link: `/profile/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
                     data={{
                         ...post,
                         post: post.content,
-                        media: post.media,
+                        media: post.UserMedia,
                         time: formatDate(new Date(post.created_at))
                     }}
                 />

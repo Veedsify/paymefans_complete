@@ -1,10 +1,5 @@
-import Link from "next/link";
-import PostMediaPreview from "@/components/route_component/post-media-preview";
-import { HiCamera, HiVideoCamera } from 'react-icons/hi';
-import { PostCancelComp } from '@/components/sub_componnets/sub/post-cancel-comp.';
 import PostEditor from '@/components/route_component/post-editor';
 import { Metadata } from 'next';
-import NewPostMediaAdd from "@/components/sub_componnets/sub/new-post-media-add";
 
 export const metadata: Metadata = {
     title: "Create Post",

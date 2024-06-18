@@ -10,6 +10,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import swal from "sweetalert"
 
 type SubscribeProps = {
     params: {
@@ -86,12 +87,12 @@ const Subscribe = ({ params }: SubscribeProps) => {
             }
             subscribeUser().then((res) => {
                 if (res.status === true) {
-                    toast.success("You have successfully subscribed to this user")
+                    swal("Success", `You have successfully subscribed to this ${profileUser.name}`, "success")
                     socket.emit("subscription_added", { user_id: profileUser.user_id })
                     router.push(`/profile/${profileUser.username}`)
                 } else {
-                    toast.error(res.message)
-                    router.push(`/profile/${profileUser.username}`)
+                    swal("Error", res.message, "error")
+                    // router.push(`/profile/${profileUser.username}`)
                 }
             })
         }

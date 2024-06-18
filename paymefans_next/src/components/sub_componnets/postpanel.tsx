@@ -34,7 +34,7 @@ const PostPanel = () => {
         >
             {(user && isFetched) && data.data.map((post: UserPostProps, index: number) => (
                 <PostComponent key={index}
-                    user={{ id: user.id, name: user.name, link: `/profile/${user.username}`, username: user.username, image: user.profile_image }}
+                    user={{ id: user.id, user_id: user.user_id, name: user.name, link: `/profile/${user.username}`, username: user.username, image: user.profile_image }}
                     data={{
                         ...post,
                         post: post.content,

@@ -19,7 +19,7 @@ const HookupSubscription = ({ hookup }: { hookup: AuthUserProps }) => {
                         priority
                         src="/site/coin.svg" alt="" className="w-4 h-4" />
                     <span className="font-bold text-primary-dark-pink">
-                        {hookup?.Settings?.price_per_message}
+                        {Number(hookup?.Settings?.price_per_message).toLocaleString()}
                     </span>
                 </span>
                 <span className="block text-xs text-center text-slate-700 ">Per msg</span>

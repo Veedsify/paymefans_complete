@@ -11,27 +11,14 @@ import PostMediaPreview from "./post-media-preview";
 import axios from "axios";
 import { SavePost } from "@/utils/save-post";
 import { useRouter } from "next/navigation";
+import swal from "sweetalert";
 
 type postAudienceDataProps = {
     id?: number;
     name?: "Public" | "Subscribers" | "Private";
     icon?: JSX.Element;
 }
-const postAudienceData: postAudienceDataProps[] = [{
-    id: 1,
-    name: "Public",
-    icon: <HiOutlineEye size={20} className="inline" />
-},
-{
-    id: 2,
-    name: "Subscribers",
-    icon: <LucideUsers size={20} className="inline" />
-},
-{
-    id: 3,
-    name: "Private",
-    icon: <LucideLock size={20} className="inline" />
-}]
+
 const PostEditor = () => {
     const router = useRouter()
     const [dropdown, setDropdown] = useState(false);
@@ -41,10 +28,28 @@ const PostEditor = () => {
     const [postAudience, setPostAudience] = useState<postAudienceDataProps>({} as postAudienceDataProps);
     const [media, setMedia] = useState<File[] | null>(null)
 
+    const postAudienceData: postAudienceDataProps[] = [
+        {
+            id: 1,
+            name: "Public",
+            icon: <HiOutlineEye size={20} className="inline" />
+        },
+        user && user.is_model ? {
+            id: 2,
+            name: "Subscribers",
+            icon: <LucideUsers size={20} className="inline" />
+        } : undefined,
+        {
+            id: 3,
+            name: "Private",
+            icon: <LucideLock size={20} className="inline" />
+        }
+    ].filter(Boolean) as postAudienceDataProps[];
+
     const ref = useRef<HTMLButtonElement>();
     const audience = useMemo(() => {
         return postAudienceData.find((audience) => audience.name === visibility) || postAudienceData[0];
-    }, [visibility]);
+    }, [visibility, postAudienceData]);
     useEffect(() => {
         setPostAudience(audience);
     }, [setPostAudience, audience])
@@ -89,7 +94,7 @@ const PostEditor = () => {
             }
 
             formData.append("visibility", visibility.toLowerCase());
-            toast.loading("Creating post...");
+            toast.loading("Creating your post...");
             const res = await SavePost(formData);
 
             if (res && res.status === true) {
@@ -109,6 +114,18 @@ const PostEditor = () => {
             toast.error("Something went wrong, Please try again later.");
         }
     }
+
+    useEffect(() => {
+        window.addEventListener("beforeunload", (e) => {
+            e.preventDefault()
+        })
+
+        return () => {
+            window.removeEventListener("beforeunload", (e) => {
+                e.preventDefault()
+            })
+        }
+    }, [])
 
     return (
         <>

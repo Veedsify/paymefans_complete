@@ -2,6 +2,7 @@ const { exec } = require('child_process');
 const fs = require('fs');
 const { v4: uuid } = require('uuid');
 const path = require('path');
+const tusOploader = require('./tus');
 const homeDir = path.join(__dirname, '..');
 
 const processPostMedia = async (files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, apiToken) => {
@@ -61,10 +62,8 @@ const uploadToCloudflareImage = async (filePath, apiToken) => {
 
 const uploadToCloudflareVideo = async (filePath, videoName, apiToken) => {
     const sanitizedFilePath = path.resolve(filePath);
-    const sanitizedVideoName = videoName.replace(/[^a-z0-9.-]/gi, '_');
-    const curlCommand = `curl -X POST "https://api.cloudflare.com/client/v4/accounts/068a98897652d9a679a7654f90eebb2c/stream" -H "Authorization: Bearer ${apiToken}" -F "file=@${sanitizedFilePath}" -F "name=${sanitizedVideoName}"`;
-
-    return execCurlCommand(curlCommand).then(response => ({ type: 'video', response }));
+    const upload = await tusOploader(sanitizedFilePath, videoName);
+    return { type: 'video', id: upload };
 };
 
 module.exports = {
