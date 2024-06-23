@@ -7,6 +7,7 @@ const { SERVER_ORIGINAL_URL, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_CUSTOMER_CODE } =
 require("dotenv").config();
 
 class PostController {
+    // Create a new post with media attached 
     static async CreatePost(req, res) {
         try {
             const validVideoMimetypes = ["video/mp4", "video/quicktime", "video/3gpp", "video/x-msvideo", "video/x-ms-wmv", "video/x-flv", "video/webm", "video/x-matroska", "video/avi", "video/mpeg", "video/ogg", "video/x-ms-asf", "video/x-m4v"];
@@ -16,8 +17,6 @@ class PostController {
             const user = req.user;
             const { content, visibility } = req.body;
             const media = await processPostMedia(files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, process.env.CLOUDFLARE_API_KEY);
-
-            console.log(JSON.stringify(media, null, 2) + 'in PostController');
 
             const post = await prismaQuery.post.create({
                 data: {
@@ -72,15 +71,148 @@ class PostController {
         }
     }
 
+    // Get all media attached to a post for the current user
+    static async GetMyMedia(req, res) {
+        try {
+            const user = req.user;
+            const { page, limit } = req.query
+            // Parse limit to an integer or default to 5 if not provided
+            const parsedLimit = limit ? parseInt(req.query.limit) : 18;
+            const parsedPage = page ? parseInt(req.query.page) : 1;
+
+            const postCount = await prismaQuery.post.findMany({
+                where: {
+                    user_id: user.id
+                },
+            });
+
+            const mediaCount = await prismaQuery.userMedia.count({
+                where: {
+                    OR: [
+                        ...postCount.map((post) => ({ post_id: post.id }))
+                    ]
+                },
+            });
+
+            const media = await prismaQuery.userMedia.findMany({
+                where: {
+                    OR: [
+                        ...postCount.map((post) => ({ post_id: post.id }))
+                    ]
+                },
+                orderBy: {
+                    created_at: "desc"
+                },
+                skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
+                take: parsedLimit
+            });
+
+            return res.status(200).json({
+                status: true,
+                message: "Media retrieved successfully",
+                data: media,
+                total: mediaCount
+            })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                message: "An error occurred while retrieving media",
+                error: error
+            })
+
+            console.log(error);
+        }
+    }
+
+    // Get all media attached to a post for the current user profile page
+    static async GetUsersMedia(req, res) {
+        try {
+            const userid = parseInt(req.params.userid)
+            const { page, limit } = req.query
+            // Parse limit to an integer or default to 5 if not provided
+            const parsedLimit = limit ? parseInt(req.query.limit) : 18;
+            const parsedPage = page ? parseInt(req.query.page) : 1;
+
+            const postCount = await prismaQuery.post.findMany({
+                where: {
+                    user_id: userid
+                },
+            });
+
+            const mediaCount = await prismaQuery.userMedia.count({
+                where: {
+                    OR: [
+                        ...postCount.map((post) => ({ post_id: post.id }))
+                    ]
+                },
+            });
+
+            const media = await prismaQuery.userMedia.findMany({
+                where: {
+                    OR: [
+                        ...postCount.map((post) => ({ post_id: post.id }))
+                    ]
+                },
+                select: {
+                    id: true,
+                    media_id: true,
+                    post_id: true,
+                    poster: true,
+                    url: true,
+                    blur: true,
+                    media_type: true,
+                    locked: true,
+                    accessible_to: true,
+                    post: {
+                        select: {
+                            user: {
+                                select: {
+                                    Subscribers: true
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: {
+                    created_at: "desc"
+                },
+                skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
+                take: parsedLimit
+            });
+
+            return res.status(200).json({
+                status: true,
+                message: "Media retrieved successfully",
+                data: media,
+                total: mediaCount
+            })
+        } catch (error) {
+            res.status(500).json({
+                status: false,
+                message: "An error occurred while retrieving media",
+                error: error
+            })
+
+            console.log(error);
+        }
+    }
+
+    // Get all posts for the current user
     static async GetMyPosts(req, res) {
         try {
             const user = req.user;
             const { page, limit } = req.query
             // Parse limit to an integer or default to 5 if not provided
-            const parsedLimit = limit ? parseInt(limit) : 5;
+            const parsedLimit = limit ? parseInt(req.query.limit) : 5;
 
             // Parse page to an integer or default to 0 if not provided
-            const parsedPage = parseInt(page) == 1 ? 0 : parseInt(page) * parsedLimit - parsedLimit;
+            const parsedPage = page ? parseInt(req.query.page) : 1;
+
+            const postCount = await prismaQuery.post.count({
+                where: {
+                    user_id: user.id
+                }
+            });
 
             const posts = await prismaQuery.post.findMany({
                 where: {
@@ -114,14 +246,15 @@ class PostController {
                         }
                     },
                 },
-                // take: parsedLimit,
-                // skip: parsedPage  // Adjusted logic for skipping records
+                skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
+                take: parsedLimit
             });
 
             return res.status(200).json({
                 status: true,
                 message: "Posts retrieved successfully",
-                data: posts
+                data: posts,
+                total: postCount
             })
         } catch (error) {
             res.status(500).json({
@@ -133,16 +266,26 @@ class PostController {
         }
     }
 
+    // Get all posts for a user by their ID
     static async GetUserPostByID(req, res) {
         try {
             const userid = parseInt(req.params.userid)
-
             const { page, limit } = req.query
-            // Parse limit to an integer or default to 5 if not provided
-            const parsedLimit = limit ? parseInt(limit) : 5;
+            // Parsed page into an interger
+            const parsedLimit = limit ? parseInt(req.query.limit) : 5;
 
             // Parse page to an integer or default to 0 if not provided
-            const parsedPage = parseInt(page) == 1 ? 0 : parseInt(page) * parsedLimit - parsedLimit;
+            const parsedPage = page ? parseInt(req.query.page) : 1;
+
+            const postCount = await prismaQuery.post.count({
+                where: {
+                    user_id: userid,
+                    post_status: "published",
+                    NOT: {
+                        post_audience: "private"
+                    }
+                },
+            })
 
             const posts = await prismaQuery.post.findMany({
                 where: {
@@ -185,19 +328,23 @@ class PostController {
                             profile_image: true,
                             name: true,
                             user_id: true,
+                            Subscribers: {
+                                select: {
+                                    subscriber_id: true
+                                }
+                            }
                         }
                     }
                 },
-                // take: parsedLimit,
-                // skip: parsedPage  // Adjusted logic for skipping records
+                skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
+                take: parsedLimit
             });
-
-            console.log(posts);
 
             return res.status(200).json({
                 status: true,
                 message: "Posts retrieved successfully",
-                data: posts
+                data: posts,
+                total: postCount
             })
         } catch (error) {
             res.status(500).json({
@@ -209,6 +356,7 @@ class PostController {
         }
     }
 
+    // Get a single post by its ID
     static async GetCurrentUserPost(req, res) {
         try {
             const { post_id } = req.params;
@@ -216,6 +364,14 @@ class PostController {
                 where: {
                     post_id: post_id,
                     post_status: "published",
+                    OR: [
+                        {
+                            post_audience: "public"
+                        },
+                        {
+                            post_audience: "subscribers"
+                        }
+                    ]
                 }, select: {
                     user: {
                         select: {

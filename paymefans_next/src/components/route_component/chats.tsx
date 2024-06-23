@@ -156,7 +156,7 @@ const Chats = ({
 
     return () => {
       if (height_ref) {
-        height_ref.scrollBy(0, height_ref.scrollHeight);
+        height_ref.scrollTo(0, height_ref.scrollHeight)
       }
     }
   }, [heightRef, messages]);

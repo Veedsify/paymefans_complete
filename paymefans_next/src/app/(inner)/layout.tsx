@@ -21,6 +21,7 @@ import { UserContextProvider } from "@/lib/userUseContext";
 import { UserPointsContextProvider } from "@/contexts/user-points-context";
 import { MessagesConversationProvider } from "@/contexts/messages-conversation-context";
 import Loader from "@/components/route_component/loader";
+import VerificationAlert from "@/components/route_component/verification-alert";
 
 
 export const metadata: Metadata = {
@@ -40,8 +41,8 @@ export default async function RootLayout({
                 <QueryProvider>
                     <MessagesConversationProvider>
                         <UserPointsContextProvider>
-                            <body className={GeistSans.className}>
-                                {/* <Loader /> */}
+                            <body className={`${GeistSans.className} dark:bg-gray-950`}>
+                                <Loader />
                                 <Toaster />
                                 <SonnerToast richColors position="top-center"
                                     toastOptions={{
@@ -62,7 +63,7 @@ export default async function RootLayout({
                                         <div className="col-span-7 overflow-auto border-r">
                                             <Header />
                                             <div className="grid lg:grid-cols-7">
-                                                <div className="col-span-4 md:border-r">
+                                                <div className="col-span-4 md:border-r dark:border-slate-800">
                                                     {children}
                                                 </div>
                                                 <SideModels />

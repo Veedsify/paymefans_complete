@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useNewPostStore } from "@/contexts/new-post-context";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { LucideChevronDown, LucideChevronUp, LucideLock, LucideUsers } from "lucide-react";
@@ -8,25 +8,29 @@ import { HiOutlineEye } from "react-icons/hi";
 import { PostCancelComp } from "../sub_componnets/sub/post-cancel-comp.";
 import toast from "react-hot-toast";
 import PostMediaPreview from "./post-media-preview";
-import axios from "axios";
 import { SavePost } from "@/utils/save-post";
 import { useRouter } from "next/navigation";
 import swal from "sweetalert";
 
 type postAudienceDataProps = {
-    id?: number;
-    name?: "Public" | "Subscribers" | "Private";
-    icon?: JSX.Element;
+    id: number;
+    name: "Public" | "Subscribers" | "Private";
+    icon: JSX.Element;
 }
 
 const PostEditor = () => {
-    const router = useRouter()
+    const router = useRouter();
     const [dropdown, setDropdown] = useState(false);
     const [wordLimit, setWordLimit] = useState(1000);
     const { user } = useUserAuthContext();
     const { setVisibility, visibility, setPostText, postText } = useNewPostStore();
-    const [postAudience, setPostAudience] = useState<postAudienceDataProps>({} as postAudienceDataProps);
-    const [media, setMedia] = useState<File[] | null>(null)
+    const [postAudience, setPostAudience] = useState<postAudienceDataProps | null>({
+        id: 1,
+        name: "Public",
+        icon: <HiOutlineEye size={20} className="inline" />
+    });
+    const [limit] = useState(1000);
+    const [media, setMedia] = useState<File[] | null>(null);
 
     const postAudienceData: postAudienceDataProps[] = [
         {
@@ -38,7 +42,7 @@ const PostEditor = () => {
             id: 2,
             name: "Subscribers",
             icon: <LucideUsers size={20} className="inline" />
-        } : undefined,
+        } : null,
         {
             id: 3,
             name: "Private",
@@ -46,38 +50,34 @@ const PostEditor = () => {
         }
     ].filter(Boolean) as postAudienceDataProps[];
 
-    const ref = useRef<HTMLButtonElement>();
     const audience = useMemo(() => {
         return postAudienceData.find((audience) => audience.name === visibility) || postAudienceData[0];
     }, [visibility, postAudienceData]);
-    useEffect(() => {
-        setPostAudience(audience);
-    }, [setPostAudience, audience])
 
     const updatePostAudience = (e: MouseEvent<HTMLLIElement>) => {
         const id = e.currentTarget.getAttribute("data-id");
-        const audience = postAudienceData.find((audience) => audience.id === Number(id)) as postAudienceDataProps;
-        setPostAudience(audience);
-        if (audience.name) {
+        const audience = postAudienceData.find((audience) => audience.id === Number(id));
+        if (audience) {
+            setPostAudience(audience);
             setVisibility(audience.name);
         }
         setDropdown(false);
-    }
+    };
 
-    const limit = 1000;
-    const checkLimit = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const checkLimit = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const count = e.target.value.length;
-        setWordLimit(limit - count);
-        setPostText(e.target.value);
         if (count > limit) {
-            setWordLimit(0);
             e.target.value = e.target.value.slice(0, limit);
+            setWordLimit(0);
+        } else {
+            setWordLimit(limit - count);
         }
-    }, [setPostText])
+        setPostText(e.target.value);
+    };
 
     const handleMediaAttachment = useCallback((files: File[] | null) => {
         setMedia(files);
-    }, [setMedia])
+    }, [setMedia]);
 
     const handlePostSubmit = async () => {
         if (!postText || postText.trim() === "") {
@@ -90,42 +90,27 @@ const PostEditor = () => {
             if (media) {
                 media.forEach((file) => {
                     formData.append("media[]", file);
-                })
+                });
             }
 
             formData.append("visibility", visibility.toLowerCase());
             toast.loading("Creating your post...");
             const res = await SavePost(formData);
+            toast.dismiss();
 
             if (res && res.status === true) {
-                router.push(`/posts/${res.data.post_id}`)
+                router.push(`/posts/${res.data.post_id}`);
                 setPostText("");
-                setVisibility("Public")
-                toast.dismiss()
+                setVisibility("Public");
                 toast.success("Post created successfully");
+            } else if (res && res.status === false) {
+                toast.error(res.message);
             }
-
-            if (res && res.status === false) {
-                toast.error(res.message)
-            }
-
         } catch (error) {
-            toast.dismiss()
+            toast.dismiss();
             toast.error("Something went wrong, Please try again later.");
         }
-    }
-
-    useEffect(() => {
-        window.addEventListener("beforeunload", (e) => {
-            e.preventDefault()
-        })
-
-        return () => {
-            window.removeEventListener("beforeunload", (e) => {
-                e.preventDefault()
-            })
-        }
-    }, [])
+    };
 
     return (
         <>
@@ -145,7 +130,7 @@ const PostEditor = () => {
                         <span className="flex gap-2 items-center font-medium text-sm p-2 transition-all duration-300 cursor-pointer"
                             onClick={() => setDropdown(!dropdown)}
                         >
-                            {postAudience.icon} {postAudience.name}
+                            {postAudience?.icon} {postAudience?.name}
                             {dropdown ? (<LucideChevronUp size={20} className="inline" />) : (<LucideChevronDown size={20} className="inline" />)}
                         </span>
                         <div className={`absolute w-full left-0 mt-0 transition-all duration-300 ${dropdown ? "opacity-100 -translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"}`}>
@@ -178,8 +163,7 @@ const PostEditor = () => {
             </div>
             <PostMediaPreview submitPost={handleMediaAttachment} />
         </>
-    )
+    );
+};
 
-}
-
-export default PostEditor
+export default PostEditor;

@@ -28,7 +28,6 @@ const SideBar = () => {
     const { user } = useUserAuthContext()
     const { count } = useConversationsContext();
 
-
     useEffect(() => {
         const closeSideBar = () => {
             setSideBar(false)
@@ -44,7 +43,7 @@ const SideBar = () => {
     return (
         <>
             <div
-                className={`lg:ml-auto bg-white h-screen lg:h-screen fixed lg:sticky top-0 overflow-auto smart-width p-4 z-50 shadow-xl lg:shadow-none lg:border-r duration-300 ease-in-out  ${sideBarState ? "left-0" : "-left-full"}`
+                className={`lg:ml-auto dark:bg-gray-950 bg-white h-screen lg:h-screen fixed lg:sticky top-0 overflow-auto smart-width p-4 z-50 shadow-xl lg:shadow-none lg:border-r duration-300 ease-in-out dark:text-white dark:border-slate-800 ${sideBarState ? "left-0" : "-left-full"}`
                 }>
                 <div className="mt-8 mb-16 ">
                     <Image className="block h-8 w-36" width={150} height={30} priority
@@ -64,7 +63,7 @@ const SideBar = () => {
                             <h2 className="mb-0 text-sm font-bold leading-none">
                                 {user?.name ? user.name : <p className='w-32 rounded-sm mb-1 h-5 bg-gray-300 animate-pulse'></p>}
                             </h2>
-                            <span className="text-sm text-gray-600">{user ? user.username : <p className='w-32 rounded-sm h-3 bg-gray-300 animate-pulse'></p>}</span>
+                            <span className="text-sm dark:text-white text-gray-600">{user ? user.username : <p className='w-32 rounded-sm h-3 bg-gray-300 animate-pulse'></p>}</span>
                         </div>
                     </div>
                     <div className="pt-5 mb-3">
@@ -74,10 +73,10 @@ const SideBar = () => {
                             <div className="w-1/2 p-2 py-3 animate-pulse bg-gray-300 rounded-md">
                             </div>
                         )}
-                        <span className="text-sm font-medium text-gray-600">Your Balance</span>
+                        <span className="text-sm font-medium dark:text-white text-gray-600">Your Balance</span>
                     </div>
                     <div className="flex gap-3 pt-4 mb-5 ">
-                        <Link href="/points" className="p-2 px-8 text-xs font-semibold text-white bg-black rounded">
+                        <Link href="/points" className="p-2 px-8 text-xs font-semibold text-white bg-black dark:bg-primary-dark-pink rounded">
                             Add Funds
                         </Link>
                         <Link href="/wallet"
@@ -87,29 +86,29 @@ const SideBar = () => {
                     </div>
                     <div className="pt-6">
                         <Link href="/profile"
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideUser />
                             <p>Profile</p>
                         </Link>
-                        {(user?.is_model && user?.Model?.verification_status === true) && (
+                        {(user?.is_model) && (
                             <Link href="/live"
-                                className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                                className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                                 <LucideAirplay />
                                 <p>Go Live</p>
                             </Link>
                         )}
                         <Link href="/hookup"
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideHeart />
                             <p>Hook Up</p>
                         </Link>
                         <Link href="/"
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideStore />
                             <p>Store</p>
                         </Link>
                         <Link href="/messages"
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideMessageSquare />
                             <p>Messages</p>
                             <span className="ml-auto h-8 w-8 p-0 font-bold flex items-center justify-center inline-block rounded-full bg-primary-dark-pink text-white">
@@ -118,24 +117,24 @@ const SideBar = () => {
                         </Link>
                         {!user?.is_model && (
                             <Link href="/models/benefits"
-                                className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                                className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                                 <LucideUserPlus />
                                 <p>Become A Model</p>
                             </Link>
                         )}
-                        <hr className="mt-8 mb-8" />
+                        <hr className="mt-8 mb-8 dark:border-slate-800" />
                         <Link href="/"
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideHelpCircle />
                             <p>Help</p>
                         </Link>
                         <Link href="/settings"
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl">
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideSettings />
                             <p>Settings & Privacy</p>
                         </Link>
                         <span
-                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 rounded-xl cursor-pointer select-none"
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl cursor-pointer select-none"
                             onClick={() => {
                                 swal({
                                     title: "Are you sure?",

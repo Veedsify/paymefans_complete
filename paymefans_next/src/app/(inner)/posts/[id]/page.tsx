@@ -1,10 +1,11 @@
 "use client"
+import CommentsHolder from "@/components/route_component/comments";
+import PostInteractions from "@/components/route_component/post-interactions";
 import { PostPageImage } from "@/components/sub_componnets/postpage-image";
 import QuickPostActions from "@/components/sub_componnets/quick_post_actions";
 import { getToken } from "@/utils/cookie.get";
 import { formatDate } from "@/utils/format-date";
 import axios from "axios";
-import { LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,7 +26,7 @@ async function getPost(id: string) {
             "Content-Type": "application/json",
         }
     })
-    return getpost
+    return getpost.data
 }
 
 const Post = ({ params: { id } }: PostPageprops) => {
@@ -35,8 +36,8 @@ const Post = ({ params: { id } }: PostPageprops) => {
     useEffect(() => {
         const fetchPost = async (id: string) => {
             try {
-                const post = await getPost(id)
-                setPost(post)
+                const post = (await getPost(id))
+                setPost(post.data)
             } catch (error) {
                 toast.error("Post not found")
                 router.push("/")
@@ -74,28 +75,21 @@ const Post = ({ params: { id } }: PostPageprops) => {
                     dangerouslySetInnerHTML={{ __html: formattedText }}
                 >
                 </div>
-
-                <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-1 mb-5">
-                    <span className="flex items-center gap-1 text-xs cursor-pointer font-medium ">
-                        <LucideHeart size={14} />
-                        23
-                    </span>
-                    <span className="flex items-center gap-1 text-xs cursor-pointer font-medium">
-                        <LucideMessageSquare size={14} />
-                        16
-                    </span>
-                    <span className="flex items-center gap-1 text-xs cursor-pointer font-medium">
-                        <LucideRepeat2 size={14} />
-                        2
-                    </span>
-                    <span className="flex items-center gap-1 text-xs cursor-pointer font-medium">
-                        <LucideShare size={14} />
-                    </span>
-                </div>
                 <div className={`grid gap-3 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3`}>
                     {post?.UserMedia.map((media: any, index: number) => (
                         <PostPageImage key={index} media={media} />
                     ))}
+                </div>
+                <PostInteractions
+                    options={{
+                        post_id: post?.post_id,
+                        author_username: post?.user.username
+                    }}
+                />
+                <div>
+                    <CommentsHolder />
+                    <CommentsHolder />
+                    <CommentsHolder />
                 </div>
             </div>
         </div >

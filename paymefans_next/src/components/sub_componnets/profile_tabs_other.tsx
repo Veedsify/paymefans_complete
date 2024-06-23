@@ -5,12 +5,15 @@ import PostPanel from "./postpanel";
 import MediaPanel from "./mediapanel";
 import LoadingPost from "./loading_post";
 import PostPanelOther from "./postpanelother";
-const ProfileTabsOther = ({ userdata }: { userdata: any }) => {
+import MediaPanelOther from "./mediapanelother";
+import { ProfileUserProps } from "@/types/user";
+const ProfileTabsOther = ({ userdata }: { userdata: ProfileUserProps }) => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
-    <div className="px-2 md:px-5">
+    <div className="">
       <Tabs
         selectedIndex={selectedTab}
+        className="px-3 md:px-5"
         onSelect={(index) => setSelectedTab(index)}
       >
         <TabList className="flex items-center text-center border-b">
@@ -51,7 +54,9 @@ const ProfileTabsOther = ({ userdata }: { userdata: any }) => {
           />
         </TabPanel>
         <TabPanel>
-          <MediaPanel />
+          <MediaPanelOther
+            userdata={userdata}
+          />
         </TabPanel>
         <TabPanel>
           <div className="py-8">

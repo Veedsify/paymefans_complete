@@ -29,6 +29,11 @@ const nextConfig = {
                 hostname: "imagedelivery.net",
                 pathname: "/**"
             },
+            {
+                protocol: "https",
+                hostname: "customer-6lygbkywiu1pj547.cloudflarestream.com",
+                pathname: "/**"
+            },
         ],
     },
 };

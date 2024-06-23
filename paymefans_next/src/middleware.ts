@@ -21,7 +21,7 @@ export const config = {
     "/settings/:path*",
     "/verification/:path*",
     "/wallet/:path*",
-    "/posts/:path*",
+    // "/posts/:path*",
     // "/search/:path*",
     // "/notifications/:path*",
     "/messages/:path*",

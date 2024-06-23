@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="083c7743-4b21-413c-af78-59f2187f061e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/infinite-query.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/wallet/add/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/wallet/add/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/controllers/api/postController.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/controllers/api/postController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/posts/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/posts/[id]/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post-editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post-editor.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post_component.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post_component.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/postpanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/postpanel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/lib/filetypes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/lib/filetypes.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/utils/format-date.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/utils/format-date.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,26 +60,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Node.js.ExpressServer.executor": "Run",
-    "Node.js.Paymefans.executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Dike Wisdom/Desktop/react_project",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.startup.tasks",
-    "ts.external.directory.path": "C:\\Users\\Dike Wisdom\\Desktop\\Files\\Documents\\Active Website Projects\\PAYMEFANS\\Source_Code\\newcode\\admin\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Node.js.ExpressServer.executor&quot;: &quot;Run&quot;,
+    &quot;Node.js.Paymefans.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Dike Wisdom/Desktop/react_project&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.startup.tasks&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Dike Wisdom\\Desktop\\Files\\Documents\\Active Website Projects\\PAYMEFANS\\Source_Code\\newcode\\paymefans_next\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Node.js.Paymefans">
     <configuration name="ExpressServer" type="NodeJSConfigurationType" node-parameters="npm run dev" working-dir="$PROJECT_DIR$/express_server">
       <method v="2" />
@@ -105,6 +115,8 @@
       <workItem from="1717367815182" duration="89000" />
       <workItem from="1717367929340" duration="302000" />
       <workItem from="1717407746131" duration="24000" />
+      <workItem from="1718834235422" duration="5480000" />
+      <workItem from="1718878542084" duration="1423000" />
     </task>
     <servers />
   </component>

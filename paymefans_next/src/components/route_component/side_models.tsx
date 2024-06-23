@@ -49,7 +49,7 @@ const SideModels = () => {
         </div>
 
         <div>
-          <div className="flex align-middle justify-between pb-6">
+          <div className="flex align-middle justify-between pb-6 dark:text-white">
             <span className="font-bold">Models/Creators</span>
             <span>
               <Link href="/models" className="bg-primary-dark-pink text-white px-3 text-sm py-1 font-semibold rounded-md">View All</Link>
@@ -65,7 +65,7 @@ const SideModels = () => {
             </div>
           </div>
         </div>
-        <hr className="" />
+        <hr className="dark:border-slate-800" />
         <div className="flex align-middle justify-between  my-8">
           <span className="font-bold">Hookup</span>
           <span>

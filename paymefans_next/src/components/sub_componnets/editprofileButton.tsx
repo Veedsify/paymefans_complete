@@ -64,7 +64,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
         <div>
             <button
                 onClick={() => setOpen(!open)}
-                className="sm:px-4 py-1 px-2 text-sm font-semibold text-white bg-black border border-black rounded text-color">
+                className="sm:px-4 py-1 px-2 text-sm font-semibold text-white dark:bg-primary-dark-pink bg-black border border-black rounded text-color">
                 Edit Profile
             </button>
             <div

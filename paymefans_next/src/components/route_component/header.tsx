@@ -25,7 +25,7 @@ const Header = () => {
     }, [])
 
     return (
-        <header className="px-4 lg:px-8 py-3 border-b bg-primary-dark-pink lg:bg-white">
+        <header className="px-4 lg:px-8 py-3 border-b bg-primary-dark-pink lg:bg-white dark:bg-black dark:text-white border-b dark:border-slate-800">
             <div className="flex items-center">
                 <HeaderTitle />
                 <Image width={200} height={40} src="/site/logo3.png" alt="" className="block lg:hidden h-auto" />

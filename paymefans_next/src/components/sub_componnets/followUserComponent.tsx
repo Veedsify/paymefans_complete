@@ -1,5 +1,5 @@
 "use client"
-import { AuthUserProps } from "@/types/user";
+import { AuthUserProps, ProfileUserProps } from "@/types/user";
 import { checkUserIsFollowing } from '@/utils/data/check-user-is-following';
 import React, { useEffect } from 'react';
 import FollowButton from "./sub/button";
@@ -7,7 +7,7 @@ import { socket } from "./sub/socket";
 
 type FollowUserProps = {
     thisuser: AuthUserProps | null;
-    profileuser: AuthUserProps;
+    profileuser: ProfileUserProps;
 }
 
 const FollowUserComponent: React.FC<FollowUserProps> = ({ profileuser, thisuser }) => {

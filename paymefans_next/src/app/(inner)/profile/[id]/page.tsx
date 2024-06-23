@@ -3,6 +3,7 @@ import CreateConversationButton from "@/components/sub_componnets/create-convers
 import CreateSubscriptionButton from "@/components/sub_componnets/create-subscription-button";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
 import ProfileTabsOther from "@/components/sub_componnets/profile_tabs_other";
+import { ProfileUserProps } from "@/types/user";
 import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
 
@@ -11,6 +12,7 @@ import {
   LucideLink,
   LucideLock,
   LucideMapPin,
+  Verified,
 } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -36,7 +38,7 @@ function formatNumber(number: any): string {
 const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const user = await getUserData();
-  const userdata = await getUserProfile({ user_id: id });
+  const userdata = await getUserProfile({ user_id: id }) as ProfileUserProps
   if (user?.id === userdata.id) redirect("/profile");
   if (!userdata) return <UserNotFound userid={id} />;
 
@@ -68,7 +70,13 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5">
           <div className="flex flex-col ">
-            <h1 className="font-bold ">{userdata?.name}</h1>
+            <h1 className="font-bold flex gap-2">{userdata?.name}
+              {userdata.is_model && (
+                <span title="Verified">
+                  <Verified stroke="purple" />
+                </span>
+              )}
+            </h1>
             <small className="text-gray-500 ">{userdata?.username}</small>
           </div>
           <p className="font-medium mb-2 leading-normal text-gray-700">

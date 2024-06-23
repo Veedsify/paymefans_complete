@@ -1,11 +1,13 @@
-"use client"
+"use client";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import PostComponent, { UserMediaProps } from "../route_component/post_component";
 import LoadingPost from "./loading_post";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { getUserPosts } from "@/utils/data/get-user-post";
+import React, { useEffect, useState } from "react";
 import { formatDate } from "@/utils/format-date";
-import { useQuery } from "@tanstack/react-query";
+import { fetchItems } from "@/components/sub_componnets/infinite-query";
+
+import InfiniteScroll from "react-infinite-scroll-component";
+
 
 type UserPostProps = {
     content: string;
@@ -20,41 +22,72 @@ type UserPostProps = {
 }
 
 const PostPanel = () => {
-    const { user } = useUserAuthContext()
+    const { user } = useUserAuthContext();
+    //allPosts will be used to store the news articles
 
-    const { data, isLoading, error, isFetched } = useQuery({
-        queryKey: ["user-posts", { pageParam: 1 }],
-        queryFn: async () => await getUserPosts({ pageParam: 1 }),
-    })
+    const [allPosts, setAllPosts] = useState<UserPostProps[]>([]);
+    const [page, setPage] = useState(1);
+    const [totalResults, setTotalResults] = useState(0);
 
-    if (error) console.error(error)
+    const fetchMoreData = async () => {
+        const res = await fetchItems({ pageParam: page + 1 });
+        setPage(page + 1);
+        setAllPosts((prev) => {
+            return [...prev, ...res?.data.data]
+        });
+        setTotalResults(res?.data.total);
+    }
 
-    return (
-        <div className="py-6 mt-3 mb-12 select-none"
-        >
-            {(user && isFetched) && data.data.map((post: UserPostProps, index: number) => (
-                <PostComponent key={index}
-                    user={{ id: user.id, user_id: user.user_id, name: user.name, link: `/profile/${user.username}`, username: user.username, image: user.profile_image }}
-                    data={{
-                        ...post,
-                        post: post.content,
-                        media: post.UserMedia,
-                        time: formatDate(new Date(post.created_at))
-                    }}
-                />
-            ))}
-            {isLoading && <LoadingPost />}
 
-            {/* <div className="py-6">
-                <button
-                    className="block mx-auto mt-6 px-4 py-2 bg-primary-dark-pink text-white rounded-md disabled:bg-gray-300"
-                    disabled={loading || posts.length === 0}
-                >
-                    {loading ? "Loading..." : "Load more"}
-                </button>
-            </div> */}
+    useEffect(() => {
+        async function fetchNews() {
+            const res = await fetchItems({ pageParam: page });
+            setAllPosts(res?.data.data);
+            setTotalResults(res?.data.total);
+        }
+        fetchNews();
+    }, [])
+
+    const EndMessage = () => (
+        <div className="px-3 py-9 mt-3">
+            <p className="text-center font-medium">
+                End Of Post
+            </p>
         </div>
-    );
+    )
+    return (
+        <div className="mt-3 mb-12 select-none">
+            <InfiniteScroll
+                dataLength={allPosts.length}
+                next={fetchMoreData}
+                hasMore={allPosts.length < totalResults}
+                loader={<LoadingPost />}
+                endMessage={<EndMessage />}
+            >
+                {user && allPosts?.map((post: UserPostProps, index: number) => (
+                    <PostComponent
+                        key={index}
+                        user={{
+                            id: user.id,
+                            user_id: user.user_id,
+                            name: user.name,
+                            link: `/profile/${user.username}`,
+                            username: user.username,
+                            image: user.profile_image
+                        }}
+                        isSubscriber={true}
+                        data={{
+                            ...post,
+                            post: post.content,
+                            media: post.UserMedia,
+                            time: formatDate(new Date(post.created_at))
+                        }}
+                    />
+                ))}
+            </InfiniteScroll>
+        </div>
+    )
+        ;
 }
 
 export default PostPanel;

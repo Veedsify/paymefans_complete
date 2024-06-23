@@ -1,8 +1,9 @@
 "use client"
 import { useState } from "react";
-import MediaPanelImageCard from "./media_panel_image_card";
+import MediaPanelImageCardOther from "./media_panel_image_cardother";
+import { ProfileUserProps } from "@/types/user";
 
-const MediaPanel = () => {
+const MediaPanelOther = ({ userdata }: { userdata: ProfileUserProps }) => {
     const [arraySort, setArraySort] = useState("all")
 
     const toggleThisSort = (sort: string) => {
@@ -29,9 +30,9 @@ const MediaPanel = () => {
                     Videos
                 </button>
             </div>
-            <MediaPanelImageCard sort={arraySort} />
+            <MediaPanelImageCardOther sort={arraySort} userdata={userdata} />
         </div>
     );
 }
 
-export default MediaPanel;
+export default MediaPanelOther;

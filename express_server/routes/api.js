@@ -13,7 +13,7 @@ const uploadAttachmentMulterMiddleware = require("../middlewares/uploadAttachmen
 const multerPostMiddleware = require("../middlewares/multerPostMiddleware.middleware");
 const uploadMediaController = require("../controllers/api/mediaUploadController");
 const { GetTransactions } = require("../controllers/api/transactionsController");
-const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID } = require("../controllers/api/postController");
+const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID, GetMyMedia, GetUsersMedia } = require("../controllers/api/postController");
 const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
 const { GetSubscriptionData, chekcSubscriber, CreateNewSubscription } = require("../controllers/api/subscriberController");
 
@@ -36,6 +36,8 @@ router.post("/profile/image/change", checkUserIsAuthenticated, multerImageMiddle
 // Post & Home 
 router.post("/post/create", checkUserIsAuthenticated, multerPostMiddleware.array("media[]"), CreatePost);
 router.get("/user/posts", checkUserIsAuthenticated, GetMyPosts);
+router.get("/user/media", checkUserIsAuthenticated, GetMyMedia);
+router.get("/profile/media/:userid", checkUserIsAuthenticated, GetUsersMedia);
 router.get("/user/:userid/posts", checkUserIsAuthenticated, GetUserPostByID);
 router.get("/posts/:post_id", GetCurrentUserPost);
 

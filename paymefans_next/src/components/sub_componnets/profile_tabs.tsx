@@ -7,12 +7,13 @@ import LoadingPost from "./loading_post";
 const ProfileTabs = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   return (
-    <div className="px-2 md:px-5">
+    <div className="">
       <Tabs
+        className="px-3 md:px-5"
         selectedIndex={selectedTab}
         onSelect={(index) => setSelectedTab(index)}
       >
-        <TabList className="flex items-center text-center border-b">
+        <TabList className="flex items-center text-center border-b dark:text-white">
           <Tab className="flex-1 outline-none cursor-pointer">
             <span className="block mb-2 text-sm font-medium">Post</span>
             <span

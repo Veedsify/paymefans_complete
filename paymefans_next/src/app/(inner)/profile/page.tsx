@@ -48,7 +48,7 @@ const ProfilePage = async () => {
                         <EditProfileButton user={user} />
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5 items-start">
+                <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5 dark:text-white items-start">
                     <div className="flex flex-col ">
                         <h1 className="font-bold ">{user?.name ? user.name : ""}</h1>
                         <small className="text-gray-500 ">{user?.username}</small>

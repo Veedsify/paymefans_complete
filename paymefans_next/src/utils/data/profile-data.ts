@@ -1,4 +1,4 @@
-import { AuthUserProps } from "@/types/user";
+import { AuthUserProps, ProfileUserProps } from "@/types/user";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
@@ -24,7 +24,7 @@ const getUserProfile = async ({ user_id }: getUserProfileProps) => {
   if (res.ok && res.status === 200) {
     const user = await res.json();
     if (user.status === true) {
-      return user.user as any;
+      return user.user as ProfileUserProps;
     }
     return null;
   }

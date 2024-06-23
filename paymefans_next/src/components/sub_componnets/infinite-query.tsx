@@ -1,67 +1,39 @@
 "use client"
 import { getToken } from '@/utils/cookie.get';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-const fetchItems = async ({ pageParam = 1 }: { pageParam: number }) => {
-    const token = getToken()
-
-    const api = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/user/posts`
-
-    const postPerPage = process.env.NEXT_PUBLIC_POST_PER_PAGE
-
-    const res = await axios.get(`${api}?page=${pageParam}&limit=${postPerPage}`, {
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    return res.data;
-};
-
-const fetchItemsOther = async ({ pageParam = 1, userid }: { pageParam: number, userid?: string }) => {
-    const token = getToken()
-
-    const api = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/user/${userid}/posts`
-
-    const postPerPage = process.env.NEXT_PUBLIC_POST_PER_PAGE
-
-    const res = await axios.get(`${api}?page=${pageParam}&limit=${postPerPage}`, {
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`,
-        }
-    })
-    return res.data;
-};
-
-export const useItems = () => {
-    return useInfiniteQuery({
-        queryKey: ['items'],
-        queryFn: async => fetchItems({ pageParam: async.pageParam }),
-        getNextPageParam: (lastPage) => {
-            if (lastPage.page < lastPage.totalPages) {
-                return lastPage.page + 1;
-            } else {
-                return undefined;
+export const fetchItems = async ({ pageParam = 1 }: { pageParam: number }) => {
+    try {
+        const token = getToken()
+        const api = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/user/posts`
+        const postPerPage = process.env.NEXT_PUBLIC_POST_PER_PAGE
+        const res = await axios.get(`${api}?page=${pageParam}&limit=${postPerPage}`, {
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`,
             }
-        },
-        initialPageParam: 0, // Add the initialPageParam property
-    });
+        })
+        return res;
+    } catch (error) {
+        console.error(error);
+    }
 };
 
-
-export const useItemsOther = ({ userId }: { userId: string }) => {
-    return useInfiniteQuery({
-        queryKey: ['itemsOther'],
-        queryFn: async => fetchItemsOther({ pageParam: async.pageParam, userid: userId }),
-        getNextPageParam: (lastPage) => {
-            if (lastPage.page < lastPage.totalPages) {
-                return lastPage.page + 1;
-            } else {
-                return undefined;
+export const fetchItemsOther = async ({ pageParam, userid }: { pageParam: number, userid?: number }) => {
+    try {
+        const token = getToken()
+        const api = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/user/${userid}/posts`
+        const postPerPage = process.env.NEXT_PUBLIC_POST_PER_PAGE
+        const res = await axios.get(`${api}?page=${pageParam}&limit=${postPerPage}`, {
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`,
             }
-        },
-        initialPageParam: 1, // Add the initialPageParam property
-    });
+        })
+        return res;
+    } catch (error) {
+        console.error(error);
+    }
 };
+
