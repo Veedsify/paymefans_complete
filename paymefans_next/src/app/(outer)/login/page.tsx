@@ -37,7 +37,7 @@ const Login = () => {
                 toast.success("Login successful");
                 document.cookie = `token=${loginThisUser.data.token}`;
                 setUser(loginThisUser.data.user);
-                router.push("/");
+                window.location.href = "/";
             } else {
                 toast.error("Invalid Login credentials");
             }

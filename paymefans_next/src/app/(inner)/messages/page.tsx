@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const Messages = async () => {
     return (
-        <div className="py-3 px-3">
+        <div className="md:py-5 md:px-8 p-3">
             <MessageCounter />
             <div className="flex align-baseline justify-between border border-gray-400 rounded-md p-4 mb-7 w-full">
                 <input type="text" placeholder="Search Messages" className=" text-sm outline-none border-none" />

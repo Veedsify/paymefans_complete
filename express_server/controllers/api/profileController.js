@@ -39,7 +39,7 @@ class profileController {
             //convert image
             const convert = await sharp(file.path)
                 .resize(943, 270)
-                .webp({ quality: 75 })
+                .webp({ quality: 90 })
                 .toFile(`public/images/converted/${file.filename}`);
 
             const updateUser = await updateBannerService(convert ? `${SERVER_ORIGINAL_URL}/images/converted/${file.filename}` : `${SERVER_ORIGINAL_URL}/images/uploads/${file.filename}`, req);

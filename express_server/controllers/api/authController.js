@@ -35,9 +35,16 @@ class authController {
      */
     static async Username(req, res) {
         const { username } = req.body;
+
+        if (username === undefined) return res.status(200).json({ message: "Username is required", status: false })
+
+        if (username === `paymefans`) {
+            return res.status(200).json({ message: "Username already exists", status: false });
+        }
+
         const user = await prismaQuery.user.findUnique({
             where: {
-                username,
+                username: `@${username}`,
             },
         });
 
@@ -74,13 +81,18 @@ class authController {
     }
 
     /**
-     * Retrieve user information.
-     * @param {Object} req - The request object.
-     * @param {Object} res - The response object.
-     * @returns {Object} The response containing the user information.
-     */
+    * Retrieve user information.
+    * @param {Object} req - The request object.
+    * @param {Object} res - The response object.
+    * @returns {Object} The response containing the user information.
+    */
     static async Retrieve(req, res) {
         try {
+            // Ensure req.user and req.user.id are valid
+            if (!req.user || !req.user.id) {
+                return res.status(400).json({ message: "Invalid request data", status: false });
+            }
+
             const user = await prismaQuery.user.findUnique({
                 where: {
                     id: req.user.id,
@@ -96,16 +108,17 @@ class authController {
                                 where: {
                                     user_id: req.user.id
                                 }
-                            }
-                            , Subscribers: {
+                            },
+                            Subscribers: {
                                 where: {
                                     user_id: req.user.id
                                 }
                             }
                         },
-                    },
+                    }
                 }
             });
+
             const following = await prismaQuery.user.count({
                 where: {
                     Follow: {
@@ -114,16 +127,29 @@ class authController {
                         }
                     }
                 }
-            })
+            });
 
             if (user) {
                 const { password, ...rest } = user;
-                return res.status(200).json({ user: { ...rest, following }, status: true });
+
+                // Handle BigInt serialization
+                const bigIntToString = (obj) => {
+                    return JSON.parse(JSON.stringify(obj, (key, value) =>
+                        typeof value === 'bigint' ? value.toString() : value
+                    ));
+                };
+
+                const data = { user: { ...rest, following }, status: true };
+                return res.status(200).json(bigIntToString(data));
+            } else {
+                return res.status(404).json({ message: "User not found", status: false });
             }
         } catch (error) {
-            return res.status(500).json({ message: "No user found", status: false });
+            console.log(error);
+            return res.status(500).json({ message: "An error occurred", status: false });
         }
     }
+
 
     /**
      * Get user points.

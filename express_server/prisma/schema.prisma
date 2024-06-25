@@ -431,7 +431,7 @@ model ReportMessage {
 model UserPoints {
   id                 Int                  @id @default(autoincrement())
   user_id            Int                  @unique
-  points             BigInt
+  points             Int                  @db.Int
   conversion_rate    Float
   created_at         DateTime             @default(now())
   updated_at         DateTime             @updatedAt

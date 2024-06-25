@@ -17,8 +17,8 @@ const CommentsHolder = () => {
                             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Recusandae doloribus ipsa rem corrupti eveniet omnis nostrum, repellendus maiores obcaecati vero aut quos alias enim ipsam dicta sapiente inventore repudiandae. Natus!
                         </div>
                         <div className="grid grid-cols-3 gap-2">
-                            <Image src="https://images.pexels.com/photos/15045083/pexels-photo-15045083/free-photo-of-woman-in-hat-posing-by-vintage-car.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" width="500" height="500" className="h-auto aspect-square rounded-lg object-cover w-auto" alt="" />
-                            <Image src="https://images.pexels.com/photos/26052406/pexels-photo-26052406/free-photo-of-what-s-up.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" width="500" height="500" className="h-auto aspect-square rounded-lg object-cover w-auto" alt="" />
+                            <Image src="https://images.pexels.com/photos/15045083/pexels-photo-15045083/free-photo-of-woman-in-hat-posing-by-vintage-car.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" width="500" height="500" className="h-auto aspect-square rounded-lg object-cover" alt="" />
+                            <Image src="https://images.pexels.com/photos/26052406/pexels-photo-26052406/free-photo-of-what-s-up.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" width="500" height="500" className="h-auto aspect-square rounded-lg object-cover" alt="" />
                         </div>
                     </div>
                     <ReplyInteractions />

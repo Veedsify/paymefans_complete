@@ -1,5 +1,6 @@
 const prismaQuery = require("../utils/prisma");
 const sanitizeHtml = require('sanitize-html');
+const { v4: uuidv4 } = require('uuid');
 
 class SaveMessageToDb {
 
@@ -55,6 +56,9 @@ class SaveMessageToDb {
                 user_id: sender_id
             },
             select: {
+                name: true,
+                id: true,
+                username: true,
                 UserPoints: true,
             }
         });
@@ -64,6 +68,9 @@ class SaveMessageToDb {
                 user_id: receiver_id
             },
             select: {
+                name: true,
+                id: true,
+                username: true,
                 Settings: true
             }
         });
@@ -101,6 +108,32 @@ class SaveMessageToDb {
                 }
             }
         });
+
+        const purchase_id = uuidv4();
+        const purchase_id2 = uuidv4();
+
+        // add to recent transactions
+        await prismaQuery.userPointsPurchase.create({
+            data: {
+                user_id: receiver.id,
+                points: receiverPrice,
+                amount: receiverPrice,
+                message: `You have recevied a message from ${receiver.username} for ${receiverPrice} points`,
+                purchase_id,
+                success: true
+            }
+        })
+
+        await prismaQuery.userPointsPurchase.create({
+            data: {
+                user_id: sender.id,
+                points: receiverPrice,
+                amount: receiverPrice,
+                message: `You have sent a message to ${sender.username} for ${receiverPrice} points`,
+                purchase_id: purchase_id2,
+                success: false
+            }
+        })
 
         return true;
 

@@ -163,6 +163,8 @@ const ChooseUserName = () => {
                                     <input
                                         onChange={checkForUsername}
                                         ref={ref}
+                                        required
+                                        pattern="\S*"
                                         type="text" id="name" className="block w-full py-3 font-bold text-white bg-transparent text-sm outline-none accent-primary-dark-pink" placeholder="Username" />
                                     <div
                                         onClick={clearInput}

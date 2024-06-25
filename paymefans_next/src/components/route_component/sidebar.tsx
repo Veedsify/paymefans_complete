@@ -11,6 +11,7 @@ import {
     LucideMessageSquare,
     LucideUserPlus,
     Router,
+    LucideBell,
 } from "lucide-react";
 import { useContext, useEffect } from "react";
 import Link from "next/link"
@@ -111,6 +112,14 @@ const SideBar = () => {
                             className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
                             <LucideMessageSquare />
                             <p>Messages</p>
+                            <span className="ml-auto h-8 w-8 p-0 font-bold flex items-center justify-center inline-block rounded-full bg-primary-dark-pink text-white">
+                                {count ? count : 0}
+                            </span>
+                        </Link>
+                        <Link href="/notifications"
+                            className="flex items-center gap-5 p-2 mb-2 transition-all duration-200 hover:bg-gray-200 dark:hover:bg-gray-900 rounded-xl">
+                            <LucideBell />
+                            <p>Notifications</p>
                             <span className="ml-auto h-8 w-8 p-0 font-bold flex items-center justify-center inline-block rounded-full bg-primary-dark-pink text-white">
                                 {count ? count : 0}
                             </span>

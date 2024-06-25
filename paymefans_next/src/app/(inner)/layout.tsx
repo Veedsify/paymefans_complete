@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 // import { Golos_Text } from "next/font/google";
 // const font = Golos_Text({
-//     weight: ["400", "500", "600", "700", "800"],
+//     weight: ["400", "500", "600", "700"],
 //     display: "auto",
 //     subsets: ["latin", "latin-ext"],
 // })
