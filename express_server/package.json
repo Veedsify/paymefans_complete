@@ -7,7 +7,6 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
-    "@prisma/client": "^5.13.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "check-password-strength": "^2.0.10",
@@ -36,6 +35,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "prisma": "^5.13.0"
+    "@prisma/client": "^5.16.1",
+    "prisma": "^5.16.1"
   }
 }

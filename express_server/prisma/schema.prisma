@@ -67,6 +67,7 @@ model User {
   Model                     Model?
   UserAttachments           UserAttachments[]
   Post                      Post[]
+  UserBanks                 UserBanks[]
 }
 
 model Participants {
@@ -453,16 +454,18 @@ model UserWallet {
 }
 
 model UserTransaction {
-  id             Int        @id @default(autoincrement())
-  transaction_id String
-  user_id        Int
-  wallet_id      Int
-  amount         Float
-  transaction    String
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @updatedAt
-  user           User       @relation(fields: [user_id], references: [id])
-  UserWallet     UserWallet @relation(fields: [wallet_id], references: [id])
+  id                  Int             @id @default(autoincrement())
+  transaction_id      String
+  user_id             Int
+  wallet_id           Int
+  amount              Float
+  transaction_message String          @db.LongText
+  transaction         String
+  created_at          DateTime        @default(now())
+  transaction_type    TransactionType
+  updated_at          DateTime        @updatedAt
+  user                User            @relation(fields: [user_id], references: [id])
+  UserWallet          UserWallet      @relation(fields: [wallet_id], references: [id])
 
   @@index([user_id], map: "UserTransaction_user_id_fkey")
   @@index([wallet_id], map: "UserTransaction_wallet_id_fkey")
@@ -550,6 +553,23 @@ model UserAttachments {
   user_id Int
 }
 
+model UserBanks {
+  id             Int      @id @default(autoincrement())
+  user_id        Int
+  bank_id        String
+  bank_name      String
+  account_name   String
+  account_number String   @unique
+  routing_number String?
+  swift_code     String?
+  bank_country   String
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+  user           User     @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "UserBanks_user_id_fkey")
+}
+
 enum UserRole {
   fan
   model
@@ -560,4 +580,10 @@ enum PostAudience {
   private
   followers
   subscribers
+}
+
+enum TransactionType {
+  credit
+  debit
+  pending
 }

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: "Profile page",
 };
 
-const page = async () => {
+const WalletPage = async () => {
     const user = await getUserData() as AuthUserProps
     const { data: transactions } = await getTransactionsData()
     const { wallet } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/wallet`, {
@@ -106,9 +106,44 @@ const page = async () => {
                         </div>
                     ))}
                 </div>
+                <Link href="/wallet/transactions/topup" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TOPUP TRANSACTIONS</Link>
+                <OtherTransactions />
             </div>
         </div>
     );
 }
 
-export default page;
+const OtherTransactions = () => {
+    return (
+        <>
+            <h2 className="text-xl font-semibold mt-10 mb-10">Other Transactions</h2>
+            <div className="grid gap-4">
+                {[0, 0, 0, 0].map((transaction: any, i: number) => (
+                    <div key={i} className="bg-white rounded-xl">
+                        <div className="flex justify-between items-center py-2">
+                            <div>
+                                <p className={`text-sm font-semibold ${transaction.success ? "text-green-600" : "text-red-500"}`}>{transaction.success ? "Transaction Successful" : "Transaction Failed"}</p>
+                                <div className="flex items-center gap-3">
+                                    <small className="text-xs">{new Date(transaction.created_at).toLocaleDateString("en-US", {
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                        month: "short",
+                                        day: "numeric",
+                                        year: "numeric",
+                                    })}</small>
+                                </div>
+                            </div>
+                            <p className={`text-sm font-semibold flex items-center gap-3 ${transaction.success ? "text-green-600" : "text-red-500"}`}>+{transaction.points}
+                                <Image width={20} height={20} className="w-auto h-5 aspect-square" src="/site/coin.svg"
+                                    alt="" />
+                            </p>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <Link href="/wallet/transactions/other" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TRANSACTIONS</Link>
+        </>
+    )
+}
+
+export default WalletPage;

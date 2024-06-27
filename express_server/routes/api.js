@@ -16,6 +16,7 @@ const { GetTransactions } = require("../controllers/api/transactionsController")
 const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID, GetMyMedia, GetUsersMedia } = require("../controllers/api/postController");
 const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
 const { GetSubscriptionData, chekcSubscriber, CreateNewSubscription } = require("../controllers/api/subscriberController");
+const { addBank, GetBanks, DeleteBank } = require("../controllers/api/banksController");
 
 
 // Authentication
@@ -60,7 +61,10 @@ router.get("/points/callback", pointsController.Callback);
 router.post("/user/get-points", checkUserIsAuthenticated, pointsController.GetUserPoints);
 router.get("/global/points", pointsController.GetGlobalPoints);
 
-// Wallet & Transactions
+// Wallet & Transactions & Banks
+router.put('/banks/add', checkUserIsAuthenticated, addBank)
+router.get('/banks', checkUserIsAuthenticated, GetBanks)
+router.delete('/banks/delete', checkUserIsAuthenticated, DeleteBank)
 router.get("/wallet/transactions", checkUserIsAuthenticated, GetTransactions);
 
 // Subscribers
