@@ -10,6 +10,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 
 type UserPostProps = {
+    id: number;
     content: string;
     post_id: string;
     post_audience: string;
@@ -19,6 +20,10 @@ type UserPostProps = {
     post_reposts: number;
     UserMedia: UserMediaProps[];
     created_at: Date;
+    PostLike: {
+        post_id: string;
+        user_id: number;
+    }[]
 }
 
 const PostPanel = () => {

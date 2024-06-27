@@ -222,6 +222,7 @@ class PostController {
                     created_at: "desc"
                 },
                 select: {
+                    id: true,
                     content: true,
                     post_id: true,
                     post_audience: true,
@@ -245,6 +246,12 @@ class PostController {
                             updated_at: true
                         }
                     },
+                    PostLike: {
+                        select: {
+                            post_id: true,
+                            user_id: true
+                        }
+                    }
                 },
                 skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
                 take: parsedLimit
@@ -299,6 +306,7 @@ class PostController {
                     created_at: "desc"
                 },
                 select: {
+                    id: true,
                     content: true,
                     post_id: true,
                     post_audience: true,
@@ -320,6 +328,12 @@ class PostController {
                             accessible_to: true,
                             created_at: true,
                             updated_at: true
+                        }
+                    },
+                    PostLike: {
+                        select: {
+                            post_id: true,
+                            user_id: true
                         }
                     },
                     user: {
@@ -386,6 +400,7 @@ class PostController {
                             }
                         }
                     },
+                    id: true,
                     content: true,
                     post_id: true,
                     post_audience: true,

@@ -17,6 +17,7 @@ const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID, GetMyMedia,
 const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
 const { GetSubscriptionData, chekcSubscriber, CreateNewSubscription } = require("../controllers/api/subscriberController");
 const { addBank, GetBanks, DeleteBank } = require("../controllers/api/banksController");
+const { likePost } = require("../controllers/api/postInteractions");
 
 
 // Authentication
@@ -41,6 +42,9 @@ router.get("/user/media", checkUserIsAuthenticated, GetMyMedia);
 router.get("/profile/media/:userid", checkUserIsAuthenticated, GetUsersMedia);
 router.get("/user/:userid/posts", checkUserIsAuthenticated, GetUserPostByID);
 router.get("/posts/:post_id", GetCurrentUserPost);
+// Post Interactions
+router.post("/post/like/:post_id", checkUserIsAuthenticated, likePost);
+
 
 // Settngs and Configs
 router.post("/profile/settings/update", checkUserIsAuthenticated, profileController.SettingsProfileChange);

@@ -17,6 +17,7 @@ import QuickPostActions from "../sub_componnets/quick_post_actions";
 import { Stream } from "@cloudflare/stream-react";
 import swal from 'sweetalert';
 import PostInteractions from './post-interactions';
+import { LikeThisPost } from '@/utils/postinteractions';
 
 export interface UserMediaProps {
     id: number;
@@ -33,7 +34,8 @@ export interface UserMediaProps {
     userId?: number;
 }
 
-interface PostData {
+export interface PostData {
+    id: number;
     post: string;
     post_id: string;
     post_audience: string;
@@ -43,6 +45,10 @@ interface PostData {
     post_reposts?: number;
     time: string;
     media: UserMediaProps[];
+    PostLike: {
+        post_id: string;
+        user_id: number;
+    }[]
 }
 
 interface PostComponentProps {
@@ -57,6 +63,15 @@ interface PostComponentProps {
     data: PostData;
     isSubscriber: boolean;
 }
+
+
+interface VideoComponentProps {
+    media: UserMediaProps;
+    data: PostData;
+    clickImageEvent: (media: UserMediaProps) => void;
+    isSubscriber: boolean;
+}
+
 
 const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber }) => {
     const imageLength = data.media.length;
@@ -182,23 +197,66 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
                     ))}
                 </div>
             </div>
-            <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-6 border-b">
-                <span className="flex items-center gap-1 text-xs cursor-pointer font-medium ">
-                    <LucideHeart size={20} />{data.post_likes?.toLocaleString()}
-                </span>
-                <span className="flex items-center gap-1 text-xs cursor-pointer font-medium">
-                    <LucideMessageSquare size={20} />{data.post_comments?.toLocaleString()}
-                </span>
-                <span className="flex items-center gap-1 text-xs cursor-pointer font-medium">
-                    <LucideRepeat2 size={20} />{data.post_reposts?.toLocaleString()}
-                </span>
-                <span className="flex items-center gap-1 text-xs cursor-pointer font-medium">
-                    <LucideShare size={20} />
-                </span>
-            </div>
+            <PostCompInteractions data={data} canLike={(!isSubscriber && data.post_audience === "subscribers")} />
         </div>
     );
 }
+
+const PostCompInteractions = ({ data, canLike }: { data: PostData, canLike: boolean }) => {
+    const [like, setLike] = useState<boolean>(false);
+    const [likesCount, setLikesCount] = useState<number>(data.post_likes!);
+    const { user } = useUserAuthContext();
+    const router = useRouter();
+
+    const likePost = async () => {
+        if (canLike) {
+            swal({
+                title: "You need to be a subscriber to like this post",
+                icon: "warning",
+                buttons: {
+                    cancel: true,
+                    confirm: {
+                        text: "Ok",
+                        className: "bg-primary-dark-pink text-white",
+                    },
+                }
+            })
+            return;
+        };
+        setLike(!like);
+        setLikesCount(like ? likesCount - 1 : likesCount + 1);
+        const res = await LikeThisPost({ data });
+        setLike(res);
+    }
+
+    useEffect(() => {
+        const isLiked = data.PostLike.some((like) => like.user_id === user?.id);
+        setLike(isLiked);
+    }, [user, data])
+
+    return (
+        <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-6 border-b">
+            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium"
+                onClick={likePost}
+            >
+                <LucideHeart
+                    fill={like ? "#f20" : "none"}
+                    strokeWidth={like ? 0 : 2}
+                    size={25} />{likesCount}
+            </span>
+            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
+                <LucideMessageSquare size={25} />{data.post_comments}
+            </span>
+            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
+                <LucideRepeat2 size={25} />{data.post_reposts}
+            </span>
+            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
+                <LucideShare size={25} />
+            </span>
+        </div>
+    )
+}
+
 
 
 const ImageComponent: React.FC<{ media: UserMediaProps, data: PostData, clickImageEvent: (media: UserMediaProps) => void }> = ({ media, data, clickImageEvent }) => {
@@ -207,13 +265,6 @@ const ImageComponent: React.FC<{ media: UserMediaProps, data: PostData, clickIma
             <Image src={media.url} alt={data.post} width={500} height={500} unoptimized unselectable="on" blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
         </>
     )
-}
-
-interface VideoComponentProps {
-    media: UserMediaProps;
-    data: PostData;
-    clickImageEvent: (media: UserMediaProps) => void;
-    isSubscriber: boolean;
 }
 
 const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImageEvent, isSubscriber }) => {
