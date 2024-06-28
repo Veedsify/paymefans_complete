@@ -2,6 +2,7 @@ import { AuthUserProps } from "@/types/user";
 import axiosInstance from "@/utils/axios";
 import getTransactionsData from "@/utils/data/transactions";
 import getUserData from "@/utils/data/user-data";
+import axios from "axios";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import Image from "next/image";
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 
 const WalletPage = async () => {
     const user = await getUserData() as AuthUserProps
-    const { data: transactions } = await getTransactionsData()
+    const { data } = await getTransactionsData()
     const { wallet } = await axiosInstance.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/auth/wallet`, {
     }, {
         headers: {
@@ -31,6 +32,7 @@ const WalletPage = async () => {
         }
     }).then(res => res.data as { points: number })
 
+    const transactions = data.slice(0, 5)
 
     return (
         <div className="p-4 py-8">
@@ -106,23 +108,33 @@ const WalletPage = async () => {
                         </div>
                     ))}
                 </div>
-                <Link href="/wallet/transactions/topup" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TOPUP TRANSACTIONS</Link>
+                <Link href="/transactions/topup" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TOPUP TRANSACTIONS</Link>
                 <OtherTransactions />
             </div>
         </div>
     );
 }
 
-const OtherTransactions = () => {
+const OtherTransactions = async () => {
+
+    const transactions = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/wallet/transactions/other`, {
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${cookies().get("token")?.value}`
+        }
+    })
+
+    transactions.data.data = transactions.data.data.slice(0, 5)
+
     return (
         <>
             <h2 className="text-xl font-semibold mt-10 mb-10">Other Transactions</h2>
             <div className="grid gap-4">
-                {[0, 0, 0, 0].map((transaction: any, i: number) => (
+                {transactions.data.data.map((transaction: any, i: number) => (
                     <div key={i} className="bg-white rounded-xl">
                         <div className="flex justify-between items-center py-2">
                             <div>
-                                <p className={`text-sm font-semibold ${transaction.success ? "text-green-600" : "text-red-500"}`}>{transaction.success ? "Transaction Successful" : "Transaction Failed"}</p>
+                                <p className={`text-sm font-semibold ${transaction.transaction_type === "credit" ? "text-green-600" : "text-red-500"}`}>{transaction.transaction_message}</p>
                                 <div className="flex items-center gap-3">
                                     <small className="text-xs">{new Date(transaction.created_at).toLocaleDateString("en-US", {
                                         hour: "numeric",
@@ -133,15 +145,17 @@ const OtherTransactions = () => {
                                     })}</small>
                                 </div>
                             </div>
-                            <p className={`text-sm font-semibold flex items-center gap-3 ${transaction.success ? "text-green-600" : "text-red-500"}`}>+{transaction.points}
+                            <p className={`text-sm font-semibold flex items-center gap-3 ${transaction.transaction_type === "credit" ? "text-green-600" : "text-red-500"}`}>
+                                {transaction.transaction_type === "credit" ? "+" : "-"}
+                                {transaction.amount}
                                 <Image width={20} height={20} className="w-auto h-5 aspect-square" src="/site/coin.svg"
-                                    alt="" />
+                                    alt="coin" />
                             </p>
                         </div>
                     </div>
                 ))}
             </div>
-            <Link href="/wallet/transactions/other" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TRANSACTIONS</Link>
+            <Link href="/transactions/others" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TRANSACTIONS</Link>
         </>
     )
 }

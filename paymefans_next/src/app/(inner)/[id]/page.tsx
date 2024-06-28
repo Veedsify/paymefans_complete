@@ -39,8 +39,8 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const id = params.id;
   const user = await getUserData();
   const userdata = await getUserProfile({ user_id: id }) as ProfileUserProps
-  if (user?.id === userdata.id) redirect("/profile");
   if (!userdata) return <UserNotFound userid={id} />;
+  if (user?.id === userdata.id) redirect("/profile");
 
   return (
     <>

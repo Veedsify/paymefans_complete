@@ -200,7 +200,7 @@ const Chats = ({
           <div className="">
             <div className="font-bold text-sm md:text-base">
               <Link
-                href={`/profile/${receiver.username}`}
+                href={`/${receiver.username}`}
                 className="flex gap-3 duration-300 items-center"
               >
                 <span>{receiver ? receiver.name : ""}</span>

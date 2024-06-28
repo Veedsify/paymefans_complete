@@ -55,6 +55,7 @@ export const SettingsBillingProvider: React.FC<SettingsBillingProps> = ({ childr
 
             if (res.ok) {
                 toast.success("Settings saved successfully")
+                router.refresh();
             } else {
                 console.log("Error: ", res.status, res.statusText);
             }

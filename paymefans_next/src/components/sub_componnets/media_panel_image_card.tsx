@@ -1,5 +1,5 @@
 "use client"
-import { LucideLock, LucidePlay } from "lucide-react";
+import { LucideLoader, LucideLock, LucidePlay } from "lucide-react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
@@ -28,7 +28,7 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
         const mediasort =
             sort === "all" ? data : data.filter((media) => media.media_type === sort);
         setSorted(mediasort);
-    }, [sort]);
+    }, [sort, data]);
 
     const PreviewImageHandler = (
         media: string,
@@ -54,7 +54,7 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
             setTotalPages(data.total)
         }
         fetinitialData()
-    }, [token])
+    }, [token, page])
 
     const fetchAdditionalData = async () => {
         setPage(page + 1);
@@ -88,7 +88,7 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
                 next={fetchAdditionalData}
                 dataLength={totalPages}
                 hasMore={data.length < totalPages}
-                loader={<div className="text-center">Loading...</div>}
+                loader={<LucideLoader className="animate-spin" size={45} />}
                 className="grid grid-cols-3 gap-1 mb-20 select-none"
                 endMessage={<p className="col-span-3 py-4 text-center">No more media</p>}
             >

@@ -12,7 +12,7 @@ const { changePassword, setMessagePrice } = require("../controllers/api/settings
 const uploadAttachmentMulterMiddleware = require("../middlewares/uploadAttachmentMulter.middleware");
 const multerPostMiddleware = require("../middlewares/multerPostMiddleware.middleware");
 const uploadMediaController = require("../controllers/api/mediaUploadController");
-const { GetTransactions } = require("../controllers/api/transactionsController");
+const { GetTransactions, OtherTransactions } = require("../controllers/api/transactionsController");
 const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID, GetMyMedia, GetUsersMedia } = require("../controllers/api/postController");
 const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
 const { GetSubscriptionData, chekcSubscriber, CreateNewSubscription } = require("../controllers/api/subscriberController");
@@ -70,6 +70,7 @@ router.put('/banks/add', checkUserIsAuthenticated, addBank)
 router.get('/banks', checkUserIsAuthenticated, GetBanks)
 router.delete('/banks/delete', checkUserIsAuthenticated, DeleteBank)
 router.get("/wallet/transactions", checkUserIsAuthenticated, GetTransactions);
+router.get("/wallet/transactions/other", checkUserIsAuthenticated, OtherTransactions);
 
 // Subscribers
 // router.post("/subscribe", checkUserIsAuthenticated, subscriberController.Subscribe);

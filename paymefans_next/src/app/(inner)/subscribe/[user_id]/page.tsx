@@ -59,7 +59,7 @@ const Subscribe = ({ params }: SubscribeProps) => {
                 }
 
                 if (!response.data.data?.Model) {
-                    router.push(`/profile/${response.data.data.username}`)
+                    router.push(`/${response.data.data.username}`)
                 }
                 setProfileUser(response.data.data)
             } catch (err) {
@@ -89,10 +89,10 @@ const Subscribe = ({ params }: SubscribeProps) => {
                 if (res.status === true) {
                     swal("Success", `You have successfully subscribed to this ${profileUser.name}`, "success")
                     socket.emit("subscription_added", { user_id: profileUser.user_id })
-                    router.push(`/profile/${profileUser.username}`)
+                    router.push(`/${profileUser.username}`)
                 } else {
                     swal("Error", res.message, "error")
-                    // router.push(`/profile/${profileUser.username}`)
+                    // router.push(`/${profileUser.username}`)
                 }
             })
         }

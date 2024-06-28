@@ -58,7 +58,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                 <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-3">
                         <Image width={40} height={40} src={post ? post.user.profile_image : "/site/avatar.png"} alt="" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
-                        <Link href={`/profile/${[post?.user.username]}`} className="flex items-center gap-1">
+                        <Link href={`/${[post?.user.username]}`} className="flex items-center gap-1">
                             <p className="text-black font-bold">{post?.user.name}</p>{post?.user.username}
                         </Link>
                         <small className="ml-auto">

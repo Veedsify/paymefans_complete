@@ -5,7 +5,7 @@ import Link from "next/link";
 const ModelsSubscription = ({ model }: { model: any }) => {
     return (
         <div className="flex flex-col items-center gap-2 select-none ">
-            <Link href={`/profile/${model?.username}`}>
+            <Link href={`/${model?.username}`}>
                 <Image
                     width={100}
                     height={100}

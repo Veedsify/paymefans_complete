@@ -76,7 +76,7 @@ const PostPanel = () => {
                             id: user.id,
                             user_id: user.user_id,
                             name: user.name,
-                            link: `/profile/${user.username}`,
+                            link: `/${user.username}`,
                             username: user.username,
                             image: user.profile_image
                         }}

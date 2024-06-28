@@ -1,7 +1,7 @@
 "use client"
 import { getToken } from "@/utils/cookie.get";
 import { LucideLoader, LucideTrash, LucideTrash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import swal from "sweetalert";
 
 interface BankData {
@@ -201,7 +201,7 @@ const SavedBanks = () => {
         })
     }
 
-    return (
+    return (banks && banks.length > 0) ? (
         <div className="mt-3">
             <h2 className="font-bold text-xl mb-3 mt-6">Saved Bank Accounts</h2>
             <table className="w-full table-auto" border={1}>
@@ -235,7 +235,8 @@ const SavedBanks = () => {
                 </tbody>
             </table>
         </div>
-    )
+    ) : (<React.Fragment >
+    </React.Fragment>)
 }
 
 export default WalletAddBank;

@@ -2,7 +2,7 @@ import getUserData from "@/utils/data/user-data";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import ProfilePage from '../../profile/[id]/page';
+import ProfilePage from '../../[id]/page';
 
 export const metadata: Metadata = {
     title: "Become a model",

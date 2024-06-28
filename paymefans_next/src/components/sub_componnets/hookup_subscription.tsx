@@ -4,7 +4,7 @@ import { AuthUserProps } from "../../types/user";
 
 const HookupSubscription = ({ hookup }: { hookup: AuthUserProps }) => {
     return (
-        <Link href={`/profile/${hookup?.username}`} className="flex flex-col items-center gap-2 my-5 select-none">
+        <Link href={`/${hookup?.username}`} className="flex flex-col items-center gap-2 my-5 select-none">
             <Image
                 width={100}
                 height={100}

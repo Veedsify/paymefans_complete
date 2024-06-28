@@ -80,7 +80,7 @@ const PostPanelOther = ({
             >
                 {userdata && allPosts?.map((post: UserPostProps, index: number) => (
                     <PostComponent key={index}
-                        user={{ id: post.user.id, user_id: post.user.user_id, name: post.user.name, link: `/profile/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
+                        user={{ id: post.user.id, user_id: post.user.user_id, name: post.user.name, link: `/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
                         isSubscriber={post.user.Subscribers.some(sub => sub.subscriber_id === user?.id)}
                         data={{
                             ...post,

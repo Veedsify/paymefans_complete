@@ -44,6 +44,8 @@ class SaveMessageToDb {
             }
         })
 
+        prismaQuery.$disconnect();
+
         // Return the data
         return newMessage;
     }
@@ -60,6 +62,7 @@ class SaveMessageToDb {
                 id: true,
                 username: true,
                 UserPoints: true,
+                UserWallet: true
             }
         });
 
@@ -71,7 +74,8 @@ class SaveMessageToDb {
                 name: true,
                 id: true,
                 username: true,
-                Settings: true
+                Settings: true,
+                UserWallet: true
             }
         });
 
@@ -112,28 +116,30 @@ class SaveMessageToDb {
         const purchase_id = uuidv4();
         const purchase_id2 = uuidv4();
 
-        // add to recent transactions
-        await prismaQuery.userPointsPurchase.create({
-            data: {
-                user_id: receiver.id,
-                points: receiverPrice,
-                amount: receiverPrice,
-                message: `You have recevied a message from ${receiver.username} for ${receiverPrice} points`,
-                purchase_id,
-                success: true
-            }
-        })
-
-        await prismaQuery.userPointsPurchase.create({
-            data: {
-                user_id: sender.id,
-                points: receiverPrice,
-                amount: receiverPrice,
-                message: `You have sent a message to ${sender.username} for ${receiverPrice} points`,
-                purchase_id: purchase_id2,
-                success: false
-            }
-        })
+        if (receiverPrice > 0) {
+            await prismaQuery.userTransaction.create({
+                data: {
+                    transaction_id: purchase_id,
+                    transaction: `Message to ${receiver.username} with id ${receiver_id}`,
+                    user_id: sender.id,
+                    amount: receiverPrice,
+                    transaction_type: "debit",
+                    transaction_message: `Message to ${receiver.username}`,
+                    wallet_id: sender.UserWallet[0].id
+                }
+            });
+            await prismaQuery.userTransaction.create({
+                data: {
+                    transaction: `Message from ${sender.username} with id ${sender_id}`,
+                    transaction_id: purchase_id2,
+                    user_id: receiver.id,
+                    amount: receiverPrice,
+                    transaction_type: "credit",
+                    transaction_message: `Message from ${sender.username}`,
+                    wallet_id: receiver.UserWallet[0].id
+                }
+            });
+        }
 
         return true;
 
