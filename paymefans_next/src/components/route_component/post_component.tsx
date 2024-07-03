@@ -9,15 +9,10 @@ import usePostComponent from "@/contexts/post-component-preview";
 import { HiPlay } from "react-icons/hi";
 import { MouseEvent, useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUserAuthContext } from "@/lib/userUseContext";
-import { checkUserIsSubscriber } from "@/utils/data/check-user-is-subscriber";
-import { AuthUserProps } from "@/types/user";
 import toast from "react-hot-toast";
 import QuickPostActions from "../sub_componnets/quick_post_actions";
-import { Stream } from "@cloudflare/stream-react";
 import swal from 'sweetalert';
-import PostInteractions from './post-interactions';
-import { LikeThisPost } from '@/utils/postinteractions';
+import { PostCompInteractions } from './post-interactions';
 
 export interface UserMediaProps {
     id: number;
@@ -49,6 +44,16 @@ export interface PostData {
         post_id: string;
         user_id: number;
     }[]
+    user?: {
+        id: number;
+        name: string;
+        username: string;
+        user_id: string;
+        profile_image: string;
+        Subscribers: {
+            subscriber_id: number;
+        }[]
+    }
 }
 
 interface PostComponentProps {
@@ -109,6 +114,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
         if (!(target instanceof HTMLAnchorElement) && !(target instanceof HTMLButtonElement)) {
             e.preventDefault();
             if (data.post_audience === "subscribers" && !isSubscriber) {
+                router.push(`/posts/${data.post_id}`);
                 return;
             } else {
                 router.push(`/posts/${data.post_id}`);
@@ -202,67 +208,13 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
     );
 }
 
-const PostCompInteractions = ({ data, canLike }: { data: PostData, canLike: boolean }) => {
-    const [like, setLike] = useState<boolean>(false);
-    const [likesCount, setLikesCount] = useState<number>(data.post_likes!);
-    const { user } = useUserAuthContext();
-    const router = useRouter();
-
-    const likePost = async () => {
-        if (canLike) {
-            swal({
-                title: "You need to be a subscriber to like this post",
-                icon: "warning",
-                buttons: {
-                    cancel: true,
-                    confirm: {
-                        text: "Ok",
-                        className: "bg-primary-dark-pink text-white",
-                    },
-                }
-            })
-            return;
-        };
-        setLike(!like);
-        setLikesCount(like ? likesCount - 1 : likesCount + 1);
-        const res = await LikeThisPost({ data });
-        setLike(res);
-    }
-
-    useEffect(() => {
-        const isLiked = data.PostLike.some((like) => like.user_id === user?.id);
-        setLike(isLiked);
-    }, [user, data])
-
-    return (
-        <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-6 border-b">
-            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium"
-                onClick={likePost}
-            >
-                <LucideHeart
-                    fill={like ? "#f20" : "none"}
-                    strokeWidth={like ? 0 : 2}
-                    size={25} />{likesCount}
-            </span>
-            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
-                <LucideMessageSquare size={25} />{data.post_comments}
-            </span>
-            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
-                <LucideRepeat2 size={25} />{data.post_reposts}
-            </span>
-            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
-                <LucideShare size={25} />
-            </span>
-        </div>
-    )
-}
 
 
 
 const ImageComponent: React.FC<{ media: UserMediaProps, data: PostData, clickImageEvent: (media: UserMediaProps) => void }> = ({ media, data, clickImageEvent }) => {
     return (
         <>
-            <Image src={media.url} alt={data.post} width={500} height={500} unoptimized unselectable="on" blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
+            <Image src={media.url} alt={data.post} width={900} height={900} unselectable="on" blurDataURL={media.poster ? media.poster : ""} onClick={() => clickImageEvent(media)} className="w-full h-full rounded-lg aspect-[3/4] md:aspect-square object-cover cursor-pointer" />
         </>
     )
 }

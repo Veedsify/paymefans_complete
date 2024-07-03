@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-// import { Golos_Text } from "next/font/google";
-// const font = Golos_Text({
-//     weight: ["400", "500", "600", "700"],
-//     display: "auto",
-//     subsets: ["latin", "latin-ext"],
-// })
-import { GeistSans } from 'geist/font/sans';
+import { Inter } from "next/font/google";
+const font = Inter({
+    weight: ["400", "500", "600", "700"],
+    display: "auto",
+    subsets: ["latin", "latin-ext"],
+})
+// import { GeistSans } from 'geist/font/sans';
 import "../globals.css";
 import MenuButtons from "@/components/route_component/menu_buttons";
 import ModalComponent from "@/components/route_component/modalComponent";
@@ -41,7 +41,7 @@ export default async function RootLayout({
                 <QueryProvider>
                     <MessagesConversationProvider>
                         <UserPointsContextProvider>
-                            <body className={`${GeistSans.className} dark:bg-gray-950`}>
+                            <body className={`${font.className} dark:bg-gray-950`}>
                                 <Loader />
                                 <Toaster />
                                 <SonnerToast richColors position="top-center"

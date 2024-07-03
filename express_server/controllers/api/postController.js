@@ -393,6 +393,11 @@ class PostController {
                             profile_image: true,
                             created_at: true,
                             name: true,
+                            Subscribers: {
+                                select: {
+                                    subscriber_id: true
+                                }
+                            },
                             Follow: {
                                 select: {
                                     follower_id: true
@@ -408,21 +413,8 @@ class PostController {
                     post_likes: true,
                     post_comments: true,
                     post_reposts: true,
-                    UserMedia: {
-                        select: {
-                            id: true,
-                            media_id: true,
-                            post_id: true,
-                            poster: true,
-                            url: true,
-                            blur: true,
-                            media_type: true,
-                            locked: true,
-                            accessible_to: true,
-                            created_at: true,
-                            updated_at: true
-                        }
-                    },
+                    PostLike: true,
+                    UserMedia: true,
                 },
 
             });

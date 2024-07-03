@@ -1,11 +1,12 @@
 "use client"
 import CommentsHolder from "@/components/route_component/comments";
-import PostInteractions from "@/components/route_component/post-interactions";
+import { PostInteractionsWithReply } from "@/components/route_component/post-interactions";
 import { PostPageImage } from "@/components/sub_componnets/postpage-image";
 import QuickPostActions from "@/components/sub_componnets/quick_post_actions";
 import { getToken } from "@/utils/cookie.get";
 import { formatDate } from "@/utils/format-date";
 import axios from "axios";
+import { LucideEye, LucideLock, LucideUsers } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -64,6 +65,9 @@ const Post = ({ params: { id } }: PostPageprops) => {
                         <small className="ml-auto">
                             {formatDate(new Date(post?.created_at))}
                         </small>
+                        <div className="text-black">
+                            {post?.post_audience === "public" ? <LucideEye size={15} /> : post?.post_audience === "private" ? <LucideLock size={15} /> : <LucideUsers size={15} />}
+                        </div>
                     </div>
                     <QuickPostActions options={{
                         post_id: post?.post_id,
@@ -80,8 +84,11 @@ const Post = ({ params: { id } }: PostPageprops) => {
                         <PostPageImage key={index} media={media} />
                     ))}
                 </div>
-                <PostInteractions
+                <PostInteractionsWithReply
                     options={{
+                        data: post,
+                        post_audience: post?.post_audience,
+                        post_likes: post?.post_likes || 0,
                         post_id: post?.post_id,
                         author_username: post?.user.username
                     }}

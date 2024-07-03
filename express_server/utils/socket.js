@@ -19,6 +19,7 @@ const serverSocket = (http) => {
         let room = "";
         const users = {};
         const interval = setInterval(() => {
+            if (!users.userId) return;
             getUserConversations(users.userId).then((data) => {
                 socket.emit("conversations", data);
             });

@@ -99,7 +99,6 @@ const PostComponentPreview = () => {
                                 height={2000}
                                 draggable={false}
                                 src={activeMedia}
-                                unoptimized
                                 onClick={e => e.stopPropagation()}
                                 className={`h-full object-contain flex-grow-0 transition-all duration-200 border-none animate-in z-10`}
                                 alt=""

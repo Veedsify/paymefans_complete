@@ -2,7 +2,7 @@
 import { useUserAuthContext } from "@/lib/userUseContext";
 import PostComponent, { UserMediaProps } from "../route_component/post_component";
 import LoadingPost from "./loading_post";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { formatDate } from "@/utils/format-date";
 import { fetchItems } from "@/components/sub_componnets/infinite-query";
 
@@ -44,14 +44,15 @@ const PostPanel = () => {
     }
 
 
+    const fetchNews = useCallback(async () => {
+        const res = await fetchItems({ pageParam: page });
+        setAllPosts(res?.data.data);
+        setTotalResults(res?.data.total);
+    }, [page])
+
     useEffect(() => {
-        async function fetchNews() {
-            const res = await fetchItems({ pageParam: page });
-            setAllPosts(res?.data.data);
-            setTotalResults(res?.data.total);
-        }
         fetchNews();
-    }, [])
+    }, [fetchNews])
 
     const EndMessage = () => (
         <div className="px-3 py-9 mt-3">

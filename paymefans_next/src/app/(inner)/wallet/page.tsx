@@ -1,3 +1,4 @@
+import OtherTransactions from "@/components/route_component/other-transactions";
 import { AuthUserProps } from "@/types/user";
 import axiosInstance from "@/utils/axios";
 import getTransactionsData from "@/utils/data/transactions";
@@ -54,7 +55,7 @@ const WalletPage = async () => {
             <div className="mb-5 flex align-middle justify-between bg-primary-dark-pink text-white p-5 rounded-xl">
                 <div className="grid gap-3">
                     <small className="text-md">Your Ballance</small>
-                    <h1 className="text-xl md:text-3xl font-bold">₦ {wallet ? wallet.toLocaleString('en-US') : 0}</h1>
+                    <h1 className="text-xl md:text-3xl font-bold">₦ {(points * 100).toLocaleString()}</h1>
                 </div>
                 <div className="flex self-center">
                     <div className="bg-coins-card-top md:px-5 md:py-3 p-2 px-4 rounded-md">
@@ -70,10 +71,10 @@ const WalletPage = async () => {
                 <>
                     <div className=" bg-black text-white p-5 rounded-xl">
                         <small className="text-md">Your Ballance</small>
-                        <h1 className="text-xl md:text-3xl font-bold mb-4">₦ {wallet ? wallet.toLocaleString() : 0}</h1>
-                        <button
+                        <h1 className="text-xl md:text-3xl font-bold mb-4">₦ {(points * 100).toLocaleString()}</h1>
+                        <Link href="/wallet/withdraw"
                             className="block text-sm text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold">WITHDRAW
-                        </button>
+                        </Link>
                     </div>
                     <div>
                         <Link href="/wallet/add"
@@ -108,56 +109,12 @@ const WalletPage = async () => {
                         </div>
                     ))}
                 </div>
-                <Link href="/transactions/topup" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TOPUP TRANSACTIONS</Link>
+                <Link href="/transactions/topup" className="text-blue-500 font-medium capitalize inline-block py-4">VIEW ALL</Link>
                 <OtherTransactions />
             </div>
         </div>
     );
 }
 
-const OtherTransactions = async () => {
-
-    const transactions = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/wallet/transactions/other`, {
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${cookies().get("token")?.value}`
-        }
-    })
-
-    transactions.data.data = transactions.data.data.slice(0, 5)
-
-    return (
-        <>
-            <h2 className="text-xl font-semibold mt-10 mb-10">Other Transactions</h2>
-            <div className="grid gap-4">
-                {transactions.data.data.map((transaction: any, i: number) => (
-                    <div key={i} className="bg-white rounded-xl">
-                        <div className="flex justify-between items-center py-2">
-                            <div>
-                                <p className={`text-sm font-semibold ${transaction.transaction_type === "credit" ? "text-green-600" : "text-red-500"}`}>{transaction.transaction_message}</p>
-                                <div className="flex items-center gap-3">
-                                    <small className="text-xs">{new Date(transaction.created_at).toLocaleDateString("en-US", {
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                        month: "short",
-                                        day: "numeric",
-                                        year: "numeric",
-                                    })}</small>
-                                </div>
-                            </div>
-                            <p className={`text-sm font-semibold flex items-center gap-3 ${transaction.transaction_type === "credit" ? "text-green-600" : "text-red-500"}`}>
-                                {transaction.transaction_type === "credit" ? "+" : "-"}
-                                {transaction.amount}
-                                <Image width={20} height={20} className="w-auto h-5 aspect-square" src="/site/coin.svg"
-                                    alt="coin" />
-                            </p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-            <Link href="/transactions/others" className="block text-center bg-coins-card-bottom px-6 py-3 rounded-md w-full text-primary-dark-pink font-semibold my-5 text-sm md:text-base">VIEW ALL TRANSACTIONS</Link>
-        </>
-    )
-}
 
 export default WalletPage;

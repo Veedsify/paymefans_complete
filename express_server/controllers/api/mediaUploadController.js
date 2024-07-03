@@ -44,6 +44,7 @@ class uploadMediaController {
                 return res.json({ message: "An error occured while uploading attachment" });
             }
         } catch (error) {
+            console.log(error);
             res.json({ message: "An error occured while uploading attachment" })
         }
     }

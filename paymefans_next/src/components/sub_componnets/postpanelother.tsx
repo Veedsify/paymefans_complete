@@ -2,13 +2,14 @@
 import PostComponent, { UserMediaProps } from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import { formatDate } from "@/utils/format-date";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { fetchItemsOther } from "./infinite-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { ProfileUserProps } from "@/types/user";
 
 type UserPostProps = {
+    id: number;
     content: string;
     post_id: string;
     post_audience: string;
@@ -17,6 +18,10 @@ type UserPostProps = {
     post_shares: number;
     post_reposts: number;
     UserMedia: UserMediaProps[];
+    PostLike: {
+        post_id: string;
+        user_id: number;
+    }[]
     user: {
         id: number;
         name: string;
@@ -50,15 +55,17 @@ const PostPanelOther = ({
         setTotalResults(res?.data.total);
     }
 
+    const fetchNews = useCallback(async () => {
+        const res = await fetchItemsOther({ pageParam: page, userid: userdata.id });
+        console.log(res?.data.data)
+        setAllPosts(res?.data.data);
+        setTotalResults(res?.data.total);
+    }, [userdata.id, page])
+
     useEffect(() => {
-        async function fetchNews() {
-            const res = await fetchItemsOther({ pageParam: page, userid: userdata.id });
-            console.log(res?.data.data)
-            setAllPosts(res?.data.data);
-            setTotalResults(res?.data.total);
-        }
         fetchNews();
-    }, [])
+    }, [fetchNews])
+
     const EndMessage = () => (
         <div className="px-3 py-9 mt-3">
             <p className="text-center font-medium">

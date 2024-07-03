@@ -1,5 +1,4 @@
-import Notify from "@/components/route_component/notifications";
-import { LucideSearch } from "lucide-react";
+import { NotificationBody, NotificationHeader } from "@/components/route_component/notifications";
 import { Metadata } from "next";
 
 interface Notification {
@@ -38,11 +37,11 @@ const Notifications = () => {
     return (
         <div>
             <div className="md:py-5 md:px-8 p-3">
-                <Notify.Header notifications={290}>
+                <NotificationHeader notifications={290}>
                     Notifications
-                </Notify.Header>
+                </NotificationHeader>
             </div>
-            <Notify.Body
+            <NotificationBody
                 notifications={notifications}
             />
         </div>

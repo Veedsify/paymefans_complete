@@ -1,6 +1,6 @@
 "use client"
 import { LucideLoader, LucideLock, LucidePlay } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
 import { getToken } from "@/utils/cookie.get";
@@ -101,6 +101,10 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
         </>
     );
 };
+
+const MemoizedMediaPanelImageCard = React.memo(MediaPanelImageCard);
+MemoizedMediaPanelImageCard.displayName = 'MediaPanelImageCard';
+
 const LockedMediaOverlay = () => {
     return (
         <div

@@ -1,21 +1,23 @@
-import getTransactionsData from "@/utils/data/transactions";
-import axios from "axios";
+
 import { cookies } from "next/headers";
 import Image from "next/image";
 
 const Transactions = async () => {
-    const transactions = await axios.get(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/wallet/transactions/other`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/wallet/transactions/other`, {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${cookies().get("token")?.value}`
         }
     })
+
+    const transactions = await res.json()
+
     return (
         <div className="p-4 py-8">
             <div>
                 <h2 className="text-2xl font-semibold mb-10">Other Transactions</h2>
                 <div className="grid gap-4">
-                    {transactions.data.data.map((transaction: any, i: number) => (
+                    {transactions.data.map((transaction: any, i: number) => (
                         <div key={i} className="bg-white rounded-xl">
                             <div className="flex justify-between items-center py-2">
                                 <div>

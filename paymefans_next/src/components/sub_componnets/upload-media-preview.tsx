@@ -101,19 +101,9 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendNe
 
     return (
         <>
-            <div className="border rounded-2xl p-2 md:p-8 py-4 w-full sm:w-5/6 md:w-4/6 lg:w-3/6 xl:w-1/4">
+            <div className="border rounded-2xl p-2 md:p-8 py-4 w-full sm:w-5/6 md:w-4/6 lg:w-4/6 xl:w-1/3">
                 <div className="flex justify-center mb-5">
-                    {mainTab && mainTab.type.includes("video") ? (
-                        <>
-                            <video
-                                src={mainTab ? URL.createObjectURL(mainTab) : "/site/banner.png"}
-                                className="object-cover rounded-lg lg:rounded-2xl w-full aspect-video"
-                                controls
-                            />
-                        </>
-                    ) : (
-                        <Image src={mainTab ? URL.createObjectURL(mainTab) : "/site/banner.png"} alt="image" width={1000} height={1000} className="object-cover rounded-lg lg:rounded-2xl w-full aspect-[9/9]" />
-                    )}
+                    {mainTab && <MainTabPreview mainTab={mainTab} />}
                 </div>
                 <Swiper
                     ref={swiperRef}
@@ -156,6 +146,30 @@ const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendNe
                     </form>
                 </div>
             </div>
+        </>
+    )
+}
+
+const MainTabPreview = ({ mainTab }: { mainTab: File | null }) => {
+    const [preview, setPreview] = useState<string>("");
+    useEffect(() => {
+        if (mainTab) {
+            setPreview(URL.createObjectURL(mainTab));
+        }
+    }, [mainTab]);
+    return (
+        <>
+            {preview && mainTab?.type.includes("video") ? (
+                <>
+                    <video
+                        src={preview}
+                        className="object-cover rounded-lg lg:rounded-2xl w-full aspect-video"
+                        controls
+                    />
+                </>
+            ) : (
+                <Image src={preview} alt="image" width={1000} height={1000} className="object-cover rounded-lg lg:rounded-2xl w-full aspect-[9/9]" />
+            )}
         </>
     )
 }

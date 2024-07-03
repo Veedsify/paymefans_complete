@@ -9,7 +9,7 @@ function Notify() {
     );
 }
 
-Notify.Header = function ({ children, notifications }: { children: string; notifications: number; }) {
+export function NotificationHeader({ children, notifications }: { children: string; notifications: number; }) {
     return (
         <div>
             <div className="flex items-center mb-7">
@@ -23,7 +23,7 @@ Notify.Header = function ({ children, notifications }: { children: string; notif
 }
 
 
-Notify.Body = function ({ notifications }: { notifications: any[] }) {
+export function NotificationBody({ notifications }: { notifications: any[] }) {
     const types = [
         {
             type: 1,
@@ -65,5 +65,7 @@ Notify.Body = function ({ notifications }: { notifications: any[] }) {
         </div>
     );
 }
+
+
 
 export default Notify;
