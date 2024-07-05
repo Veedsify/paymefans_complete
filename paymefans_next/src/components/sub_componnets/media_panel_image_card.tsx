@@ -1,6 +1,6 @@
 "use client"
 import { LucideLoader, LucideLock, LucidePlay } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
 import { getToken } from "@/utils/cookie.get";
@@ -24,11 +24,15 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
     const { fullScreenPreview } = usePostComponent()
     const token = getToken()
 
-    useEffect(() => {
+    const sortThisMedia = useCallback(() => {
         const mediasort =
             sort === "all" ? data : data.filter((media) => media.media_type === sort);
         setSorted(mediasort);
-    }, [sort, data]);
+    }, [sort, data])
+
+    useEffect(() => {
+        sortThisMedia()
+    }, [sortThisMedia]);
 
     const PreviewImageHandler = (
         media: string,

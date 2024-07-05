@@ -1,13 +1,13 @@
 "use client"
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import MediaPanelImageCard from "./media_panel_image_card";
 
 const MediaPanel = () => {
-    const [arraySort, setArraySort] = useState("all")
+    const [arraySort, setArraySort] = useState<string>("all")
 
-    const toggleThisSort = (sort: string) => {
+    const toggleThisSort = useCallback((sort: string) => {
         setArraySort(sort)
-    }
+    }, [setArraySort])
 
     return (
         <div className="py-4">

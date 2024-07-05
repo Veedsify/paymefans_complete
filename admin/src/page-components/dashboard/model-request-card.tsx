@@ -38,8 +38,8 @@ const ModelRequestCard = () => {
             </CardContent>
             <CardFooter>
                 <div className="flex gap-4 items-center">
-                    <Button className="bg-primary-dark-pink">Approve</Button>
-                    <Button>Decline</Button>
+                    <Button className="font-semibold">Decline</Button>
+                    <Button className="bg-primary-dark-pink font-semibold">Approve</Button>
                 </div>
             </CardFooter>
         </Card>
