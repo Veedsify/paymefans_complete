@@ -94,9 +94,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                     }}
                 />
                 <div>
-                    <CommentsHolder />
-                    <CommentsHolder />
-                    <CommentsHolder />
+                    {post && <CommentsHolder post={post} />}
                 </div>
             </div>
         </div >

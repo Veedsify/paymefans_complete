@@ -16,10 +16,11 @@ export interface ReplyPostProps {
         post_id: string
         post_audience: string
         author_username: string
+        reply_to?: string
     };
     isSubscriber: boolean
 }
-const ReplyPostComponent = ({
+export const ReplyPostComponent = ({
     options,
     isSubscriber
 }: ReplyPostProps) => {
@@ -62,7 +63,7 @@ const ReplyPostComponent = ({
                 setFiles((prev) => [...prev, file]);
             })
         }
-    }, [setFiles]);
+    }, [setFiles, Files]);
 
 
     const removeFile = (file: File) => {

@@ -1,7 +1,10 @@
 import Image from "next/image";
 import { LucideBarChart, LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
+import { PostInteractionsWithReply } from "./post-interactions";
+import { PostData } from "./post_component";
+import ReplyPostComponent from "./reply-post-textarea";
 
-const CommentsHolder = () => {
+const CommentsHolder = ({ post }: { post: PostData }) => {
     return (
         <div className="border-y p-0 md:p-3 py-5">
             <div className="flex gap-1 md:gap-3 items-start relative">
@@ -38,6 +41,14 @@ const CommentsHolder = () => {
                         </div>
                     </div>
                     <ReplyInteractions />
+                    <ReplyPostComponent
+                        options={{
+                            author_username: post.user.username,
+                            post_id: post.post_id,
+                            post_audience: post.post_audience
+                        }}
+                        isSubscriber={true}
+                    />
                 </div>
             </div>
             <div className="flex gap-1 md:gap-3 items-start relative">
