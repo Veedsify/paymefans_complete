@@ -18,6 +18,8 @@ const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerif
 const { GetSubscriptionData, chekcSubscriber, CreateNewSubscription } = require("../controllers/api/subscriberController");
 const { addBank, GetBanks, DeleteBank } = require("../controllers/api/banksController");
 const { likePost } = require("../controllers/api/postInteractions");
+const { NewPostComment, CommentsAttachMents } = require("../controllers/api/commentController");
+const commentAttachmentMiddleware = require("../middlewares/commentAttachment.middleware");
 
 
 // Authentication
@@ -90,5 +92,8 @@ router.post("/conversation/create-new", checkUserIsAuthenticated, ConversationsC
 router.get("/conversations/my-conversations", checkUserIsAuthenticated, ConversationsController.myConversations);
 router.post("/upload/attachments", checkUserIsAuthenticated, uploadAttachmentMulterMiddleware.array("attachments[]"), uploadMediaController.attachments);
 
+
+router.post("/comment/new", checkUserIsAuthenticated, NewPostComment)
+router.post("/comment/attachment", checkUserIsAuthenticated, commentAttachmentMiddleware("file"), CommentsAttachMents)
 
 module.exports = router;

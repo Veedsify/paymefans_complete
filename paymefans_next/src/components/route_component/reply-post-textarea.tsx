@@ -2,14 +2,15 @@
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { LucideCamera, X } from "lucide-react";
 import Image from "next/image";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { ChangeEvent, SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { HiEmojiHappy, HiOutlineEmojiHappy } from "react-icons/hi";
 import EmojiPicker from 'emoji-picker-react';
 import { imageTypes } from "@/lib/filetypes";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { v4 as uuid } from "uuid";
-
+import { getToken } from "../../utils/cookie.get";
+import { useCommentIdContext } from "../../contexts/comment-attachment-context";
 
 export interface ReplyPostProps {
     options: {
@@ -30,7 +31,6 @@ export const ReplyPostComponent = ({
     const [typedComment, setTypedComment] = useState<string>('');
     const [Files, setFiles] = useState<File[]>([]);
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-
     const handleTextAreaFocus = () => {
         setReplyPostOpen(true);
     }
@@ -115,7 +115,8 @@ export const ReplyPostComponent = ({
                         </span>
                     </div>
                 </div>
-                <button className="bg-primary-dark-pink text-white px-6 py-2 rounded-full">Reply</button>
+                <button
+                    className="bg-primary-dark-pink text-white px-6 py-2 rounded-full">Reply</button>
             </div>
             {/* )} */}
         </div >
@@ -123,40 +124,54 @@ export const ReplyPostComponent = ({
 }
 
 
+interface FileHolderProps {
+    file: File
+    remove: (e: File) => void
+    uploadedFiles: File[]
+}
 
-const FilesHolder = ({ file, remove, uploadedFiles }: { file: File, remove: (e: File) => void, uploadedFiles: File[] }) => {
+const FilesHolder = ({ file, remove, uploadedFiles }: FileHolderProps) => {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [errorUpload, setErrorUpload] = useState(false);
+    const [fileId, setFileId] = useState<number | null>(null);
+    const { addNewAttachment, removeAttachment } = useCommentIdContext();
 
     const uploadFile = useCallback(async () => {
         if (uploadedFiles.includes(file)) {
             return;
         }
+        const token = getToken()
         const formData = new FormData();
         formData.append("file", file);
         try {
             setIsUploading(true);
-            const res = await axios.post("", formData, {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_EXPRESS_URL}/comment/attachment`, formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`
                 },
                 onUploadProgress: (progressEvent) => {
                     const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
                     setUploadProgress(percentCompleted);
                 }
             });
-            setUploadedUrl(res.data.url);
+            setFileId(res.data.data.id);
             setIsUploading(false);
         } catch (error) {
             setIsUploading(false);
-            toast.error("Failed to upload file");
+            setErrorUpload(true);
         }
     }, [file, uploadedFiles]);
 
     useEffect(() => {
         uploadFile();
     }, [uploadFile]);
+
+    const removeFileFromArray = () => {
+        remove(file);
+    }
 
     return (
         <div className="relative w-[100px] aspect-square">
@@ -165,16 +180,21 @@ const FilesHolder = ({ file, remove, uploadedFiles }: { file: File, remove: (e: 
                     <div className="text-white">{uploadProgress}%</div>
                 </div>
             ) : (
-                <Image
-                    src={uploadedUrl || URL.createObjectURL(file)}
-                    alt=""
-                    width={100}
-                    height={100}
-                    className="rounded-lg aspect-square w-full shadow-lg bg-white object-cover"
-                />
+                <>
+                    {errorUpload && <div className="absolute inset-0 w-full aspect-square flex items-center justify-center bg-red-500 bg-opacity-70 rounded-lg">
+                        <X stroke="#fff" size={50} strokeWidth={3} />
+                    </div>}
+                    <Image
+                        src={uploadedUrl || URL.createObjectURL(file)}
+                        alt=""
+                        width={100}
+                        height={100}
+                        className="rounded-lg aspect-square w-full shadow-lg bg-white object-cover"
+                    />
+                </>
             )}
             <span className="absolute top-0 right-0 bg-black text-white flex items-center justify-center w-7 h-7 rounded-full cursor-pointer"
-                onClick={() => remove(file)}
+                onClick={removeFileFromArray}
             >
                 <X size={20} strokeWidth={3} />
             </span>

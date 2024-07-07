@@ -197,17 +197,41 @@ model Post {
 }
 
 model PostComment {
-  id            Int             @id @default(autoincrement())
-  comment_id    String
-  user_id       String
-  post_id       Int
-  comment       String
-  created_at    DateTime        @default(now())
-  updated_at    DateTime        @updatedAt
-  post          Post            @relation(fields: [post_id], references: [id])
-  ReportComment ReportComment[]
+  id                             Int                              @id @default(autoincrement())
+  comment_id                     String
+  user_id                        String
+  post_id                        Int
+  comment                        String
+  created_at                     DateTime                         @default(now())
+  updated_at                     DateTime                         @updatedAt
+  post                           Post                             @relation(fields: [post_id], references: [id])
+  ReportComment                  ReportComment[]
+  pivot_post_comment_attachments pivot_post_comment_attachments[]
 
   @@index([post_id], map: "PostComment_post_id_fkey")
+}
+
+model PostCommentAttachments {
+  id                             Int                              @id @default(autoincrement())
+  path                           String
+  type                           String
+  name                           String
+  created_at                     DateTime                         @default(now())
+  updated_at                     DateTime                         @updatedAt
+  pivot_post_comment_attachments pivot_post_comment_attachments[]
+}
+
+model pivot_post_comment_attachments {
+  id                       Int                    @id @default(autoincrement())
+  post_comment_id          Int
+  post_comment_attach      Int
+  created_at               DateTime               @default(now())
+  updated_at               DateTime               @updatedAt
+  post_comment             PostComment            @relation(fields: [post_comment_id], references: [id])
+  post_comment_attachments PostCommentAttachments @relation(fields: [post_comment_attach], references: [id])
+
+  @@index([post_comment_id], map: "pivot_post_comment_attachments_post_comment_id_fkey")
+  @@index([post_comment_attach], map: "pivot_post_comment_attachments_post_comment_attach_fkey")
 }
 
 model PostLike {
