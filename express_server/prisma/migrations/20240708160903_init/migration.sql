@@ -105,16 +105,17 @@ CREATE TABLE `Model` (
 CREATE TABLE `UserMedia` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `media_id` VARCHAR(191) NOT NULL,
-    `user_id` INTEGER NOT NULL,
+    `post_id` INTEGER NOT NULL,
     `media_type` VARCHAR(191) NOT NULL,
-    `media` LONGTEXT NOT NULL,
-    `post_image` LONGTEXT NOT NULL,
+    `url` LONGTEXT NOT NULL,
+    `blur` LONGTEXT NOT NULL,
+    `poster` LONGTEXT NOT NULL,
     `locked` BOOLEAN NOT NULL DEFAULT false,
     `accessible_to` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    INDEX `UserMedia_user_id_fkey`(`user_id`),
+    INDEX `UserMedia_user_id_fkey`(`post_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -129,19 +130,6 @@ CREATE TABLE `UserRepost` (
 
     INDEX `UserRepost_post_id_fkey`(`post_id`),
     INDEX `UserRepost_user_id_fkey`(`user_id`),
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `UserLockedMedia` (
-    `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `user_id` INTEGER NOT NULL,
-    `media_id` INTEGER NOT NULL,
-    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `updated_at` DATETIME(3) NOT NULL,
-
-    INDEX `UserLockedMedia_media_id_fkey`(`media_id`),
-    INDEX `UserLockedMedia_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -166,14 +154,15 @@ CREATE TABLE `Post` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `post_id` VARCHAR(191) NOT NULL,
     `was_repost` BOOLEAN NOT NULL DEFAULT false,
-    `user_id` VARCHAR(191) NOT NULL,
-    `title` VARCHAR(191) NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
-    `post_type` VARCHAR(191) NOT NULL,
-    `image` LONGTEXT NOT NULL,
-    `video` LONGTEXT NOT NULL,
+    `user_id` INTEGER NOT NULL,
+    `content` LONGTEXT NOT NULL,
+    `media` JSON NULL,
     `post_status` VARCHAR(191) NOT NULL,
+    `post_audience` ENUM('public', 'private', 'followers', 'subscribers') NOT NULL,
     `post_is_visible` BOOLEAN NOT NULL DEFAULT true,
+    `post_likes` INTEGER NOT NULL DEFAULT 0,
+    `post_comments` INTEGER NOT NULL DEFAULT 0,
+    `post_reposts` INTEGER NOT NULL DEFAULT 0,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -191,6 +180,19 @@ CREATE TABLE `PostComment` (
     `updated_at` DATETIME(3) NOT NULL,
 
     INDEX `PostComment_post_id_fkey`(`post_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `PostCommentAttachments` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `comment_id` INTEGER NOT NULL,
+    `path` VARCHAR(191) NOT NULL,
+    `type` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -231,6 +233,7 @@ CREATE TABLE `Follow` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `Follow_follow_id_key`(`follow_id`),
     INDEX `Follow_user_id_fkey`(`user_id`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -313,6 +316,7 @@ CREATE TABLE `Settings` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `user_id` INTEGER NOT NULL,
     `price_per_message` DOUBLE NOT NULL,
+    `subscription_active` BOOLEAN NOT NULL DEFAULT false,
     `enable_free_message` BOOLEAN NOT NULL,
     `subscription_price` DOUBLE NOT NULL,
     `subscription_type` VARCHAR(191) NOT NULL,
@@ -450,8 +454,10 @@ CREATE TABLE `UserTransaction` (
     `user_id` INTEGER NOT NULL,
     `wallet_id` INTEGER NOT NULL,
     `amount` DOUBLE NOT NULL,
+    `transaction_message` LONGTEXT NOT NULL,
     `transaction` VARCHAR(191) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `transaction_type` ENUM('credit', 'debit', 'pending') NOT NULL,
     `updated_at` DATETIME(3) NOT NULL,
 
     INDEX `UserTransaction_user_id_fkey`(`user_id`),
@@ -550,6 +556,25 @@ CREATE TABLE `UserAttachments` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `UserBanks` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `bank_id` VARCHAR(191) NOT NULL,
+    `bank_name` VARCHAR(191) NOT NULL,
+    `account_name` VARCHAR(191) NOT NULL,
+    `account_number` VARCHAR(191) NOT NULL,
+    `routing_number` VARCHAR(191) NULL,
+    `swift_code` VARCHAR(191) NULL,
+    `bank_country` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `UserBanks_account_number_key`(`account_number`),
+    INDEX `UserBanks_user_id_fkey`(`user_id`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `_ConversationsToParticipants` (
     `A` INTEGER NOT NULL,
     `B` INTEGER NOT NULL,
@@ -568,7 +593,7 @@ ALTER TABLE `Messages` ADD CONSTRAINT `Messages_conversationsId_fkey` FOREIGN KE
 ALTER TABLE `Model` ADD CONSTRAINT `Model_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserMedia` ADD CONSTRAINT `UserMedia_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserMedia` ADD CONSTRAINT `UserMedia_post_id_fkey` FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `UserRepost` ADD CONSTRAINT `UserRepost_post_id_fkey` FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -577,16 +602,16 @@ ALTER TABLE `UserRepost` ADD CONSTRAINT `UserRepost_post_id_fkey` FOREIGN KEY (`
 ALTER TABLE `UserRepost` ADD CONSTRAINT `UserRepost_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserLockedMedia` ADD CONSTRAINT `UserLockedMedia_media_id_fkey` FOREIGN KEY (`media_id`) REFERENCES `UserMedia`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `UserLockedMedia` ADD CONSTRAINT `UserLockedMedia_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `UserStory` ADD CONSTRAINT `UserStory_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `Post` ADD CONSTRAINT `Post_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `PostComment` ADD CONSTRAINT `PostComment_post_id_fkey` FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `PostCommentAttachments` ADD CONSTRAINT `PostCommentAttachments_comment_id_fkey` FOREIGN KEY (`comment_id`) REFERENCES `PostComment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `PostLike` ADD CONSTRAINT `PostLike_post_id_fkey` FOREIGN KEY (`post_id`) REFERENCES `Post`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -625,7 +650,7 @@ ALTER TABLE `LiveStreamLike` ADD CONSTRAINT `LiveStreamLike_user_id_fkey` FOREIG
 ALTER TABLE `LiveStreamView` ADD CONSTRAINT `LiveStreamView_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Settings` ADD CONSTRAINT `Settings_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Settings` ADD CONSTRAINT `Settings_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Notifications` ADD CONSTRAINT `Notifications_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -658,10 +683,10 @@ ALTER TABLE `ReportMessage` ADD CONSTRAINT `ReportMessage_message_id_fkey` FOREI
 ALTER TABLE `ReportMessage` ADD CONSTRAINT `ReportMessage_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserPoints` ADD CONSTRAINT `UserPoints_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserPoints` ADD CONSTRAINT `UserPoints_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `UserWallet` ADD CONSTRAINT `UserWallet_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `UserWallet` ADD CONSTRAINT `UserWallet_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `UserTransaction` ADD CONSTRAINT `UserTransaction_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -683,6 +708,9 @@ ALTER TABLE `UserPointsPurchase` ADD CONSTRAINT `UserPointsPurchase_userPointsId
 
 -- AddForeignKey
 ALTER TABLE `UserAttachments` ADD CONSTRAINT `UserAttachments_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `UserBanks` ADD CONSTRAINT `UserBanks_user_id_fkey` FOREIGN KEY (`user_id`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_ConversationsToParticipants` ADD CONSTRAINT `_ConversationsToParticipants_A_fkey` FOREIGN KEY (`A`) REFERENCES `Conversations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

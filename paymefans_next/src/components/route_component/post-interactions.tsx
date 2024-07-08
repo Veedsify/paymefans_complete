@@ -8,30 +8,8 @@ import { useRouter } from "next/navigation";
 import swal from "sweetalert";
 import { LikeThisPost } from "@/utils/postinteractions";
 import numeral from "numeral";
-export interface PostInteractionsProps {
-    options: {
-        data?: PostData
-        post_likes: number;
-        post_id: string;
-        post_audience: string;
-        author_username: string;
-    }
-}
 
-export const PostInteractionsWithReply = ({
-    options
-}: PostInteractionsProps) => {
-    const { user } = useUserAuthContext()
-    const isSubscriber = user?.username === options.author_username ? true : options?.data?.user?.Subscribers.some(sub => sub.subscriber_id === user?.id) ? true : false
-    return (
-        <>
-            <PostCompInteractions data={options.data} canLike={(!isSubscriber && options?.data?.post_audience === "subscribers")} />
-            <ReplyPostComponent options={{ ...options }} isSubscriber={isSubscriber} />
-        </>
-    )
-}
-
-export const PostCompInteractions = ({ data, canLike }: { data: PostData | undefined, canLike: boolean }) => {
+export const PostCompInteractions = ({ data }: { data: PostData | undefined }) => {
     const formattedNumber = (number: number) => numeral(number).format('0a').toUpperCase(); // Converts the suffix to uppercase
     const [like, setLike] = useState<boolean>(false);
     const [likesCount, setLikesCount] = useState<number>(0);
@@ -45,20 +23,6 @@ export const PostCompInteractions = ({ data, canLike }: { data: PostData | undef
     }, [data?.post_likes])
 
     const likePost = async () => {
-        if (canLike) {
-            swal({
-                title: "You need to be a subscriber to like this post",
-                icon: "warning",
-                buttons: {
-                    cancel: true,
-                    confirm: {
-                        text: "Ok",
-                        className: "bg-primary-dark-pink text-white",
-                    },
-                }
-            })
-            return;
-        };
         setLike(!like);
         setLikesCount(like ? likesCount - 1 : likesCount + 1);
         const res = await LikeThisPost({ data: data! });

@@ -93,7 +93,6 @@ router.get("/conversations/my-conversations", checkUserIsAuthenticated, Conversa
 router.post("/upload/attachments", checkUserIsAuthenticated, uploadAttachmentMulterMiddleware.array("attachments[]"), uploadMediaController.attachments);
 
 
-router.post("/comment/new", checkUserIsAuthenticated, NewPostComment)
-router.post("/comment/attachment", checkUserIsAuthenticated, commentAttachmentMiddleware("file"), CommentsAttachMents)
+router.post("/comment/new", checkUserIsAuthenticated, commentAttachmentMiddleware("files"), NewPostComment)
 
 module.exports = router;

@@ -1,6 +1,7 @@
 "use client"
 import CommentsHolder from "@/components/route_component/comments";
-import { PostInteractionsWithReply } from "@/components/route_component/post-interactions";
+import { PostCompInteractions } from "@/components/route_component/post-interactions";
+import ReplyPostComponent from "@/components/route_component/reply-post-textarea";
 import { PostPageImage } from "@/components/sub_componnets/postpage-image";
 import QuickPostActions from "@/components/sub_componnets/quick_post_actions";
 import { getToken } from "@/utils/cookie.get";
@@ -84,15 +85,12 @@ const Post = ({ params: { id } }: PostPageprops) => {
                         <PostPageImage key={index} media={media} />
                     ))}
                 </div>
-                <PostInteractionsWithReply
-                    options={{
-                        data: post,
-                        post_audience: post?.post_audience,
-                        post_likes: post?.post_likes || 0,
-                        post_id: post?.post_id,
-                        author_username: post?.user.username
-                    }}
-                />
+                <PostCompInteractions data={post} />
+                <ReplyPostComponent options={{
+                    post_id: post?.post_id,
+                    post_audience: post?.post_audience,
+                    author_username: post?.user.username
+                }} />
                 <div>
                     {post && <CommentsHolder post={post} />}
                 </div>
