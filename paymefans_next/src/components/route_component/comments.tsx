@@ -43,9 +43,9 @@ const CommentsHolder = ({ post }: { post: PostData }) => {
 
     return (
         <div className="border-y p-0 md:p-3 py-5">
-            {post.PostComment?.map((comment, index) => (
+            {postComments?.map((comment, index) => (
                 <div className="flex gap-1 md:gap-3 items-start relative w-full" key={index}>
-                    {(index !== post?.PostComment?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
+                    {(index !== postComments?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
                     </div>)}
                     <Link href={`/${comment.user.username}`}>
                         <Image src={comment.user.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />
