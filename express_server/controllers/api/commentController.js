@@ -7,55 +7,56 @@ class CommentController {
     static async NewPostComment(req, res) {
         try {
             const { id } = req.user
-            const { post_id: postStringId, id: postId, comment, attachments } = req.body
-            const files = req.files
-            const comment_id = uuid()
-            const fileUrls = []
-
-            files.foreach(async (file) => {
-                const upload = await uploadToCloudflareImage(file.path, process.env.CLOUDFLARE_API_KEY)
-                fileUrls.push({
-                    name: file.filename,
-                    path: upload.response.result.variants.find((variant) => variant.includes('/public')),
-                    type: file.mimetype.replace('image/', '')
-                })
-            })
+            const { post_id: postStringId, postId, reply_to, comment, attachments } = req.body
+            const { files } = req.files
+            const comment_id = uuid();
+            let fileUrls = []
 
             const createComment = await prismaQuery.postComment.create({
                 data: {
                     comment: comment,
                     comment_id: comment_id,
-                    post_id: postId,
-                    user_id: id,
+                    post_id: parseInt(postId),
+                    user_id: parseInt(id),
                 }
             })
 
-
-            const addAttachments = await prismaQuery.postCommentAttachments.createMany({
-                data: [
-                    ...fileUrls.map((file) => {
-                        return {
-                            name: file.name,
-                            path: file.path,
-                            type: file.type,
-                            comment_id: createComment.id
-                        }
-                    })
-                ]
+            await prismaQuery.post.update({
+                where: {
+                    id: parseInt(postId)
+                },
+                data: {
+                    post_comments: {
+                        increment: 1
+                    }
+                }
             })
 
-            if (!addAttachments) {
-                const deleteComments = await prismaQuery.postComment.delete({
-                    where: {
-                        id: createComment.id
-                    }
-                })
-                prismaQuery.$disconnect()
-                return res.status(500).json({
-                    status: false,
-                    message: 'An error occured while creating comment'
-                })
+            async function uploadFiles() {
+                if (files) {
+                    files.map((file) => {
+                        const res = async () => {
+                            const upload = await uploadToCloudflareImage(file.path, process.env.CLOUDFLARE_API_KEY)
+                            return upload
+                        }
+                        res().then(async (upload) => {
+                            console.log(upload.response)
+                            await prismaQuery.postCommentAttachments.create({
+                                data: {
+                                    name: upload.response.result.filename,
+                                    path: upload.response.result.variants.find((variant) => variant.includes('/public')),
+                                    type: file.mimetype.replace('image/', ''),
+                                    comment_id: createComment.id
+                                }
+                            })
+                        })
+                    })
+                    return true
+                }
+                return true
             }
+
+            await uploadFiles()
 
             prismaQuery.$disconnect()
             res.json({

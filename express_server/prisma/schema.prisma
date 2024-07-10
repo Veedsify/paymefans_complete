@@ -68,6 +68,7 @@ model User {
   UserAttachments           UserAttachments[]
   Post                      Post[]
   UserBanks                 UserBanks[]
+  PostComment               PostComment[]
 }
 
 model Participants {
@@ -199,7 +200,7 @@ model Post {
 model PostComment {
   id                     Int                      @id @default(autoincrement())
   comment_id             String
-  user_id                String
+  user_id                Int
   post_id                Int
   comment                String
   created_at             DateTime                 @default(now())
@@ -207,6 +208,7 @@ model PostComment {
   post                   Post                     @relation(fields: [post_id], references: [id])
   ReportComment          ReportComment[]
   PostCommentAttachments PostCommentAttachments[]
+  user                   User                     @relation(fields: [user_id], references: [id])
 
   @@index([post_id], map: "PostComment_post_id_fkey")
 }

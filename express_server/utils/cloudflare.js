@@ -55,6 +55,7 @@ const execCurlCommand = (command) => {
 
 const uploadToCloudflareImage = async (filePath, apiToken) => {
     const sanitizedFilePath = path.resolve(filePath);
+    console.log(sanitizedFilePath, "Sanitzd path")
     const curlCommand = `curl -X POST "https://api.cloudflare.com/client/v4/accounts/068a98897652d9a679a7654f90eebb2c/images/v1" -H "Authorization: Bearer ${apiToken}" -F "file=@${sanitizedFilePath}"`;
 
     return execCurlCommand(curlCommand).then(response => ({ type: 'image', response }));

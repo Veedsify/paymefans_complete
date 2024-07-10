@@ -54,6 +54,25 @@ export interface PostData {
             subscriber_id: number;
         }[]
     }
+    PostComment?: {
+        id: number;
+        comment: string;
+        created_at: string;
+        user: {
+            id: number;
+            user_id: string;
+            name: string;
+            username: string;
+            profile_image: string;
+        }
+        PostCommentAttachments: {
+            id: number;
+            comment_id: number;
+            path: string;
+            type: string;
+            created_at: string;
+        }[]
+    }[]
 }
 
 interface PostComponentProps {
@@ -203,7 +222,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
                     ))}
                 </div>
             </div>
-            <PostCompInteractions data={data} canLike={(!isSubscriber && data.post_audience === "subscribers")} />
+            <PostCompInteractions data={data} />
         </div>
     );
 }

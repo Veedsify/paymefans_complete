@@ -7,6 +7,7 @@ import { imageTypes } from "@/lib/filetypes";
 import toast from "react-hot-toast";
 import { getToken } from "../../utils/cookie.get";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface FileHolderProps {
     file: File;
@@ -15,6 +16,7 @@ interface FileHolderProps {
 
 export interface ReplyPostProps {
     options: {
+        id: string;
         post_id: string;
         post_audience: string;
         author_username: string;
@@ -43,6 +45,7 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
     const [emojiOpen, setEmojiOpen] = useState(false);
     const [typedComment, setTypedComment] = useState('');
     const [files, setFiles] = useState<File[]>([]);
+    const router = useRouter();
 
     const handleTextAreaFocus = () => setReplyPostOpen(true);
 
@@ -75,13 +78,15 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
     }, []);
 
     const handleReplyClicked = async () => {
+        if ((!typedComment && files.length == 0)) return toast.error("Comment cannot be empty");
         try {
             const token = getToken();
             const url = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/comment/new`;
             const formData = new FormData();
-            formData.append("post_id", options.post_id);
+            formData.append("post_id", options?.post_id);
+            formData.append("postId", options?.id)
             formData.append("comment", typedComment);
-            formData.append("reply_to", options.reply_to || "");
+            formData.append("reply_to", options?.reply_to || "");
             files.forEach((file) => {
                 formData.append("files", file);
             });
@@ -100,6 +105,7 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
             const data = res.data;
             if (data.status) {
                 toast.success("Comment posted successfully");
+                router.refresh()
                 setTypedComment("");
                 setFiles([]);
             }
@@ -122,6 +128,7 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
                         onBlur={(e) => !e.target.value && setReplyPostOpen(false)}
                         onFocus={handleTextAreaFocus}
                         onChange={handleTypedComment}
+                        value={typedComment}
                         placeholder="Type a reply"
                         className={`block w-full outline-none p-3 pt-0 resize-none ${replyPostOpen ? "h-52" : "h-auto"}`}
                     />

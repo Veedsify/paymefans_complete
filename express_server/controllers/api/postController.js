@@ -415,6 +415,27 @@ class PostController {
                     post_reposts: true,
                     PostLike: true,
                     UserMedia: true,
+                    PostComment: {
+                        orderBy: {
+                            created_at: "desc"
+                        },
+                        select: {
+                            id: true,
+                            comment: true,
+                            created_at: true,
+                            comment_id: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    user_id: true,
+                                    username: true,
+                                    profile_image: true,
+                                    name: true
+                                }
+                            },
+                            PostCommentAttachments: true
+                        }
+                    }
                 },
 
             });

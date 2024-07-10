@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="083c7743-4b21-413c-af78-59f2187f061e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/infinite-query.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/express_server/controllers/api/postController.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/controllers/api/postController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/controllers/api/commentController.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/controllers/api/commentController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/express_server/utils/cloudflare.js" beforeDir="false" afterPath="$PROJECT_DIR$/express_server/utils/cloudflare.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/posts/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/app/(inner)/posts/[id]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post-editor.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post-editor.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post_component.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/post_component.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/sidebar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/postpanel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/sub_componnets/postpanel.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/lib/filetypes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/lib/filetypes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paymefans_next/src/utils/format-date.ts" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/utils/format-date.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/comments.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/comments.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/paymefans_next/src/components/route_component/reply-post-textarea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/paymefans_next/src/components/route_component/reply-post-textarea.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +69,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.startup.tasks&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Dike Wisdom\\Desktop\\Files\\Documents\\Active Website Projects\\PAYMEFANS\\Source_Code\\newcode\\paymefans_next\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -95,7 +89,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.17011.90" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.18034.50" />
       </set>
     </attachedChunks>
   </component>
@@ -117,6 +111,9 @@
       <workItem from="1717407746131" duration="24000" />
       <workItem from="1718834235422" duration="5480000" />
       <workItem from="1718878542084" duration="1423000" />
+      <workItem from="1720533601511" duration="78000" />
+      <workItem from="1720533694938" duration="51000" />
+      <workItem from="1720533758845" duration="1697000" />
     </task>
     <servers />
   </component>
@@ -125,6 +122,17 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />

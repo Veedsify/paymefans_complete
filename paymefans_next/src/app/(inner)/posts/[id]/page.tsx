@@ -87,6 +87,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                 </div>
                 <PostCompInteractions data={post} />
                 <ReplyPostComponent options={{
+                    id: post?.id,
                     post_id: post?.post_id,
                     post_audience: post?.post_audience,
                     author_username: post?.user.username

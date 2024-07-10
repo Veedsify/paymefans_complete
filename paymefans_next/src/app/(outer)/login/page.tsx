@@ -17,9 +17,6 @@ const Login = () => {
 
     useEffect(() => {
         document.title = "Login | Paymefans";
-        if (document.cookie.includes("token")) {
-            router.push("/");
-        }
     }, [router]);
 
     const handleLoginInput = (e: ChangeEvent<HTMLInputElement>) => {
