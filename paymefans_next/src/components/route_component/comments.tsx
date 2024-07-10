@@ -1,14 +1,23 @@
 "use client"
 import Image from "next/image";
 import { LucideBarChart, LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
-import { PostData } from "./post_component";
+import { PostCompomentProps, PostData } from "./post_component";
 import ReplyPostComponent from "./reply-post-textarea";
 import numeral from "numeral";
 import moment from "moment";
 import usePostComponent from "@/contexts/post-component-preview";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const CommentsHolder = ({ post }: { post: PostData }) => {
+    const [postComments, setPostComments] = useState<PostCompomentProps[]>([])
     const { fullScreenPreview } = usePostComponent();
+
+    useEffect(() => {
+        if (post.PostComment) {
+            setPostComments(post?.PostComment)
+        }
+    }, [post])
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -38,10 +47,12 @@ const CommentsHolder = ({ post }: { post: PostData }) => {
                 <div className="flex gap-1 md:gap-3 items-start relative w-full" key={index}>
                     {(index !== post?.PostComment?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
                     </div>)}
-                    <Image src={comment.user.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />
+                    <Link href={`/${comment.user.username}`}>
+                        <Image src={comment.user.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />
+                    </Link>
                     <div className="w-full">
                         <h3 className="mb-2">
-                            <span className="md:text-lg text-sm font-bold">{comment.user.name}</span>  &nbsp;<span className="md:text-lg text-sm">{comment.user.username}</span>  &nbsp; . &nbsp; <span className="md:text-lg text-xs">{formatDate(comment.created_at)}</span>
+                            <Link href={`/${comment.user.username}`} className="md:text-lg text-sm font-bold">{comment.user.name}</Link>  &nbsp;<Link href={`/${comment.user.username}`} className="md:text-lg text-sm">{comment.user.username}</Link>  &nbsp; . &nbsp; <span className="md:text-lg text-xs">{formatDate(comment.created_at)}</span>
                         </h3>
                         <div className="md:text-lg text-sm mb-2">
                             <div className="mb-3"
@@ -50,9 +61,10 @@ const CommentsHolder = ({ post }: { post: PostData }) => {
                             </div>
                             <div className="grid grid-cols-3 gap-2">
                                 {comment.PostCommentAttachments.map((media, index) => (
-                                    <Image
-                                        onClick={() => previewImage(media.path)}
-                                        key={index} src={media.path} width="500" height="500" className="h-auto aspect-square rounded-lg object-cover cursor-pointer" alt="" />
+                                    <div key={index} onClick={() => previewImage(media.path)}>
+                                        <Image
+                                            src={media.path} width="500" height="500" className="h-auto aspect-square rounded-lg object-cover cursor-pointer" alt="" />
+                                    </div>
                                 ))}
                             </div>
                         </div>

@@ -29,6 +29,26 @@ export interface UserMediaProps {
     userId?: number;
 }
 
+export interface PostCompomentProps {
+    id: number;
+    comment: string;
+    created_at: string;
+    user: {
+        id: number;
+        user_id: string;
+        name: string;
+        username: string;
+        profile_image: string;
+    }
+    PostCommentAttachments: {
+        id: number;
+        comment_id: number;
+        path: string;
+        type: string;
+        created_at: string;
+    }[]
+}
+
 export interface PostData {
     id: number;
     post: string;
@@ -54,25 +74,7 @@ export interface PostData {
             subscriber_id: number;
         }[]
     }
-    PostComment?: {
-        id: number;
-        comment: string;
-        created_at: string;
-        user: {
-            id: number;
-            user_id: string;
-            name: string;
-            username: string;
-            profile_image: string;
-        }
-        PostCommentAttachments: {
-            id: number;
-            comment_id: number;
-            path: string;
-            type: string;
-            created_at: string;
-        }[]
-    }[]
+    PostComment?: PostCompomentProps[];
 }
 
 interface PostComponentProps {
