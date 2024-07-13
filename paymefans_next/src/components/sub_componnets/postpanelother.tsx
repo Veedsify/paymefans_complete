@@ -1,5 +1,5 @@
 "use client"
-import PostComponent, { UserMediaProps } from "../route_component/post_component";
+import PostComponent from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import { formatDate } from "@/utils/format-date";
 import { useCallback, useEffect, useState } from "react";
@@ -7,33 +7,9 @@ import { fetchItemsOther } from "./infinite-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { ProfileUserProps } from "@/types/user";
+import { UserPostPropsOther } from "@/types/components";
 
-type UserPostProps = {
-    id: number;
-    content: string;
-    post_id: string;
-    post_audience: string;
-    post_likes: number;
-    post_comments: number;
-    post_shares: number;
-    post_reposts: number;
-    UserMedia: UserMediaProps[];
-    PostLike: {
-        post_id: string;
-        user_id: number;
-    }[]
-    user: {
-        id: number;
-        name: string;
-        username: string;
-        user_id: string;
-        profile_image: string;
-        Subscribers: {
-            subscriber_id: number;
-        }[]
-    }
-    created_at: Date;
-}
+
 
 const PostPanelOther = ({
     userdata
@@ -42,7 +18,7 @@ const PostPanelOther = ({
 }) => {
     //allPosts will be used to store the news articles
     const { user } = useUserAuthContext();
-    const [allPosts, setAllPosts] = useState<UserPostProps[]>([]);
+    const [allPosts, setAllPosts] = useState<UserPostPropsOther[]>([]);
     const [page, setPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
 
@@ -85,7 +61,7 @@ const PostPanelOther = ({
                 loader={<LoadingPost />}
                 endMessage={<EndMessage />}
             >
-                {userdata && allPosts?.map((post: UserPostProps, index: number) => (
+                {userdata && allPosts?.map((post: UserPostPropsOther, index: number) => (
                     <PostComponent key={index}
                         user={{ id: post.user.id, user_id: post.user.user_id, name: post.user.name, link: `/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
                         isSubscriber={post.user.Subscribers.some(sub => sub.subscriber_id === user?.id)}

@@ -1,20 +1,14 @@
 "use client"
 import { useUserAuthContext } from "@/lib/userUseContext";
-import { Attachment } from "./message_input";
 import usePostComponent from "@/contexts/post-component-preview";
 import { LucidePlay } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import path from "path";
 import { HiPlay } from "react-icons/hi";
+import { Attachment, MessageBubbleProps } from "@/types/components";
 
-type MessageBubbleProps = {
-    message?: string | TrustedHTML;
-    attachment: Attachment[] | null;
-    sender: string;
-    seen: boolean;
-    date: string
-}
+
 const server = process.env.NEXT_PUBLIC_EXPRESS_URL_DIRECT as string
 
 const MessageBubble: React.FC<MessageBubbleProps> = ({ sender, seen, message, date, attachment }) => {

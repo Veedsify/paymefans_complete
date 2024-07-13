@@ -13,90 +13,7 @@ import toast from "react-hot-toast";
 import QuickPostActions from "../sub_componnets/quick_post_actions";
 import swal from 'sweetalert';
 import { PostCompInteractions } from './post-interactions';
-
-export interface UserMediaProps {
-    id: number;
-    media_id: string;
-    post_id: number;
-    media_type: string;
-    url: string;
-    blur: string;
-    poster: string;
-    locked: boolean;
-    accessible_to: string;
-    created_at: string;
-    updated_at: string;
-    userId?: number;
-}
-
-export interface PostCompomentProps {
-    id: number;
-    comment: string;
-    created_at: string;
-    user: {
-        id: number;
-        user_id: string;
-        name: string;
-        username: string;
-        profile_image: string;
-    }
-    PostCommentAttachments: {
-        id: number;
-        comment_id: number;
-        path: string;
-        type: string;
-        created_at: string;
-    }[]
-}
-
-export interface PostData {
-    id: number;
-    post: string;
-    post_id: string;
-    post_audience: string;
-    post_likes?: number;
-    post_comments?: number;
-    post_shares?: number;
-    post_reposts?: number;
-    time: string;
-    media: UserMediaProps[];
-    PostLike: {
-        post_id: string;
-        user_id: number;
-    }[]
-    user?: {
-        id: number;
-        name: string;
-        username: string;
-        user_id: string;
-        profile_image: string;
-        Subscribers: {
-            subscriber_id: number;
-        }[]
-    }
-    PostComment?: PostCompomentProps[];
-}
-
-interface PostComponentProps {
-    user: {
-        id: number;
-        user_id: string;
-        name: string;
-        link: string;
-        username: string;
-        image: string;
-    };
-    data: PostData;
-    isSubscriber: boolean;
-}
-
-
-interface VideoComponentProps {
-    media: UserMediaProps;
-    data: PostData;
-    clickImageEvent: (media: UserMediaProps) => void;
-    isSubscriber: boolean;
-}
+import { PostComponentProps, PostData, UserMediaProps, VideoComponentProps } from '@/types/components';
 
 
 const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber }) => {
@@ -228,8 +145,6 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
         </div>
     );
 }
-
-
 
 
 const ImageComponent: React.FC<{ media: UserMediaProps, data: PostData, clickImageEvent: (media: UserMediaProps) => void }> = ({ media, data, clickImageEvent }) => {

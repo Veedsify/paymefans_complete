@@ -1,9 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { PostData } from "../route_component/post_component";
 import axios, { CancelToken, CancelTokenSource } from "axios";
 import { getToken } from "@/utils/cookie.get";
-import { UserPostProps } from "../sub_componnets/postpanel";
+import { UserPostProps } from "@/types/components";
 
 export default function PostPanelFetch(pageNumber: number) {
     const [posts, setPosts] = useState<UserPostProps[]>([]);

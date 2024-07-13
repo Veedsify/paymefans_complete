@@ -3,22 +3,7 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import UserFollowComp from "../sub_componnets/userfollowcomp";
 import { getToken } from "@/utils/cookie.get";
-
-interface PaginateProps {
-    min: number;
-    max: number;
-}
-
-export interface Followers {
-    user: {
-        id: string;
-        username: string;
-        fullname: string;
-        profile_image: string;
-        name: string;
-    },
-    iAmFollowing: boolean;
-}
+import { Followers, PaginateProps } from "@/types/components";
 
 const FollowersDisplay = () => {
     const [paginate, setPaginate] = useState<PaginateProps>({

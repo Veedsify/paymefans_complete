@@ -1,16 +1,9 @@
 import { useState } from "react"
 import CommentsHolder from "./comments"
 import ReplyPostComponent from "./reply-post-textarea"
-import { PostData } from "./post_component";
+import { Comment, PostData } from "@/types/components";
 
-interface Comment {
-    text: string;
-    files: File[];
-    author_username: string;
-    time: Date
-    name: string;
-    profile_image: string;
-}
+
 const CommentsAndReply = ({ post }: { post: PostData }) => {
     const [postComments, setPostComments] = useState<Comment[]>([])
 

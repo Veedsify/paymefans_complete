@@ -3,7 +3,7 @@ import GetConversationMessages from "@/utils/data/get-conversation-messages";
 import Chats from "./chats";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Message } from "../sub_componnets/message_input";
+import { Message } from "@/types/components";
 
 const FetchChatData = ({ stringId }: { stringId: string }) => {
     const [messages, setMessages] = useState<Message[]>([]);

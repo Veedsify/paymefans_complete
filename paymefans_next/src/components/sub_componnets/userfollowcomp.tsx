@@ -1,19 +1,9 @@
+import { UserFollowCompProps } from "@/types/components";
 import Image from "next/image";
 import Link from "next/link";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 
-interface UserFollowCompProps {
-    follower: {
-        user: {
-            id: string;
-            username: string;
-            fullname: string;
-            profile_image: string;
-            name: string;
-        },
-        iAmFollowing: boolean;
-    }
-}
+
 
 const UserFollowComp: React.FC<UserFollowCompProps> = ({ follower }) => {
     return (

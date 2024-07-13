@@ -25,7 +25,7 @@ const Header = () => {
     }, [])
 
     return (
-        <header className="px-4 lg:px-8 py-3 border-b bg-primary-dark-pink lg:bg-white dark:bg-black dark:text-white border-b dark:border-slate-800">
+        <header className="px-4 lg:px-8 py-3  bg-primary-dark-pink lg:bg-white dark:bg-black dark:text-white border-b dark:border-slate-800">
             <div className="flex items-center">
                 <HeaderTitle />
                 <Image width={200} height={40} src="/site/logo3.png" alt="" className="block lg:hidden h-auto" />
@@ -38,7 +38,7 @@ const Header = () => {
                         </span>
                         <ul
                             ref={ref}
-                            className={`${notification ? "block" : "hidden"} absolute z-10 w-72 top-10 right-0 bg-white rounded-lg shadow-lg max-h-[250px] overflow-y-auto shadow-2xl border`}>
+                            className={`${notification ? "block" : "hidden"} absolute z-10 w-72 top-10 right-0 bg-white rounded-lg max-h-[250px] overflow-y-auto shadow-2xl border`}>
                             <h1 className="text-black font-bold mb-3 p-4 pb-2">Notifications</h1>
                             <li>
                                 <Link href="/messages" className="flex items-center gap-4 border-b p-4 hover:bg-messages-unread">

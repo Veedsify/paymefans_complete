@@ -10,10 +10,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { LucideArrowLeft, LucideGrip } from "lucide-react";
 import MessageBubble from "../sub_componnets/message_bubble";
-import MessageInput, { Message } from "../sub_componnets/message_input";
+import MessageInput from "../sub_componnets/message_input";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { socket } from "../sub_componnets/sub/socket";
 import swal from "sweetalert";
+import { Message } from "@/types/components";
 
 const Chats = ({
   allmessages,

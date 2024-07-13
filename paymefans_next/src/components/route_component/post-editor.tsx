@@ -11,12 +11,9 @@ import PostMediaPreview from "./post-media-preview";
 import { SavePost } from "@/utils/save-post";
 import { useRouter } from "next/navigation";
 import swal from "sweetalert";
+import { postAudienceDataProps } from "@/types/components";
 
-type postAudienceDataProps = {
-    id: number;
-    name: "Public" | "Subscribers" | "Private";
-    icon: JSX.Element;
-}
+
 
 const PostEditor = () => {
     const router = useRouter();

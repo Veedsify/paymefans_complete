@@ -14,30 +14,9 @@ import toast from "react-hot-toast";
 import UploadMediaComponent from "../route_component/upload-media-conponent";
 import swal from "sweetalert";
 import { useConversationsContext } from "@/contexts/messages-conversation-context";
+import { Attachment, MessageInputProps } from "@/types/components";
 
-export interface Attachment {
-  type: string;
-  extension: string;
-  size: number;
-  name: string;
-  url: string;
-}
 
-export interface Message {
-  message_id: number;
-  message: string;
-  sender_id: string;
-  receiver_id?: string;
-  attachment: Attachment[] | null;
-  seen: boolean;
-  conversationId?: string;
-  created_at: string;
-}
-export interface MessageInputProps {
-  sendMessage: ({ }: Message) => void;
-  sendTyping: (value: boolean) => void;
-  receiver: any;
-}
 
 const MessageInput = ({
   sendMessage,

@@ -5,15 +5,9 @@ import 'swiper/css/navigation';
 import toast from 'react-hot-toast';
 import { X } from 'lucide-react';
 import MediaPreviewer from '../sub_componnets/upload-media-preview';
-import { Attachment } from '../sub_componnets/message_input';
+import { Attachment, UploadMediaCompProps } from '@/types/components';
 
-type UploadMediaCompProps = {
-    open: boolean;
-    close: () => void;
-    sendNewMessage: (attachment: Attachment[]) => void;
-    setMessage: (message: string) => void;
-    message: string;
-}
+
 const UploadMediaComponent: React.FC<UploadMediaCompProps> = ({ open, close, setMessage, sendNewMessage, message }) => {
     const [files, setFiles] = useState<FileList | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);

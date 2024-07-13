@@ -10,21 +10,10 @@ import { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { Navigation } from "swiper/modules";
 import { Swiper } from "swiper/react";
 import { SwiperSlide } from "swiper/react";
-import { Attachment } from "./message_input";
 import toast from "react-hot-toast";
+import { MediaPreviewProps, PreviewTypes } from "@/types/components";
 
-interface MediaPreviewProps {
-    files: FileList;
-    setMessage: (message: string) => void;
-    sendNewMessage: (attachment: Attachment[]) => void;
-    close: () => void;
-    message: string;
-}
-interface PreviewTypes {
-    type: "image" | "video"
-    src: string
-    poster?: string
-}
+
 
 const MediaPreviewer: React.FC<MediaPreviewProps> = ({ files, setMessage, sendNewMessage, close, message }) => {
     const [mainTab, setMainTab] = useState<File | null>(null);

@@ -1,27 +1,12 @@
 "use client"
 import { socket } from "@/components/sub_componnets/sub/socket";
 import { useUserAuthContext } from "@/lib/userUseContext";
+import { MessagesConversationContextValue, UserConversations } from "@/types/components";
 import { Conversation, LastMessage } from "@/types/conversations";
 import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
-interface UserConversations {
-    conversation: Conversation;
-    conversation_id: string;
-    lastMessage: LastMessage;
-    receiver: {
-        user_id: string;
-        username: string;
-        name: string;
-        profile_image: string;
-    }
-}
 
-export interface MessagesConversationContextValue {
-    count?: number;
-    conversations: UserConversations[];
-    lastMessage?: LastMessage;
-    addConversations?: (conversations: Conversation) => void;
-}
+
 
 const MessagesConversationContext = createContext<MessagesConversationContextValue | null>(
     null

@@ -1,13 +1,13 @@
 "use client"
 import { LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
 import ReplyPostComponent from "@/components/route_component/reply-post-textarea";
-import { PostData } from "./post_component";
 import { useEffect, useState } from "react";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { useRouter } from "next/navigation";
 import swal from "sweetalert";
 import { LikeThisPost } from "@/utils/postinteractions";
 import numeral from "numeral";
+import { PostData } from "@/types/components";
 
 export const PostCompInteractions = ({ data }: { data: PostData | undefined }) => {
     const formattedNumber = (number: number) => numeral(number).format('0a').toUpperCase(); // Converts the suffix to uppercase

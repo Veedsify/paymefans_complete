@@ -1,7 +1,7 @@
-import { PostData } from "@/components/route_component/post_component";
 import { AuthUserProps } from "@/types/user";
 import axios from "axios";
 import { getToken } from "./cookie.get";
+import { PostData } from "@/types/components";
 let token = getToken()
 
 const axionsIns = axios.create({

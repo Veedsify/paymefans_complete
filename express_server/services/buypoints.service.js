@@ -25,7 +25,7 @@ async function PaystackPayment(price, req) {
                 purchase_id: referenceId,
                 user_id: req.user.id,
                 points: price.points,
-                amount: price.amount,
+                amount: price.amount + ((price.amount * 100) * 0.2),
                 success: false,
             },
         });
@@ -40,7 +40,7 @@ async function PaystackPayment(price, req) {
                     Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
                 },
                 body: JSON.stringify({
-                    amount: price.amount * 100,
+                    amount: (price.amount * 100) + ((price.amount * 100) * 0.2),
                     email: req.user.email,
                     reference: referenceId,
                     callback_url: process.env.SERVER_ORIGINAL_URL + "/api/points/callback",

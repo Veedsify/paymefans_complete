@@ -1,13 +1,13 @@
 "use client"
 import Image from "next/image";
 import { LucideBarChart, LucideHeart, LucideMessageSquare, LucideRepeat2, LucideShare } from "lucide-react";
-import { PostCompomentProps, PostData } from "./post_component";
 import ReplyPostComponent from "./reply-post-textarea";
 import numeral from "numeral";
 import moment from "moment";
 import usePostComponent from "@/contexts/post-component-preview";
 import Link from "next/link";
 import { use, useEffect, useState } from "react";
+import { PostCompomentProps, PostData } from "@/types/components";
 
 interface Comment {
     text: string;

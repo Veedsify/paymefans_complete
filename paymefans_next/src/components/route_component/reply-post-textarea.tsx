@@ -8,30 +8,9 @@ import toast from "react-hot-toast";
 import { getToken } from "../../utils/cookie.get";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { FileHolderProps, ReplyPostProps } from "@/types/components";
 
-interface FileHolderProps {
-    file: File;
-    remove: (file: File) => void;
-}
-interface Comment {
-    text: string;
-    files: File[];
-    author_username: string;
-    time: Date
-    name: string;
-    profile_image: string;
-}
 
-export interface ReplyPostProps {
-    options: {
-        id: number;
-        post_id: string;
-        post_audience: string;
-        author_username: string;
-        reply_to?: string;
-        setNewComment?: (comment: Comment) => void;
-    };
-}
 
 const FilesHolder = React.memo(({ file, remove }: FileHolderProps) => {
     const objUrl = URL.createObjectURL(file);

@@ -7,28 +7,9 @@ import { getToken } from "@/utils/cookie.get";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ProfileUserProps } from "@/types/user";
 import { useUserAuthContext } from "@/lib/userUseContext";
+import { MediaDataTypeOtherProps } from "@/types/components";
 
 
-type MediaDataTypeOtherProps = {
-    id: number;
-    url: string;
-    blur: string;
-    locked: boolean;
-    media_type: string,
-    poster?: string
-    media_id: string
-    accessible_to: string
-    post: {
-        user: {
-            Subscribers: {
-                subscriber_id: number
-                user_id: number
-                id: number
-                sub_id: string
-            }[]
-        }
-    }
-};
 
 const MediaPanelImageCardOther = ({ sort, userdata }: { sort: string; userdata: ProfileUserProps }) => {
     const [data, setData] = useState<MediaDataTypeOtherProps[]>([]);

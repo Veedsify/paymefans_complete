@@ -1,30 +1,14 @@
 "use client";
 import { useUserAuthContext } from "@/lib/userUseContext";
-import PostComponent, { UserMediaProps } from "../route_component/post_component";
+import PostComponent from "../route_component/post_component";
 import LoadingPost from "./loading_post";
 import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { formatDate } from "@/utils/format-date";
 import { fetchItems } from "@/components/sub_componnets/infinite-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostPanelFetch from "../custom-hooks/post-panel-fetch";
+import { UserPostProps } from "@/types/components";
 
-
-export type UserPostProps = {
-    id: number;
-    content: string;
-    post_id: string;
-    post_audience: string;
-    post_likes: number;
-    post_comments: number;
-    post_shares: number;
-    post_reposts: number;
-    UserMedia: UserMediaProps[];
-    created_at: Date;
-    PostLike: {
-        post_id: string;
-        user_id: number;
-    }[]
-}
 
 const PostPanel = () => {
     const { user } = useUserAuthContext();

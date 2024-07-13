@@ -1,6 +1,7 @@
 "use client"
 import { countries } from "@/lib/locations";
 import { useUserAuthContext } from "@/lib/userUseContext";
+import { postAudienceDataProps, postAudienceDataProps2 } from "@/types/components";
 import { modelSignUp } from "@/utils/data/model-signup";
 import { LucideChevronDown, LucideChevronUp, LucideEye, LucideUser, LucideUser2 } from "lucide-react";
 import Image from "next/image";
@@ -10,13 +11,8 @@ import { ChangeEvent, LegacyRef, MouseEvent, MutableRefObject, useRef, useState 
 import toast from "react-hot-toast";
 import swal from "sweetalert";
 
-type postAudienceDataProps = {
-    id?: number;
-    name?: string;
-    icon?: JSX.Element;
-}
 
-const postAudienceData: postAudienceDataProps[] = [{
+const postAudienceData: postAudienceDataProps2[] = [{
     id: 1,
     name: "Male",
     icon: <LucideUser size={20} className="inline" />
@@ -40,7 +36,7 @@ const BecomeAModel = () => {
     const router = useRouter()
     const [modelSignUpdata, setModelSignUpData] = useState<ModelSignUpProps>({})
     const [dropdown, setDropdown] = useState(false);
-    const [postAudience, setPostAudience] = useState<postAudienceDataProps>({
+    const [postAudience, setPostAudience] = useState<postAudienceDataProps2>({
         name: "Choose Gender",
     });
     const ref = useRef()

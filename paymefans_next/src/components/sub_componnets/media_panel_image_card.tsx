@@ -5,16 +5,9 @@ import Image from "next/image";
 import usePostComponent from "@/contexts/post-component-preview";
 import { getToken } from "@/utils/cookie.get";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { MediaDataType } from "@/types/components";
 
-type MediaType = { media: string; type: string } | null;
-type MediaDataType = {
-    id: number;
-    url: string;
-    blur: string;
-    locked: boolean;
-    media_type: string,
-    poster?: string
-};
+
 
 const MediaPanelImageCard = ({ sort }: { sort: string }) => {
     const [data, setData] = useState<MediaDataType[]>([]);
