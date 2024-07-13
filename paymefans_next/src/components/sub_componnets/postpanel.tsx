@@ -2,14 +2,14 @@
 import { useUserAuthContext } from "@/lib/userUseContext";
 import PostComponent, { UserMediaProps } from "../route_component/post_component";
 import LoadingPost from "./loading_post";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { formatDate } from "@/utils/format-date";
 import { fetchItems } from "@/components/sub_componnets/infinite-query";
-
 import InfiniteScroll from "react-infinite-scroll-component";
+import PostPanelFetch from "../custom-hooks/post-panel-fetch";
 
 
-type UserPostProps = {
+export type UserPostProps = {
     id: number;
     content: string;
     post_id: string;
@@ -29,9 +29,9 @@ type UserPostProps = {
 const PostPanel = () => {
     const { user } = useUserAuthContext();
     //allPosts will be used to store the news articles
+    const [page, setPage] = useState(1);
 
     const [allPosts, setAllPosts] = useState<UserPostProps[]>([]);
-    const [page, setPage] = useState(1);
     const [totalResults, setTotalResults] = useState(0);
 
     const fetchMoreData = async () => {
@@ -61,6 +61,7 @@ const PostPanel = () => {
             </p>
         </div>
     )
+
     return (
         <div className="mt-3 mb-12 select-none">
             <InfiniteScroll
@@ -74,12 +75,12 @@ const PostPanel = () => {
                     <PostComponent
                         key={index}
                         user={{
-                            id: user.id,
-                            user_id: user.user_id,
-                            name: user.name,
-                            link: `/${user.username}`,
-                            username: user.username,
-                            image: user.profile_image
+                            id: user?.id!,
+                            user_id: user?.user_id!,
+                            name: user?.name!,
+                            link: `/${user?.username}`,
+                            username: user?.username!,
+                            image: user?.profile_image!
                         }}
                         isSubscriber={true}
                         data={{
@@ -89,9 +90,10 @@ const PostPanel = () => {
                             time: formatDate(new Date(post.created_at))
                         }}
                     />
-                ))}
-            </InfiniteScroll>
-        </div>
+                ))
+                }
+            </InfiniteScroll >
+        </div >
     )
         ;
 }

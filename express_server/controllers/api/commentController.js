@@ -18,7 +18,7 @@ class CommentController {
                     comment_id: comment_id,
                     post_id: parseInt(postId),
                     user_id: parseInt(id),
-                }
+                },
             })
 
             await prismaQuery.post.update({
@@ -58,11 +58,27 @@ class CommentController {
 
             await uploadFiles()
 
+            const thisComment = await prismaQuery.postComment.findUnique({
+                where: {
+                    id: createComment.id
+                },
+                select: {
+                    id: true,
+                    comment: true,
+                    comment_id: true,
+                    post_id: true,
+                    user_id: true,
+                    created_at: true,
+                    updated_at: true,
+                    PostCommentAttachments: true
+                }
+            })
+
             prismaQuery.$disconnect()
             res.json({
                 status: true,
                 message: 'Comment created successfully',
-                data: createComment
+                data: thisComment
             })
         } catch (error) {
             console.log(error)

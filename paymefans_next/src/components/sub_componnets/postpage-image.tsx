@@ -40,6 +40,7 @@ export const PostPageImage = ({ media: { media_type, poster, url } }: {
                 <Image
                     unoptimized
                     height={300}
+                    priority
                     width={300}
                     onClick={handleClick}
                     src={url}

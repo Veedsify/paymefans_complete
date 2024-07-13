@@ -7,15 +7,28 @@ import numeral from "numeral";
 import moment from "moment";
 import usePostComponent from "@/contexts/post-component-preview";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
-const CommentsHolder = ({ post }: { post: PostData }) => {
-    const [postComments, setPostComments] = useState<PostCompomentProps[]>([])
+interface Comment {
+    text: string;
+    files: File[];
+    author_username: string;
+    time: Date
+    name: string;
+    profile_image: string;
+}
+
+const CommentsHolder = ({ post, postComments: AttachedComments }: { post: PostData, postComments: Comment[] }) => {
+    const [postComment, setPostComments] = useState<PostCompomentProps[]>([])
     const { fullScreenPreview } = usePostComponent();
 
+    // Aadd infinte scroll to load more comments
     useEffect(() => {
         if (post.PostComment) {
             setPostComments(post?.PostComment)
+        }
+        return () => {
+            setPostComments([])
         }
     }, [post])
 
@@ -29,7 +42,6 @@ const CommentsHolder = ({ post }: { post: PostData }) => {
 
         const now = moment();
         const diffForHumans = moment(dateString).from(now);
-
         return diffForHumans
     };
 
@@ -43,9 +55,41 @@ const CommentsHolder = ({ post }: { post: PostData }) => {
 
     return (
         <div className="border-y p-0 md:p-3 py-5">
-            {postComments?.map((comment, index) => (
+            {
+                AttachedComments.map((comment, index) => (
+                    <div className="flex gap-1 md:gap-3 items-start relative w-full" key={index}>
+                        {(index !== AttachedComments.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
+                        </div>)}
+                        <Link href={`/${comment.author_username}`}>
+                            <Image src={comment.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />
+                        </Link>
+                        <div className="w-full">
+                            <h3 className="mb-2">
+                                <Link href={`/${comment.author_username}`} className="md:text-lg text-sm font-bold">{comment.name}</Link>  &nbsp;<Link href={`/${comment.author_username}`} className="md:text-lg text-sm">{comment.author_username}</Link>  &nbsp; . &nbsp; <span className="md:text-lg text-xs">{formatDate(comment.time.toString())}</span>
+                            </h3>
+                            <div className="md:text-lg text-sm mb-2">
+                                <div className="mb-3"
+                                    dangerouslySetInnerHTML={{ __html: comment.text }}
+                                >
+                                </div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    {comment.files.map((media, index) => (
+                                        <div key={index} onClick={() => previewImage(URL.createObjectURL(media))}>
+                                            <Image
+                                                priority
+                                                src={URL.createObjectURL(media)} width="500" height="500" className="h-auto aspect-square rounded-lg object-cover cursor-pointer" alt="" />
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <ReplyInteractions />
+                        </div>
+                    </div>
+                ))
+            }
+            {postComment?.map((comment, index) => (
                 <div className="flex gap-1 md:gap-3 items-start relative w-full" key={index}>
-                    {(index !== postComments?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
+                    {(index !== postComment?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
                     </div>)}
                     <Link href={`/${comment.user.username}`}>
                         <Image src={comment.user.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />
@@ -63,6 +107,7 @@ const CommentsHolder = ({ post }: { post: PostData }) => {
                                 {comment.PostCommentAttachments.map((media, index) => (
                                     <div key={index} onClick={() => previewImage(media.path)}>
                                         <Image
+                                            priority
                                             src={media.path} width="500" height="500" className="h-auto aspect-square rounded-lg object-cover cursor-pointer" alt="" />
                                     </div>
                                 ))}

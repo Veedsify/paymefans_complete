@@ -64,7 +64,7 @@ export interface PostData {
         post_id: string;
         user_id: number;
     }[]
-    user: {
+    user?: {
         id: number;
         name: string;
         username: string;

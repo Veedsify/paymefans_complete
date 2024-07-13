@@ -1,5 +1,6 @@
 "use client"
 import CommentsHolder from "@/components/route_component/comments";
+import CommentsAndReply from "@/components/route_component/comments-and-reply";
 import { PostCompInteractions } from "@/components/route_component/post-interactions";
 import ReplyPostComponent from "@/components/route_component/reply-post-textarea";
 import { PostPageImage } from "@/components/sub_componnets/postpage-image";
@@ -86,15 +87,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                     ))}
                 </div>
                 <PostCompInteractions data={post} />
-                <ReplyPostComponent options={{
-                    id: post?.id,
-                    post_id: post?.post_id,
-                    post_audience: post?.post_audience,
-                    author_username: post?.user.username
-                }} />
-                <div>
-                    {post && <CommentsHolder post={post} />}
-                </div>
+                <CommentsAndReply post={post} />
             </div>
         </div >
     );

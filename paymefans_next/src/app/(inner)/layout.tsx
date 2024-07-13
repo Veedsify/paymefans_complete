@@ -42,7 +42,7 @@ export default async function RootLayout({
                     <MessagesConversationProvider>
                         <UserPointsContextProvider>
                             <body className={`${font.className} dark:bg-gray-950`}>
-                                <Loader />
+                                {/* <Loader /> */}
                                 <Toaster />
                                 <SonnerToast richColors position="top-center"
                                     toastOptions={{

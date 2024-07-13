@@ -1,6 +1,6 @@
 "use client"
 import { useUserAuthContext } from "@/lib/userUseContext";
-import { LucideCamera, X } from "lucide-react";
+import { LucideCamera, LucideLoader, X } from "lucide-react";
 import Image from "next/image";
 import React, { ChangeEvent, useCallback, useState } from "react";
 import { imageTypes } from "@/lib/filetypes";
@@ -13,14 +13,23 @@ interface FileHolderProps {
     file: File;
     remove: (file: File) => void;
 }
+interface Comment {
+    text: string;
+    files: File[];
+    author_username: string;
+    time: Date
+    name: string;
+    profile_image: string;
+}
 
 export interface ReplyPostProps {
     options: {
-        id: string;
+        id: number;
         post_id: string;
         post_audience: string;
         author_username: string;
         reply_to?: string;
+        setNewComment?: (comment: Comment) => void;
     };
 }
 
@@ -42,9 +51,9 @@ FilesHolder.displayName = "FilesHolder";
 export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
     const { user } = useUserAuthContext();
     const [replyPostOpen, setReplyPostOpen] = useState(false);
-    const [emojiOpen, setEmojiOpen] = useState(false);
     const [typedComment, setTypedComment] = useState('');
     const [files, setFiles] = useState<File[]>([]);
+    const [commentSending, setCommentSending] = useState(false);
     const router = useRouter();
 
     const handleTextAreaFocus = () => setReplyPostOpen(true);
@@ -64,10 +73,9 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
                 if (!imageTypes.includes(file.type)) {
                     toast.error("Only images are allowed");
                 } else {
-                    setFiles((prev) => [
-                        ...prev,
-                        file
-                    ]);
+                    setFiles((prev) => {
+                        return [...new Set([...prev, ...newFiles])];
+                    })
                 }
             });
         }
@@ -80,18 +88,21 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
     const handleReplyClicked = async () => {
         if ((!typedComment && files.length == 0)) return toast.error("Comment cannot be empty");
         try {
+            setCommentSending(true);
             const token = getToken();
             const url = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/comment/new`;
             const formData = new FormData();
             formData.append("post_id", options?.post_id);
-            formData.append("postId", options?.id)
+            formData.append("postId", String(options?.id))
             formData.append("comment", typedComment);
             formData.append("reply_to", options?.reply_to || "");
             files.forEach((file) => {
                 formData.append("files", file);
             });
+            let cancel;
             // Perform your API call here with axios using the token and url
             const res = await axios.post(url, formData, {
+                cancelToken: new axios.CancelToken((c) => cancel = c),
                 onUploadProgress(progressEvent) {
                     if (progressEvent) {
                         console.log(progressEvent.loaded / progressEvent.total! * 100 + "%");
@@ -103,9 +114,18 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
                 },
             });
             const data = res.data;
+            console.log(data)
             if (data.status) {
                 toast.success("Comment posted successfully");
-                router.refresh()
+                setCommentSending(false);
+                options.setNewComment?.({
+                    text: data.data.comment,
+                    files: files,
+                    author_username: user?.username || "",
+                    time: new Date(),
+                    name: user?.name || "",
+                    profile_image: user?.profile_image || "",
+                })
                 setTypedComment("");
                 setFiles([]);
             }
@@ -116,6 +136,9 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
 
     return (
         <div>
+            {commentSending && <div className="flex w-full text-center justify-center p-2">
+                <LucideLoader size={30} className="animate-spin transition-all duration-300" />
+            </div>}
             <div className="flex gap-4 items-start mt-5">
                 <div className="flex items-center gap-2">
                     <Image width={80} height={80} src={user?.profile_image || "/site/avatar.png"} alt="" className="w-10 md:w-16 h-auto rounded-full object-cover" />
@@ -128,6 +151,7 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
                         onBlur={(e) => !e.target.value && setReplyPostOpen(false)}
                         onFocus={handleTextAreaFocus}
                         onChange={handleTypedComment}
+                        disabled={commentSending}
                         value={typedComment}
                         placeholder="Type a reply"
                         className={`block w-full outline-none p-3 pt-0 resize-none ${replyPostOpen ? "h-52" : "h-auto"}`}
