@@ -8,6 +8,9 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { ProfileUserProps } from "@/types/user";
 import { UserPostPropsOther } from "@/types/components";
+import PostPanelFetchOther from "../custom-hooks/post-panel-other-fetch";
+import { useInView } from "react-intersection-observer";
+import { LucideLoader } from "lucide-react";
 
 
 
@@ -16,55 +19,44 @@ const PostPanelOther = ({
 }: {
     userdata: ProfileUserProps
 }) => {
-    //allPosts will be used to store the news articles
-    const { user } = useUserAuthContext();
-    const [allPosts, setAllPosts] = useState<UserPostPropsOther[]>([]);
     const [page, setPage] = useState(1);
-    const [totalResults, setTotalResults] = useState(0);
-
-    const fetchMoreData = async () => {
-        const res = await fetchItemsOther({ pageParam: page + 1, userid: userdata.id });
-        setPage(page + 1);
-        setAllPosts((prev) => {
-            return [...prev, ...res?.data.data]
-        });
-        setTotalResults(res?.data.total);
-    }
-
-    const fetchNews = useCallback(async () => {
-        const res = await fetchItemsOther({ pageParam: page, userid: userdata.id });
-        console.log(res?.data.data)
-        setAllPosts(res?.data.data);
-        setTotalResults(res?.data.total);
-    }, [userdata.id, page])
+    const { posts, loading, hasMore } = PostPanelFetchOther(userdata.id, page);
+    const { ref, inView } = useInView({
+        threshold: 1
+    })
 
     useEffect(() => {
-        fetchNews();
-    }, [fetchNews])
+        if (loading) return;
+        if (inView && hasMore) {
+            setPage(prev => prev + 1);
+        }
+    }, [inView, hasMore])
 
     const EndMessage = () => (
-        <div className="px-3 py-9 mt-3">
-            <p className="text-center font-medium">
+        <div className="px-3 py-2">
+            <p className="text-gray-500 italic text-center font-medium">
                 End Of Post
             </p>
         </div>
     )
 
-
     return (
-        <div className="mt-3 mb-12 select-none"
-        >
-            <InfiniteScroll
-                dataLength={allPosts.length}
-                next={fetchMoreData}
-                hasMore={allPosts.length < totalResults}
-                loader={<LoadingPost />}
-                endMessage={<EndMessage />}
-            >
-                {userdata && allPosts?.map((post: UserPostPropsOther, index: number) => (
-                    <PostComponent key={index}
-                        user={{ id: post.user.id, user_id: post.user.user_id, name: post.user.name, link: `/${post.user.username}`, username: post.user.username, image: post.user.profile_image }}
-                        isSubscriber={post.user.Subscribers.some(sub => sub.subscriber_id === user?.id)}
+        <div className="mt-3 mb-12 select-none">
+            {posts.map((post, index) => (
+                <div
+                    key={index}
+                    ref={index === posts.length - 1 ? ref : null}
+                >
+                    <PostComponent
+                        user={{
+                            id: post.user.id,
+                            user_id: post.user.user_id,
+                            name: post.user.name,
+                            link: `/${post.user.username}`,
+                            username: post.user.username,
+                            image: post.user.profile_image
+                        }}
+                        isSubscriber={true}
                         data={{
                             ...post,
                             post: post.content,
@@ -72,9 +64,11 @@ const PostPanelOther = ({
                             time: formatDate(new Date(post.created_at))
                         }}
                     />
-                ))}
-            </InfiniteScroll>
-        </div>
+                </div>
+            ))}
+            {loading && <div className="flex justify-center"> <LucideLoader size={30} className="animate-spin" stroke="purple" /></div>}
+            {!hasMore && <EndMessage />}
+        </div >
     );
 }
 

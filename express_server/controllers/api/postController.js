@@ -77,8 +77,12 @@ class PostController {
             const user = req.user;
             const { page, limit } = req.query
             // Parse limit to an integer or default to 5 if not provided
-            const parsedLimit = limit ? parseInt(req.query.limit) : 18;
-            const parsedPage = page ? parseInt(req.query.page) : 1;
+            const parsedLimit = limit ? parseInt(limit, 10) : 6;
+            const validLimit = Number.isNaN(parsedLimit) || parsedLimit <= 0 ? 5 : parsedLimit;
+
+            // Parse page to an integer or default to 1 if not provided
+            const parsedPage = page ? parseInt(page, 10) : 1;
+            const validPage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
 
             const postCount = await prismaQuery.post.findMany({
                 where: {
@@ -103,8 +107,11 @@ class PostController {
                 orderBy: {
                     created_at: "desc"
                 },
-                skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
-                take: parsedLimit
+                skip: (validPage - 1) * validLimit,
+                take: validLimit,
+                orderBy: {
+                    created_at: "desc"
+                },
             });
 
             return res.status(200).json({
@@ -130,8 +137,13 @@ class PostController {
             const userid = parseInt(req.params.userid)
             const { page, limit } = req.query
             // Parse limit to an integer or default to 5 if not provided
-            const parsedLimit = limit ? parseInt(req.query.limit) : 18;
-            const parsedPage = page ? parseInt(req.query.page) : 1;
+            // Parse limit to an integer or default to 5 if not provided
+            const parsedLimit = limit ? parseInt(limit, 10) : 6;
+            const validLimit = Number.isNaN(parsedLimit) || parsedLimit <= 0 ? 5 : parsedLimit;
+
+            // Parse page to an integer or default to 1 if not provided
+            const parsedPage = page ? parseInt(page, 10) : 1;
+            const validPage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
 
             const postCount = await prismaQuery.post.findMany({
                 where: {
@@ -173,11 +185,11 @@ class PostController {
                         }
                     }
                 },
+                skip: (validPage - 1) * validLimit,
+                take: validLimit,
                 orderBy: {
                     created_at: "desc"
                 },
-                skip: parsedPage === 1 ? 0 : (parsedLimit * parsedPage) - parsedLimit,
-                take: parsedLimit
             });
 
             return res.status(200).json({
@@ -251,6 +263,19 @@ class PostController {
                         select: {
                             post_id: true,
                             user_id: true
+                        }
+                    },
+                    user: {
+                        select: {
+                            username: true,
+                            profile_image: true,
+                            name: true,
+                            user_id: true,
+                            Subscribers: {
+                                select: {
+                                    subscriber_id: true
+                                }
+                            }
                         }
                     }
                 },

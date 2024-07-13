@@ -47,9 +47,11 @@ export const PostCompInteractions = ({ data }: { data: PostData | undefined }) =
             <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
                 <LucideMessageSquare size={25} />{data?.post_comments}
             </span>
-            <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
-                <LucideRepeat2 size={25} />{data?.post_reposts}
-            </span>
+            {(data?.user?.user_id !== user?.user_id) && (
+                <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
+                    <LucideRepeat2 size={25} />{data?.post_reposts}
+                </span>
+            )}
             <span className="flex items-center gap-1 text-sm cursor-pointer font-medium">
                 <LucideShare size={25} />
             </span>

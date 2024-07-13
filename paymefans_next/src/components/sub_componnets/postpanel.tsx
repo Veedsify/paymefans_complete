@@ -8,39 +8,28 @@ import { fetchItems } from "@/components/sub_componnets/infinite-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import PostPanelFetch from "../custom-hooks/post-panel-fetch";
 import { UserPostProps } from "@/types/components";
+import { useInView } from 'react-intersection-observer';
+import { LucideLoader } from "lucide-react";
 
 
 const PostPanel = () => {
     const { user } = useUserAuthContext();
-    //allPosts will be used to store the news articles
     const [page, setPage] = useState(1);
-
-    const [allPosts, setAllPosts] = useState<UserPostProps[]>([]);
-    const [totalResults, setTotalResults] = useState(0);
-
-    const fetchMoreData = async () => {
-        const res = await fetchItems({ pageParam: page + 1 });
-        setPage(page + 1);
-        setAllPosts((prev) => {
-            return [...prev, ...res?.data.data]
-        });
-        setTotalResults(res?.data.total);
-    }
-
-
-    const fetchNews = useCallback(async () => {
-        const res = await fetchItems({ pageParam: page });
-        setAllPosts(res?.data.data);
-        setTotalResults(res?.data.total);
-    }, [page])
+    const { posts, loading, hasMore } = PostPanelFetch(page);
+    const { ref, inView } = useInView({
+        threshold: 1
+    })
 
     useEffect(() => {
-        fetchNews();
-    }, [fetchNews])
+        if (loading) return;
+        if (inView && hasMore) {
+            setPage(prev => prev + 1);
+        }
+    }, [inView, hasMore])
 
     const EndMessage = () => (
-        <div className="px-3 py-9 mt-3">
-            <p className="text-center font-medium">
+        <div className="px-3 py-2">
+            <p className="text-gray-500 italic text-center font-medium">
                 End Of Post
             </p>
         </div>
@@ -48,16 +37,12 @@ const PostPanel = () => {
 
     return (
         <div className="mt-3 mb-12 select-none">
-            <InfiniteScroll
-                dataLength={allPosts.length}
-                next={fetchMoreData}
-                hasMore={allPosts.length < totalResults}
-                loader={<LoadingPost />}
-                endMessage={<EndMessage />}
-            >
-                {user && allPosts?.map((post: UserPostProps, index: number) => (
+            {posts.map((post, index) => (
+                <div
+                    key={index}
+                    ref={index === posts.length - 1 ? ref : null}
+                >
                     <PostComponent
-                        key={index}
                         user={{
                             id: user?.id!,
                             user_id: user?.user_id!,
@@ -74,12 +59,12 @@ const PostPanel = () => {
                             time: formatDate(new Date(post.created_at))
                         }}
                     />
-                ))
-                }
-            </InfiniteScroll >
+                </div>
+            ))}
+            {loading && <div className="flex justify-center"> <LucideLoader size={30} className="animate-spin" stroke="purple" /></div>}
+            {!hasMore && <EndMessage />}
         </div >
     )
-        ;
 }
 
 export default PostPanel;

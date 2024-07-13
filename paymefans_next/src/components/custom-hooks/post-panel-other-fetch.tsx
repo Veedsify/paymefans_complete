@@ -2,10 +2,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken } from "@/utils/cookie.get";
-import { PostData, UserPostProps } from "@/types/components";
+import { PostData, UserPostProps, UserPostPropsOther } from "@/types/components";
 
-export default function PostPanelFetch(pageNumber: number) {
-    const [posts, setPosts] = useState<UserPostProps[]>([]);
+export default function PostPanelFetchOther(userid: number, pageNumber: number) {
+    const [posts, setPosts] = useState<UserPostPropsOther[]>([]);
     const [totalResults, setTotalResults] = useState(0);
     const [loading, setLoading] = useState(true);
     const [hasMore, setHasMore] = useState(true);
@@ -16,7 +16,7 @@ export default function PostPanelFetch(pageNumber: number) {
         setLoading(true)
         setError(false)
         const token = getToken()
-        const api = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/user/posts`
+        const api = `${process.env.NEXT_PUBLIC_EXPRESS_URL}/user/${userid}/posts`
         const postPerPage = process.env.NEXT_PUBLIC_POST_PER_PAGE
 
         axios(api, {
