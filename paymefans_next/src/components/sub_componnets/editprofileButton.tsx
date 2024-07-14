@@ -69,16 +69,16 @@ const EditProfileButton = ({ user }: { user: any }) => {
             </button>
             <div
                 onClick={() => setOpen(false)}
-                className={`fixed inset-0 w-full h-full bg-white z-50 flex items-center justify-center transition-all duration-300 ${open ? "opacity-100 pointer-events-auto" : "pointer-events-none opacity-0"}`}>
+                className={`fixed inset-0 w-full h-full bg-white dark:bg-slate-950 z-50 flex items-center justify-center transition-all duration-300 ${open ? "opacity-100 pointer-events-auto" : "pointer-events-none opacity-0"}`}>
                 <span
                     className="absolute top-5 right-5 cursor-pointer"
                     onClick={() => setOpen(false)}>
                     <X />
                 </span>
-                <div className="bg-white m-2 md:m-3 p-5 rounded-md shadow-lg md:min-w-[550px] max-h-[600px] overflow-y-auto"
+                <div className="bg-white dark:bg-slate-900 m-2 md:m-3 p-5 rounded-md shadow-lg md:min-w-[550px] max-h-[600px] overflow-y-auto"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <h1 className="font-bold text-lg md:text-xl mb-5">Edit Profile</h1>
+                    <h1 className="font-bold text-lg md:text-xl mb-5 dark:text-white">Edit Profile</h1>
                     <label htmlFor="imageUpload">
                         <div className="mb-3 rounded-xl overflow-hidden">
                             <BannerComponent profile_banner={user ? user.profile_banner : "/site/banner.png"} />
@@ -108,7 +108,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             onChange={handleInputChange}
                             name="name"
                             defaultValue={user?.name}
-                            className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
+                            className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 border-gray-300 p-4 outline-none text-black rounded-xl"
                             placeholder="Name "
                         />
                     </div>
@@ -117,7 +117,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             type="text"
                             onChange={handleInputChange}
                             name="location"
-                            className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
+                            className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 border-gray-300 p-4 outline-none text-black rounded-xl"
                             defaultValue={user?.location ? user?.location : ""}
                             placeholder="Location "
                         />
@@ -126,7 +126,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
                         <input
                             type="email"
                             defaultValue={user?.email ? user?.email : ""}
-                            className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl select-none"
+                            className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 border-gray-300 p-4 outline-none text-black rounded-xl select-none"
                             readOnly
                             disabled
                             placeholder="Email "
@@ -138,7 +138,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             id=""
                             rows={6}
                             onChange={handleInputChange}
-                            className="resize-none w-full block outline-none border mb-3 border-gray-300 p-4 text-black rounded-xl"
+                            className="resize-none w-full block outline-none border mb-3 border-gray-300 dark:text-white dark:bg-slate-900 dark:border-slate-700 p-4 text-black rounded-xl"
                             placeholder="Bio"
                             defaultValue={user?.bio ? user?.bio : ""}
                         ></textarea>
@@ -149,12 +149,12 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             onChange={handleInputChange}
                             name="website"
                             defaultValue={user?.website ? user?.website : ""}
-                            className="w-full block border mb-5 border-gray-300 p-4 outline-none text-black rounded-xl"
+                            className="w-full block border mb-5 border-gray-300 p-4 outline-none text-black rounded-xl dark:text-white dark:bg-slate-900 dark:border-slate-700"
                             placeholder="Website"
                         />
                     </div>
-                    <div className="grid grid-cols-12 border rounded-xl items-center justify-center mb-5">
-                        <div className="flex items-center justify-center col-span-2 bg-gray-100 h-full
+                    <div className="grid grid-cols-12 border rounded-xl items-center justify-center mb-5 overflow-hidden dark:border-slate-600">
+                        <div className="flex items-center justify-center col-span-2 bg-gray-100 dark:bg-black dark:text-white h-full
                         ">
                             <Instagram />
                         </div>
@@ -162,12 +162,12 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             type="text"
                             onChange={handleInputChange}
                             name="instagram"
-                            className="w-full block border-gray-300 p-4 outline-none text-black  col-span-10"
+                            className="w-full block border-gray-300 dark:text-white dark:bg-slate-900 dark:border-slate-700 p-4 outline-none text-black  col-span-10"
                             placeholder="https://instagram.com/@paymefans"
                         />
                     </div>
-                    <div className="grid grid-cols-12 border rounded-xl items-center justify-center mb-5">
-                        <div className="flex items-center justify-center col-span-2 bg-gray-100 h-full
+                    <div className="grid grid-cols-12 border rounded-xl items-center justify-center mb-5 overflow-hidden dark:border-slate-600">
+                        <div className="flex items-center justify-center col-span-2 bg-gray-100 dark:bg-black dark:text-white h-full
                         ">
                             <Twitter />
                         </div>
@@ -175,12 +175,12 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             type="text"
                             onChange={handleInputChange}
                             name="twitter"
-                            className="w-full block border-gray-300 p-4 outline-none text-black  col-span-10"
+                            className="w-full block border-gray-300 dark:text-white dark:bg-slate-900 dark:border-slate-700 p-4 outline-none text-black  col-span-10"
                             placeholder="https://twitter.com/@paymefans"
                         />
                     </div>
-                    <div className="grid grid-cols-12 border rounded-xl items-center justify-center mb-5">
-                        <div className="flex items-center justify-center col-span-2 bg-gray-100 h-full
+                    <div className="grid grid-cols-12 border rounded-xl items-center justify-center mb-5 overflow-hidden dark:border-slate-600">
+                        <div className="flex items-center justify-center col-span-2 bg-gray-100 dark:bg-black dark:text-white h-full
                         ">
                             <Facebook />
                         </div>
@@ -188,7 +188,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             type="text"
                             onChange={handleInputChange}
                             name="facebook"
-                            className="w-full block border-gray-300 p-4 outline-none text-black  col-span-10"
+                            className="w-full block border-gray-300 dark:text-white dark:bg-slate-900 dark:border-slate-700 p-4 outline-none text-black  col-span-10"
                             placeholder="https://facebook.com/@paymefans"
                         />
                     </div>
@@ -197,7 +197,7 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             type="submit"
                             onClick={handleSaveClick}
                             defaultValue={"Save"}
-                            className="w-full block border mb-3 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer"
+                            className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer"
                             placeholder="Website "
                         />
                     </div>

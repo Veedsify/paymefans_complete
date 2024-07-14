@@ -83,7 +83,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
     }
 
     return (
-        <div className='hover:bg-gray-100 py-6 px-2 md:px-5 duration-300'>
+        <div className='hover:bg-gray-100 dark:hover:bg-slate-900 py-6 px-2 md:px-5 duration-300'>
             <div className="cursor-pointer" onClick={redirectToPost}>
                 <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-1 md:gap-3 dark:text-white">
