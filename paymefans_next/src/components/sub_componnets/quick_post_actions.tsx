@@ -65,11 +65,11 @@ const QuickPostActions = ({ options }: QuickPostActionsProps) => {
                 <LucideMoreVertical className="cursor-pointer" size={20} />
             </span>
             <div className={`absolute right-0 py-3 z-20 duration-300 transition-all ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
-                <ul className="bg-white border shadow-2xl overflow-hidden rounded-lg w-52 py-1">
+                <ul className="bg-white dark:bg-slate-800 dark:border-slate-700 border shadow-2xl overflow-hidden rounded-lg w-52 py-1">
                     {user?.username === options.username ? (
                         ownerOptions.map((option, index) => (
-                            <li key={index} className={`py-2 hover:bg-gray-50 ${index == ownerOptions.length - 1 ? "" : "border-b"}`}>
-                                <Link href={option.link} className="font-medium text-black flex items-center text-sm py-1 px-3">
+                            <li key={index} className={`py-2 hover:bg-gray-50 dark:hover:bg-slate-900 ${index == ownerOptions.length - 1 ? "" : "border-b dark:border-slate-700"}`}>
+                                <Link href={option.link} className="font-medium dark:text-white text-black flex items-center text-sm py-1 px-3">
                                     {option.icon}
                                     {option.name}
                                 </Link>
@@ -77,8 +77,8 @@ const QuickPostActions = ({ options }: QuickPostActionsProps) => {
                         ))
                     ) : (
                         publicOptions.map((option, index) => (
-                            <li key={index} className="py-2 hover:bg-gray-50 border-b">
-                                <Link href={option.link} className="font-medium text-black flex items-center text-sm py-1 px-3">
+                            <li key={index} className="py-2 hover:bg-gray-50 dark:hover:bg-slate-900 border-b">
+                                <Link href={option.link} className="font-medium dark:text-white text-black flex items-center text-sm py-1 px-3">
                                     {option.icon}
                                     {option.name}
                                 </Link>

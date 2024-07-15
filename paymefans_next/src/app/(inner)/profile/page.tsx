@@ -51,11 +51,12 @@ const ProfilePage = async () => {
                 <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5 dark:text-white items-start">
                     <div className="flex flex-col ">
                         <h1 className="font-bold ">{user?.name ? user.name : ""}</h1>
-                        <small className="text-gray-500 ">{user?.username}</small>
+                        <small className="text-gray-500 dark:text-gray-400">{user?.username}</small>
                     </div>
-                    <p className="font-medium mb-2 leading-normal text-gray-700">
-                        {user?.bio ? user.bio : ""}
-                    </p>
+                    <div className="font-medium mb-2 leading-loose dark:text-gray-300 text-gray-700"
+                        dangerouslySetInnerHTML={{ __html: user?.bio?.replace(/(?:\r\n|\r|\n)/g, '<br>')! }}
+                    >
+                    </div>
                     {user?.website && <>
                         <Link
                             href={user.website ? user.website : ""}

@@ -13,7 +13,7 @@ const ProfileTabs = () => {
         selectedIndex={selectedTab}
         onSelect={(index) => setSelectedTab(index)}
       >
-        <TabList className="flex items-center text-center border-b dark:text-white">
+        <TabList className="flex items-center text-center border-b dark:border-slate-600 dark:text-white">
           <Tab className="flex-1 outline-none cursor-pointer">
             <span className="block mb-2 text-sm font-medium">Post</span>
             <span

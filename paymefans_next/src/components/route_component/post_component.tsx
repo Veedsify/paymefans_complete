@@ -92,7 +92,7 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
                             <p className="text-black dark:text-white font-bold">{user.name}</p>{user.username}
                         </Link>
                         <small className="ml-auto">{data.time}</small>
-                        <div className="text-black">
+                        <div className="text-black dark:text-white">
                             {data.post_audience === "public" ? <LucideEye size={15} /> : data.post_audience === "private" ? <LucideLock size={15} /> : <LucideUsers size={15} />}
                         </div>
                     </div>

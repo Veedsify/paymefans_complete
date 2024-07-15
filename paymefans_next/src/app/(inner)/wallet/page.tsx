@@ -41,13 +41,13 @@ const WalletPage = async () => {
                 <div className="flex align-middle gap-5">
                     <Image src={user.profile_image} width={50} height={50} alt="" priority
                         className="object-cover w-12 h-12 border-2 rounded-full sm:-top-12  -top-12" />
-                    <div className="self-center">
+                    <div className="self-center dark:text-gray-300">
                         <h2 className="font-bold">{user.name}</h2>
                         <p>{user.username}</p>
                     </div>
                 </div>
                 <div>
-                    <Link href="/points" className="p-3 px-8 text-xs font-semibold text-white bg-black rounded">
+                    <Link href="/points" className="p-3 px-8 text-xs font-semibold text-white bg-black dark:bg-primary-dark-pink rounded">
                         Add Funds
                     </Link>
                 </div>
@@ -84,15 +84,15 @@ const WalletPage = async () => {
                 </>
             )}
             <div>
-                <h2 className="text-xl font-semibold mt-10 mb-10">Transactions</h2>
+                <h2 className="text-xl font-semibold mt-10 mb-10 dark:text-white">Transactions</h2>
                 <div className="grid gap-4">
                     {transactions.map((transaction: any, i: number) => (
-                        <div key={i} className="bg-white rounded-xl">
-                            <div className="flex justify-between items-center py-2">
+                        <div key={i} className="bg-white dark:bg-slate-800 rounded-xl">
+                            <div className="flex justify-between items-center p-2 ">
                                 <div>
                                     <p className={`text-sm font-semibold ${transaction.success ? "text-green-600" : "text-red-500"}`}>{transaction.success ? "Transaction Successful" : "Transaction Failed"}</p>
                                     <div className="flex items-center gap-3">
-                                        <small className="text-xs">{new Date(transaction.created_at).toLocaleDateString("en-US", {
+                                        <small className="text-xs dark:text-gray-300">{new Date(transaction.created_at).toLocaleDateString("en-US", {
                                             hour: "numeric",
                                             minute: "numeric",
                                             month: "short",

@@ -42,8 +42,8 @@ const SideModels = () => {
     <div className="p-4 lg:block hidden lg:col-span-3" >
       <div className="max-w-[450px]">
         <div className="relative overflow-auto mb-8">
-          <label className="flex justify-between border border-gray-400 rounded-md pr-5 overflow-hidden">
-            <input type="search" name="Search" id="search" className="p-4 w-full outline-none" placeholder="Search" />
+          <label className="flex justify-between border dark:border-slate-700 dark:text-white border-gray-400 rounded-md pr-5 overflow-hidden">
+            <input type="search" name="Search" id="search" className="p-4 dark:bg-slate-950  w-full outline-none" placeholder="Search" />
             <LucideSearch className="self-center pr-2 cursor-pointer" size={30} />
           </label>
         </div>

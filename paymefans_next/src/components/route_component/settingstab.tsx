@@ -46,7 +46,7 @@ const SettingsTab = ({ user }: { user: AuthUserProps | null }) => {
                             data-tab="security"
                             className="text-black font-bold py-2">Security</button>
                     </Tab>
-                    {authuser?.is_model && (
+                    {(authuser?.is_model && authuser.Model?.verification_status === true) && (
                         <Tab>
                             <button
                                 onClick={handleClick}

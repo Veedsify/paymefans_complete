@@ -189,6 +189,30 @@ class authController {
         }
         return res.status(200).json({ message: "No Data found", status: false });
     }
+
+    /**
+     * Check if an email is verified.
+     * @param {Object} req - The request object.
+     * @param {Object} res - The response object.
+     * @returns {Object} The response containing the status and message.
+     */
+    static async CheckEmail(req, res) {
+        const { email } = req.query;
+
+        if (email === undefined) return res.status(200).json({ message: "Email is required", status: false });
+
+        const user = await prismaQuery.user.findUnique({
+            where: {
+                email: email,
+            },
+        });
+
+        if (user) {
+            return res.status(200).json({ email, message: "Email is verified", status: true });
+        }
+
+        return res.status(200).json({ message: "Email is not verified", status: false });
+    }
 }
 
 module.exports = authController;

@@ -103,6 +103,7 @@ export type AllModelsProps = {
 export type UserUpdateProfileType = {
   profile_image?: File;
   name: string;
+  email: string;
   location: string;
   bio: string | null;
   website: string | null;

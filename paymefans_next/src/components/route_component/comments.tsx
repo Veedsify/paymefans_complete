@@ -54,11 +54,11 @@ const CommentsHolder = ({ post, postComments: AttachedComments }: { post: PostDa
     }
 
     return (
-        <div className="border-y p-0 md:p-3 py-5">
+        <div className={`${(postComment.length > 0 || AttachedComments.length > 0) && "border-y"}  dark:text-gray-100 dark:border-slate-800 p-0 md:p-3 py-5`}>
             {
                 AttachedComments.map((comment, index) => (
                     <div className="flex gap-1 md:gap-3 items-start relative w-full" key={index}>
-                        {(index !== AttachedComments.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
+                        {(index !== AttachedComments.length! - 1) && (<div className="absolute border-r dark:border-slate-700 h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
                         </div>)}
                         <Link href={`/${comment.author_username}`}>
                             <Image src={comment.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />
@@ -89,7 +89,7 @@ const CommentsHolder = ({ post, postComments: AttachedComments }: { post: PostDa
             }
             {postComment?.map((comment, index) => (
                 <div className="flex gap-1 md:gap-3 items-start relative w-full" key={index}>
-                    {(index !== postComment?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 -z-10 -translate-1/2">
+                    {(index !== postComment?.length! - 1) && (<div className="absolute border-r h-full top-0 left-4 md:left-7 dark:border-slate-700  -z-10 -translate-1/2">
                     </div>)}
                     <Link href={`/${comment.user.username}`}>
                         <Image src={comment.user.profile_image} width="50" height="50" className="h-auto aspect-square rounded-full w-8 md:w-14" alt="" />

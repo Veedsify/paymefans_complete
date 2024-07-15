@@ -1,10 +1,13 @@
 "use client"
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import { UserUpdateProfileType } from "@/types/user";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { saveUserSettings } from "@/utils/data/save-user-settings";
+import axios from "axios";
+import { getToken } from "@/utils/cookie.get";
+import useCheckEmail from "../custom-hooks/check-email";
 
 type ProfileSettingsProps = {
     user: any
@@ -15,11 +18,21 @@ const ProfileSettings = ({
 }: ProfileSettingsProps) => {
     const router = useRouter()
     const [userData, setUserData] = useState<UserUpdateProfileType>({} as UserUpdateProfileType)
+    const [emailcheck, setEmailCheck] = useState("")
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setUserData({ ...userData, [e.target.name]: e.target.value })
     }
+
+    const { message, canSave } = useCheckEmail(user, emailcheck)
+
+
     const handleSaveClick = async () => {
         try {
+            const email = userData.email
+            const regex = `^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$`
+            if (!email.match(regex)) {
+                return toast.error('Invalid email address')
+            }
             const response = await saveUserSettings(userData)
             if (response.ok) {
                 toast.success('Profile updated successfully');
@@ -58,17 +71,22 @@ const ProfileSettings = ({
             <div>
                 <input
                     type="email"
-                    disabled
+                    name="email"
+                    onChange={e => {
+                        setEmailCheck(e.target.value)
+                        handleInputChange(e)
+                    }}
                     defaultValue={user?.email}
                     className="w-full block border mb-3 border-gray-300 p-4 outline-none text-black rounded-xl"
                     placeholder="Email "
                 />
+                {message && <p className="text-red-500 pb-1 font-semibold px-2">{message}</p>}
             </div>
             <div>
                 <textarea
                     name="bio"
                     rows={6}
-                    className="resize-none w-full block outline-none border mb-3 border-gray-300 p-4 text-black rounded-xl"
+                    className="resize-none whitespace-pre-line w-full block outline-none border mb-3 border-gray-300 p-4 text-black rounded-xl"
                     placeholder="Bio"
                     onChange={handleInputChange}
                     defaultValue={user?.bio ? user.bio : ""}
@@ -127,9 +145,10 @@ const ProfileSettings = ({
                 <div>
                     <input
                         type="submit"
+                        disabled={!canSave}
                         onClick={handleSaveClick}
                         defaultValue={"Save"}
-                        className="w-full block border mb-3 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer"
+                        className="w-full block border mb-3 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-500"
                     />
                 </div>
             </div>

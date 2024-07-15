@@ -35,7 +35,7 @@ export const PostCompInteractions = ({ data }: { data: PostData | undefined }) =
     }, [user, data])
 
     return (
-        <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-6 border-b">
+        <div className="flex mt-6 justify-around text-sm w-full text-gray-600 py-6 dark:border-slate-700 border-b">
             <span className="flex items-center gap-1 text-sm cursor-pointer font-medium"
                 onClick={likePost}
             >

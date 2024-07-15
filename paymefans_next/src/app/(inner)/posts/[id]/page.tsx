@@ -58,11 +58,11 @@ const Post = ({ params: { id } }: PostPageprops) => {
     return (
         <div className="p-4 mt-8">
             <div className="mb-10">
-                <div className="flex items-center justify-between text-gray-500 text-sm mb-2">
+                <div className="flex items-center justify-between dark:text-white text-gray-500 text-sm mb-2">
                     <div className="flex items-center gap-3">
                         <Image width={40} height={40} src={post ? post.user.profile_image : "/site/avatar.png"} alt="" className="w-8 md:w-10 rounded-full aspect-square object-cover" />
                         <Link href={`/${[post?.user.username]}`} className="flex items-center gap-1">
-                            <p className="text-black font-bold">{post?.user.name}</p>{post?.user.username}
+                            <p className="dark:text-white text-black font-bold">{post?.user.name}</p>{post?.user.username}
                         </Link>
                         <small className="ml-auto">
                             {formatDate(new Date(post?.created_at))}
@@ -77,7 +77,7 @@ const Post = ({ params: { id } }: PostPageprops) => {
                     }} />
                 </div>
 
-                <div className="text-sm font-medium py-2 leading-loose text-gray-700"
+                <div className="text-sm font-medium py-2 leading-loose dark:text-white text-gray-700"
                     dangerouslySetInnerHTML={{ __html: formattedText }}
                 >
                 </div>

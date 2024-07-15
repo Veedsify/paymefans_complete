@@ -29,7 +29,7 @@ router.post("/auth/login", authController.Login);
 router.post("/auth/points", checkUserIsAuthenticated, authController.Points);
 router.post("/auth/wallet", checkUserIsAuthenticated, authController.Wallet);
 router.get("/retrieve", checkUserIsAuthenticated, authController.Retrieve);
-
+router.post("/users/check-email", checkUserIsAuthenticated, authController.CheckEmail);
 
 // Profile
 router.post("/profile/user", profileController.Profile);

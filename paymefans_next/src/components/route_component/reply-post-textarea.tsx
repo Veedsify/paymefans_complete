@@ -118,7 +118,7 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
             {commentSending && <div className="flex w-full text-center justify-center p-2">
                 <LucideLoader size={30} className="animate-spin transition-all duration-300" />
             </div>}
-            <div className="flex gap-4 items-start mt-5">
+            <div className="flex gap-4 items-start mt-5 dark:text-white">
                 <div className="flex items-center gap-2">
                     <Image width={80} height={80} src={user?.profile_image || "/site/avatar.png"} alt="" className="w-10 md:w-16 h-auto rounded-full object-cover" />
                 </div>
@@ -126,15 +126,17 @@ export const ReplyPostComponent = ({ options }: ReplyPostProps) => {
                     <p className="mb-3 p-3 text-sm font-semibold">
                         Replying to <span className="font-bold text-primary-dark-pink">{options.author_username}</span>
                     </p>
-                    <textarea
-                        onBlur={(e) => !e.target.value && setReplyPostOpen(false)}
-                        onFocus={handleTextAreaFocus}
-                        onChange={handleTypedComment}
-                        disabled={commentSending}
-                        value={typedComment}
-                        placeholder="Type a reply"
-                        className={`block w-full outline-none p-3 pt-0 resize-none ${replyPostOpen ? "h-52" : "h-auto"}`}
-                    />
+                    <div className={`h-56`}>
+                        <textarea
+                            onBlur={(e) => !e.target.value && setReplyPostOpen(false)}
+                            onFocus={handleTextAreaFocus}
+                            onChange={handleTypedComment}
+                            disabled={commentSending}
+                            value={typedComment}
+                            placeholder="Type a reply"
+                            className={`block w-full outline-none p-3 resize-none duration-300 transition-all ${replyPostOpen ? "h-full" : "h-1/3"} dark:text-white dark:bg-slate-800 rounded-md`}
+                        />
+                    </div>
                     <div className="flex gap-3 flex-wrap mb-3">
                         {files.map((file, index) => (
                             <FilesHolder key={index} file={file} remove={removeFile} />

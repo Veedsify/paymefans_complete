@@ -26,7 +26,7 @@ const SettingsHookupCheck = () => {
         }
     }
 
-    if (user?.Model !== null) {
+    if ((user?.Model && user?.Model?.verification_status === true)) {
         return (
             <>
                 <div>

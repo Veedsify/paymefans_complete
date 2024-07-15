@@ -25,11 +25,11 @@ const OtherTransactions = () => {
 
     return (
         <>
-            <h2 className="text-xl font-semibold mt-10 mb-10">Other Transactions</h2>
+            <h2 className="text-xl font-semibold mt-10 mb-10 dark:text-white">Other Transactions</h2>
             <div className="grid gap-4">
                 {transactions.map((transaction: any, i) => (
-                    <div key={i} className="bg-white rounded-xl">
-                        <div className="flex justify-between items-center py-2">
+                    <div key={i} className="bg-white dark:bg-slate-800 rounded-xl">
+                        <div className="flex justify-between items-center p-2">
                             <div>
                                 <p className={`text-sm font-semibold ${transaction.transaction_type === "credit" ? "text-green-600" : "text-red-500"}`}>{transaction.transaction_message}</p>
                                 <div className="flex items-center gap-3">
