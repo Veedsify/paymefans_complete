@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken } from "@/utils/cookie.get";
 import { PostData, UserPostProps, UserPostPropsOther } from "@/types/components";
+import { u } from "@vidstack/react/types/vidstack.js";
 
 export default function PostPanelFetchOther(userid: number, pageNumber: number) {
     const [posts, setPosts] = useState<UserPostPropsOther[]>([]);
@@ -41,7 +42,7 @@ export default function PostPanelFetchOther(userid: number, pageNumber: number) 
             if (axios.isCancel(e)) return
             setError(true)
         })
-    }, [pageNumber])
+    }, [pageNumber, userid])
 
     return { posts, loading, error, hasMore, totalResults }
 }

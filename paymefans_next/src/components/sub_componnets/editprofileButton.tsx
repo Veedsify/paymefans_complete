@@ -41,8 +41,8 @@ const EditProfileButton = ({ user }: { user: any }) => {
             })
 
             if (response.status === 200 && response.data) {
-                setOpen(false)
                 toast.success('Profile updated successfully');
+                setOpen(false)
                 router.refresh()
             } else {
                 return toast.error('Failed to update profile')

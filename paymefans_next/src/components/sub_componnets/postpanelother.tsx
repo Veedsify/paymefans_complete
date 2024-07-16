@@ -30,7 +30,7 @@ const PostPanelOther = ({
         if (inView && hasMore) {
             setPage(prev => prev + 1);
         }
-    }, [inView, hasMore])
+    }, [inView, hasMore, loading])
 
     const EndMessage = () => (
         <div className="px-3 py-2">
@@ -56,7 +56,7 @@ const PostPanelOther = ({
                             username: post.user.username,
                             image: post.user.profile_image
                         }}
-                        isSubscriber={true}
+                        isSubscriber={post.user.Subscribers.some((sub) => sub.subscriber_id === userdata.id)}
                         data={{
                             ...post,
                             post: post.content,

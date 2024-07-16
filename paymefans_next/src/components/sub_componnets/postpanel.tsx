@@ -25,7 +25,7 @@ const PostPanel = () => {
         if (inView && hasMore) {
             setPage(prev => prev + 1);
         }
-    }, [inView, hasMore])
+    }, [inView, hasMore, loading])
 
     const EndMessage = () => (
         <div className="px-3 py-2">

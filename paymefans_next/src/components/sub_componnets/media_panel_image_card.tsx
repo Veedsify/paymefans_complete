@@ -16,11 +16,11 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
     const token = getToken();
     const [hasMore, setHasMore] = useState(true);
 
-    const sortData = (data: MediaDataType[]) => {
-        return sort === "all" ? data : data.filter((media) => media.media_type === sort);
-    };
 
     useEffect(() => {
+        const sortData = (data: MediaDataType[]) => {
+            return sort === "all" ? data : data.filter((media) => media.media_type === sort);
+        };
         setSorted(sortData(data));
     }, [data, sort]);
 

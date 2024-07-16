@@ -54,7 +54,7 @@ const ProfilePage = async () => {
                         <small className="text-gray-500 dark:text-gray-400">{user?.username}</small>
                     </div>
                     <div className="font-medium mb-2 leading-loose dark:text-gray-300 text-gray-700"
-                        dangerouslySetInnerHTML={{ __html: user?.bio?.replace(/(?:\r\n|\r|\n)/g, '<br>')! }}
+                        dangerouslySetInnerHTML={{ __html: user?.bio ? user?.bio?.replace(/(?:\r\n|\r|\n)/g, '<br>') : "" }}
                     >
                     </div>
                     {user?.website && <>

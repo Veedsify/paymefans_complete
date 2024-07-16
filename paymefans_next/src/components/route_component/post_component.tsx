@@ -48,17 +48,30 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
 
     const redirectToPost = useCallback((e: MouseEvent) => {
         const target = e.target as HTMLElement;
-
         if (!(target instanceof HTMLAnchorElement) && !(target instanceof HTMLButtonElement)) {
             e.preventDefault();
             if (data.post_audience === "subscribers" && !isSubscriber) {
-                router.push(`/posts/${data.post_id}`);
+                swal({
+                    title: "You need to be a subscriber to view this post",
+                    icon: "warning",
+                    buttons: {
+                        cancel: true,
+                        confirm: {
+                            text: "Subscribe",
+                            className: "bg-primary-dark-pink text-white",
+                        }
+                    },
+                }).then((willSubscribe) => {
+                    if (willSubscribe) {
+                        router.push(`/subscribe/${user.user_id}`);
+                    }
+                });
                 return;
             } else {
                 router.push(`/posts/${data.post_id}`);
             }
         }
-    }, [router, data.post_id, data.post_audience, isSubscriber]);
+    }, [router, data.post_id, data.post_audience, isSubscriber, user.user_id]);
 
     const handleNonSubscriberClick = (e: MouseEvent) => {
         e.stopPropagation()

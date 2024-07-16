@@ -19,11 +19,11 @@ const MediaPanelImageCardOther = ({ sort, userdata }: { sort: string; userdata: 
     const [hasMore, setHasMore] = useState(true);
     const { user } = useUserAuthContext();
 
-    const sortData = (data: MediaDataTypeOtherProps[]) => {
-        return sort === "all" ? data : data.filter((media) => media.media_type === sort);
-    };
 
     useEffect(() => {
+        const sortData = (data: MediaDataTypeOtherProps[]) => {
+            return sort === "all" ? data : data.filter((media) => media.media_type === sort);
+        };
         setSorted(sortData(data));
     }, [data, sort]);
 
