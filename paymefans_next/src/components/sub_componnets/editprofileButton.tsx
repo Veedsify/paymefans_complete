@@ -126,9 +126,10 @@ const EditProfileButton = ({ user }: { user: any }) => {
                         <input
                             type="email"
                             defaultValue={user?.email ? user?.email : ""}
-                            className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 border-gray-300 p-4 outline-none text-black rounded-xl select-none"
+                            className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 border-gray-300 p-4 outline-none text-black rounded-xl select-none cursor-none"
+                            name="email"
                             readOnly
-                            disabled
+                            onChange={handleInputChange}
                             placeholder="Email "
                         />
                     </div>

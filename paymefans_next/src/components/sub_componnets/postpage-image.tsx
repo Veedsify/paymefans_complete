@@ -1,5 +1,5 @@
 "use client";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { HiPlay } from "react-icons/hi";
 import usePostComponent from "@/contexts/post-component-preview";
 import Image from "next/image";
@@ -12,7 +12,16 @@ export const PostPageImage = ({ media: { media_type, poster, url } }: {
     }
 }) => {
     const { fullScreenPreview } = usePostComponent();
+    const [canplay, setCanplay] = useState(false);
     const handleClick = useCallback(() => {
+        if (media_type === "video" && canplay) {
+            return swal({
+                title: "Video not ready",
+                text: "Please wait for the video to load",
+                icon: "warning",
+                timer: 2000,
+            })
+        }
         fullScreenPreview({ url, type: media_type, open: true });
     }, [fullScreenPreview, media_type, url]);
 
@@ -23,6 +32,7 @@ export const PostPageImage = ({ media: { media_type, poster, url } }: {
                     <video
                         onClick={handleClick}
                         className="w-full rounded-lg mt-3 block aspect-square object-cover cursor-pointer"
+                        onCanPlay={e => setCanplay(true)}
                         poster={poster ?? ""}
                     >
                         <source src={url} />

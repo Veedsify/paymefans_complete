@@ -20,6 +20,77 @@ class modelController {
             .json({ message: "Models found", status: true, models: getmodels });
     }
 
+    static async ModelsSearch(req, res) {
+        const { page, limit, q } = req.query
+        // Parse limit to an integer or default to 5 if not provided
+        const parsedLimit = limit ? parseInt(limit, 10) : 6;
+        const validLimit = Number.isNaN(parsedLimit) || parsedLimit <= 0 ? 5 : parsedLimit;
+
+        // Parse page to an integer or default to 1 if not provided
+        const parsedPage = page ? parseInt(page, 10) : 1;
+        const validPage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
+        try {
+
+            const getmodels = await prismaQuery.user.findMany({
+                where: {
+                    is_model: true,
+                    // Model: {
+                    //     verification_status: true,
+                    // }
+                    // OR: [
+                    //     {
+                    //         firstname: {
+                    //             contains: q,
+                    //         }
+                    //     },
+                    //     {
+                    //         lastname: {
+                    //             contains: q,
+                    //         }
+                    //     },
+                    //     {
+                    //         user: {
+                    //             fullname: {
+                    //                 contains: q,
+                    //             },
+                    //         }
+                    //     },
+                    //     {
+                    //         user: {
+                    //             username: {
+                    //                 contains: q,
+                    //             },
+                    //         }
+                    //     }
+                    // ]
+                },
+                select: {
+                    profile_image: true,
+                    username: true,
+                    id: true,
+                    fullname: true,
+                    Subscribers: {
+                        select: {
+                            id: true,
+                            subscriber_id: true
+                        }
+                    }
+                },
+                skip: (validPage - 1) * validLimit,
+                take: validLimit,
+            })
+
+            return res
+                .status(200)
+                .json({ message: "Models found", status: true, models: getmodels });
+        } catch (error) {
+            console.log(error)
+            return res
+                .status(500)
+                .json({ message: "An error occurred while fetching models", status: false });
+        }
+    }
+
     // Signup Model
     static async SignupModel(req, res) {
         try {

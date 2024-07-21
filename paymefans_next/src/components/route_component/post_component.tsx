@@ -171,7 +171,7 @@ const ImageComponent: React.FC<{ media: UserMediaProps, data: PostData, clickIma
 const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImageEvent, isSubscriber }) => {
     const [playing, setPlaying] = useState<boolean>(false);
     const videoRef = useRef<MediaPlayerInstance | null>(null);
-
+    const [canplay, setCanplay] = useState<boolean>(false);
     const playPauseVideo = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         if (data.post_audience === "subscribers" && !isSubscriber) {
@@ -182,7 +182,15 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImage
             if (playing) {
                 videoRef.current.pause();
             } else {
-                videoRef.current.play();
+                if (canplay) {
+                    videoRef.current.play();
+                } else {
+                    swal({
+                        title: "Video is still processing",
+                        icon: "warning",
+                        timer: 1500
+                    })
+                }
             }
             setPlaying(!playing);
         }
@@ -228,14 +236,17 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImage
                     e.currentTarget.muted = true
                     clickImageEvent(media);
                 }}
-                onCanPlay={() => setPlaying(true)}
+                onCanPlay={() => {
+                    setCanplay(true)
+                    setPlaying(true)
+                }}
                 onEnded={() => setPlaying(false)}
                 poster={media.poster ? media.poster : ""}
                 title={data.post}
                 src={media.url}
                 muted
                 autoplay
-                controls={playing}
+            // controls={playing}
             >
                 <MediaProvider className='video-stream-player' />
             </MediaPlayer>

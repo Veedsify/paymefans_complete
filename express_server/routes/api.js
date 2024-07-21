@@ -57,6 +57,7 @@ router.post("/settings/billings/message-price", checkUserIsAuthenticated, setMes
 
 // Models
 router.post("/models/all", checkUserIsAuthenticated, modelController.GetModels);
+router.get("/search-models", checkUserIsAuthenticated, modelController.ModelsSearch);
 router.post("/models/hookups", checkUserIsAuthenticated, modelController.GetModelAvailableForHookup);
 router.post("/models/signup", checkUserIsAuthenticated, modelController.SignupModel);
 router.get("/callback/model/signup", modelController.ValidateModelPayment);
