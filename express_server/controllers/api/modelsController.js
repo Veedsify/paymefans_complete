@@ -30,39 +30,24 @@ class modelController {
         const parsedPage = page ? parseInt(page, 10) : 1;
         const validPage = Number.isNaN(parsedPage) || parsedPage <= 0 ? 1 : parsedPage;
         try {
-
             const getmodels = await prismaQuery.user.findMany({
                 where: {
                     is_model: true,
                     // Model: {
                     //     verification_status: true,
-                    // }
-                    // OR: [
-                    //     {
-                    //         firstname: {
-                    //             contains: q,
-                    //         }
-                    //     },
-                    //     {
-                    //         lastname: {
-                    //             contains: q,
-                    //         }
-                    //     },
-                    //     {
-                    //         user: {
-                    //             fullname: {
-                    //                 contains: q,
-                    //             },
-                    //         }
-                    //     },
-                    //     {
-                    //         user: {
-                    //             username: {
-                    //                 contains: q,
-                    //             },
-                    //         }
-                    //     }
-                    // ]
+                    // },
+                    OR: [
+                        {
+                            fullname: {
+                                contains: q,
+                            }
+                        },
+                        {
+                            username: {
+                                contains: q,
+                            }
+                        },
+                    ]
                 },
                 select: {
                     profile_image: true,
@@ -75,6 +60,9 @@ class modelController {
                             subscriber_id: true
                         }
                     }
+                },
+                orderBy: {
+                    created_at: "desc"
                 },
                 skip: (validPage - 1) * validLimit,
                 take: validLimit,

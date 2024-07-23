@@ -6,8 +6,6 @@ import getUserData from "@/utils/data/user-data";
 import { LucideArrowUp, LucideSearch } from "lucide-react";
 
 const ModelsPage = async () => {
-    const models: AllModelsProps[] = await getSideModels({ limit: 3 })
-    const user = await getUserData()
     return (
         <>
             <div className="block p-4 md:p-8" >
