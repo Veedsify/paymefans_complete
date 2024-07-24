@@ -23,7 +23,7 @@ const serverSocket = (http) => {
             getUserConversations(users.userId).then((data) => {
                 socket.emit("conversations", data);
             });
-        }, 200);
+        }, 300);
 
         // Event handler for receiving new messages
         const handleMessage = async (data) => {

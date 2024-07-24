@@ -22,6 +22,7 @@ class modelController {
 
     static async ModelsSearch(req, res) {
         const { page, limit, q } = req.query
+        const user = req.user
         // Parse limit to an integer or default to 5 if not provided
         const parsedLimit = limit ? parseInt(limit, 10) : 6;
         const validLimit = Number.isNaN(parsedLimit) || parsedLimit <= 0 ? 5 : parsedLimit;
@@ -33,9 +34,14 @@ class modelController {
             const getmodels = await prismaQuery.user.findMany({
                 where: {
                     is_model: true,
-                    // Model: {
-                    //     verification_status: true,
-                    // },
+                    Model: {
+                        verification_status: true,
+                    },
+                    NOT: [
+                        {
+                            id: user.id
+                        }
+                    ],
                     OR: [
                         {
                             fullname: {

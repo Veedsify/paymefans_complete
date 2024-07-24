@@ -32,25 +32,30 @@ const processPostMedia = async (files, req, validVideoMimetypes, SERVER_ORIGINAL
 };
 
 const execCurlCommand = (command) => {
-    return new Promise((resolve, reject) => {
-        exec(command, { maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Command failed: ${stderr}`);
-                reject(new Error(`Command failed: ${stderr}`));
-                return;
-            }
-            try {
-                const response = JSON.parse(stdout);
-                if (!response.success) {
-                    reject(new Error(`Failed to upload: ${stdout}`));
-                } else {
-                    resolve(response);
+    try {
+        return new Promise((resolve, reject) => {
+            exec(command, { maxBuffer: 1024 * 1024 }, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Command failed: ${stderr}`);
+                    reject(new Error(`Command failed: ${stderr}`));
+                    return;
                 }
-            } catch (parseError) {
-                reject(new Error(`Failed to parse response: ${parseError.message}`));
-            }
+                try {
+                    const response = JSON.parse(stdout);
+                    if (!response.success) {
+                        reject(new Error(`Failed to upload: ${stdout}`));
+                    } else {
+                        resolve(response);
+                    }
+                } catch (parseError) {
+                    reject(new Error(`Failed to parse response: ${parseError.message}`));
+                }
+            });
         });
-    });
+    } catch (error) {
+        console.error(`Error executing command: ${error.message}`);
+        return Promise.reject(error);
+    }
 };
 
 const uploadToCloudflareImage = async (filePath, apiToken) => {
