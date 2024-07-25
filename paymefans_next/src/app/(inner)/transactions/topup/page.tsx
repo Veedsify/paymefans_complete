@@ -4,12 +4,12 @@ import Image from "next/image";
 const Transactions = async () => {
     const { data: transactions } = await getTransactionsData()
     return (
-        <div className="p-4 py-8">
+        <div className="p-4 py-8 dark:text-white">
             <div>
                 <h2 className="text-2xl font-semibold mb-10">Transactions</h2>
                 <div className="grid gap-4">
                     {transactions.map((transaction: any, i: number) => (
-                        <div key={i} className="bg-white rounded-xl">
+                        <div key={i} className="bg-white dark:bg-gray-950 dark:border dark:border-slate-800 px-2  rounded-xl">
                             <div className="flex justify-between items-center py-2">
                                 <div>
                                     <p className={`text-sm font-semibold ${transaction.success ? "text-green-600" : "text-red-500"}`}>{transaction.success ? "Transaction Successful" : "Transaction Failed"}</p>

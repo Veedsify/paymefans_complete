@@ -45,7 +45,7 @@ export function NotificationBody({ notifications }: { notifications: any[] }) {
         <div>
             {notifications.map((notification, index) => (
                 <div key={index}>
-                    <div className={`w-full border-t ${index + 1 === notifications.length && "border-b"} border-gray-50 p-3 bg-white rounded flex items-center hover:bg-gray-100 cursor-pointer`}>
+                    <div className={`w-full border-t ${index + 1 === notifications.length && "border-b"} border-gray-50 dark:border-slate-800 p-3 bg-white dark:bg-gray-950 rounded flex items-center dark:hover:bg-slate-800 dark:text-white hover:bg-gray-100 cursor-pointer`}>
                         <div aria-label="heart icon" role="img" className="focus:outline-none w-20 h-20 rounded-full border-gray-200 flex items-center justify-center">
                             {
                                 notification.type && types.find((type) => type.type === notification.type)?.icon

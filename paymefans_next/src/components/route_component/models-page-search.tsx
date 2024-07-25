@@ -24,11 +24,11 @@ export default function ModelsPageSearch() {
             <h1 className="font-bold text-xl mb-5 flex items-center gap-1">
                 Search for Models/Creators <LucideArrowDown />
             </h1>
-            <div className="relative overflow-auto pb-7">
+            <div className="relative overflow-auto pb-7 dark:text-white">
                 <label className="flex justify-between pr-5 overflow-hidden border border-gray-400 rounded-md">
                     <input
                         onChange={handleSearch}
-                        type="search" name="Search" id="search" className="w-full p-4 outline-none" placeholder="Search" />
+                        type="search" name="Search" id="search" className="w-full p-4 outline-none  dark:bg-gray-950 " placeholder="Search" />
                     <LucideSearch className="self-center pr-2 cursor-pointer" size={30} />
                 </label>
             </div>

@@ -111,7 +111,7 @@ const PostEditor = () => {
 
     return (
         <>
-            <div className="md:p-8 p-4">
+            <div className="md:p-8 p-4 dark:text-white">
                 <div className="flex items-center mb-6">
                     <PostCancelComp />
                     <button
@@ -123,7 +123,7 @@ const PostEditor = () => {
                 <div className="flex items-center gap-2">
                     <Image src={user?.profile_image || "/site/avatar.png"} alt="" width={56} height={56} className="w-14 border border-gray-800 inline-block rounded-full" />
                     <button
-                        className="border inline-block border-gray-800 ml-2 rounded-3xl px-3 text-gray-800 text-sm relative">
+                        className="border inline-block border-gray-800 ml-2 rounded-3xl px-3 text-gray-800  dark:text-gray-200 text-sm relative">
                         <span className="flex gap-2 items-center font-medium text-sm p-2 transition-all duration-300 cursor-pointer"
                             onClick={() => setDropdown(!dropdown)}
                         >
@@ -132,12 +132,12 @@ const PostEditor = () => {
                         </span>
                         <div className={`absolute w-full left-0 mt-0 transition-all duration-300 ${dropdown ? "opacity-100 -translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"}`}>
                             <ul
-                                className="bg-white rounded-2xl overflow-hidden mt-2 border border-gray-800 text-left w-full">
+                                className="bg-white  dark:bg-gray-950   rounded-2xl overflow-hidden mt-2 border border-gray-800 text-left w-full">
                                 {
                                     postAudienceData.map((audience) => (
                                         <li key={audience.id}
                                             data-id={audience.id}
-                                            onClick={updatePostAudience} className="p-3 pr-5 text-sm flex items-center gap-2 text-gray-600 font-medium hover:bg-violet-50">
+                                            onClick={updatePostAudience} className="p-3 pr-5 text-sm flex items-center gap-2 text-gray-600 dark:text-gray-400 font-medium  dark:hover:bg-slate-800 hover:bg-violet-50">
                                             {audience.icon}
                                             {audience.name}
                                         </li>
@@ -148,7 +148,7 @@ const PostEditor = () => {
                     </button>
                 </div>
                 <textarea
-                    className="block border border-gray-500 rounded-md mb-3 leading-relaxed text-gray-700 font-medium w-full resize-none p-3 outline-none mt-3 overflow-auto h-[40vh]"
+                    className="block border border-gray-500  dark:bg-gray-950 dark:text-white   rounded-md mb-3 leading-relaxed text-gray-700 font-medium w-full resize-none p-3 outline-none mt-3 overflow-auto h-[40vh]"
                     placeholder="What’s on your mind?"
                     defaultValue={postText}
                     onChange={checkLimit}></textarea>

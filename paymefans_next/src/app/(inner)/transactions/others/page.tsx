@@ -18,7 +18,7 @@ const Transactions = async () => {
                 <h2 className="text-2xl font-semibold mb-10">Other Transactions</h2>
                 <div className="grid gap-4">
                     {transactions.data.map((transaction: any, i: number) => (
-                        <div key={i} className="bg-white rounded-xl">
+                        <div key={i} className="bg-white  dark:bg-gray-950 dark:border dark:border-slate-800 px-2  rounded-xl">
                             <div className="flex justify-between items-center py-2">
                                 <div>
                                     <p className={`text-sm font-semibold ${transaction.transaction_type === "credit" ? "text-green-600" : "text-red-500"}`}>{transaction.transaction_message}</p>

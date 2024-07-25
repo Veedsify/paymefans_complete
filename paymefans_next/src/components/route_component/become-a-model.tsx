@@ -89,7 +89,7 @@ const BecomeAModel = () => {
         return (
             <>
                 <div>
-                    <div className="m-3 p-8 px-12 rounded-2xl">
+                    <div className="m-3 p-8 px-12 rounded-2xl dark:text-white">
                         <Image src="/icons/feeling_sorry.svg" width={300} height={300} alt="Sorry you are already a model" className="w-3/5 mx-auto block" />
                         <div>
                             <h1 className="text-center mt-6 mb-8 font-bold md:text-3xl text-2xl ">
