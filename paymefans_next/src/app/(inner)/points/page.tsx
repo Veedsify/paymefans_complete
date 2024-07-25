@@ -11,7 +11,7 @@ const Points = async () => {
     const points: Points[] = await getAllPoints()
     return (
         <div>
-            <div className="p-4">
+            <div className="p-4 dark:text-white">
                 <h1 className="font-bold text-2xl mb-10 pt-4">
                     Points
                 </h1>

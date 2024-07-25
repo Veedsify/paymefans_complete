@@ -34,10 +34,10 @@ const NewPostMediaAdd = ({
     }
     return (
         <>
-            <div className="md:px-8 px-4 w-full flex md:justify-start gap-3 items-center">
+            <div className="md:px-8 px-4 w-full dark:text-white flex md:justify-start gap-3 items-center">
                 <label htmlFor="attachments" className='cursor-pointer'>
                     <LucidePaperclip size={40}
-                        className='border border-gray-400 p-2 rounded-lg'
+                        className='border border-gray-400 dark:border-slate-800 p-2 rounded-lg'
                     />
                 </label>
                 <input type="file" accept="image/*, video/*" multiple
@@ -46,7 +46,7 @@ const NewPostMediaAdd = ({
                 <input type="file" className="hidden" id="flie" capture="environment" />
                 <label htmlFor="flie" className='cursor-pointer'>
                     <HiUser size={40} strokeWidth={1}
-                        className="border border-gray-400 p-2 rounded-lg"
+                        className="border border-gray-400 dark:border-slate-800 p-2 rounded-lg"
                     />
                 </label>
                 <div className="flex items-center gap-3">

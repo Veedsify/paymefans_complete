@@ -30,7 +30,7 @@ const Toggle = ({ state, set }: { state?: boolean, set?: (value: boolean) => voi
                 className="flex items-center cursor-pointer duration-300"
             >
                 <div className="relative">
-                    <div className={`w-12 h-7 flex items-center border rounded-full shadow-inner ${isChecked
+                    <div className={`w-12 h-7 flex items-center border rounded-full shadow-inner dark:border-slate-800 ${isChecked
                         ? "bg-primary-dark-pink"
                         : ""
                         } transition-transform duration-300`}>

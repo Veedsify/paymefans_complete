@@ -54,7 +54,7 @@ const Live = async () => {
                         <span className="text-2xl font-bold">Hi,</span>
                         <span className="text-2xl font-bold text-primary-dark-pink"> {user?.name}</span>
                     </div>
-                    <h1 className="text-xl font-bold mb-5">Verification</h1>
+                    <h1 className="text-xl font-bold mb-5 dark:text-white">Verification</h1>
                     <p className="text-gray-500">You need to verify your account to go live</p>
                     <Link href="/verification" className="block bg-primary-dark-pink p-2 mx-auto text-sm font-bold text-white rounded-lg cursor-pointer w-52 mt-5">Go to Verification Center</Link>
                 </div>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 const Verification = () => {
     return (
-        <div className="min-h-screen p-5 md:p-7">
+        <div className="min-h-screen p-5 md:p-7 dark:text-white">
             <div className="max-w-screen-xl pt-12 mx-auto mb-24 md:mt-16">
                 <h1 className="mt-auto mb-16 text-2xl font-bold text-center">Verify Yourself</h1>
                 <div className="grid max-w-96 mx-auto mb-12">

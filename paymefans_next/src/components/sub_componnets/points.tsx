@@ -33,10 +33,10 @@ const PointsBuy = ({
         }
     }
     return (
-        <div className="rounded-2xl bg-coins-card-bottom cursor-pointer"
+        <div className="rounded-2xl bg-coins-card-bottom  dark:bg-slate-800  dark:border-slate-800 dark:border cursor-pointer"
             onClick={() => handlePointsClick(point.points_buy_id)}
         >
-            <div className="flex py-5 rounded-tr-2xl rounded-tl-2xl items-center gap-2 justify-center bg-white m-[2px]">
+            <div className="flex py-5 rounded-tr-2xl rounded-tl-2xl items-center gap-2 justify-center dark:bg-gray-950 bg-white m-[2px]">
                 <Image width={20} height={20} src="/site/coin.svg" className="h-auto" alt="" />
                 <h2 className="font-bold text-xl text-primary-dark-pink">{point.points}</h2>
             </div>

@@ -12,8 +12,8 @@ const Messages = async () => {
     return (
         <div className="md:py-5 md:px-8 p-3">
             <MessageCounter />
-            <div className="flex align-baseline justify-between border border-gray-400 rounded-md p-4 mb-7 w-full">
-                <input type="text" placeholder="Search Messages" className=" text-sm outline-none border-none" />
+            <div className="flex align-baseline justify-between border  dark:text-white border-gray-400 rounded-md p-4 mb-7 w-full ">
+                <input type="text" placeholder="Search Messages" className=" text-sm outline-none border-none  dark:bg-gray-950 w-full" />
                 <LucideSearch className="block text-center" />
             </div>
             <ConversationComponent />
