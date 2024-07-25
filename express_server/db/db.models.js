@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
+    id: { type: Schema.Types.ObjectId, required: true, default: mongoose.Types.ObjectId },
     email: { type: String, unique: true, required: true },
     name: { type: String, required: true },
     password: { type: String, required: true },
@@ -465,5 +466,32 @@ module.exports = {
     UserMedia,
     UserSubscriptionCurrent,
     Post,
-    Follow
+    Follow,
+    Subscribers,
+    LiveStream,
+    LiveStreamComment,
+    LiveStreamLike,
+    LiveStreamView,
+    Settings,
+    Notifications,
+    UserPoints,
+    UserRepost,
+    UserStory,
+    PostLike,
+    PostShared,
+    ReportUser,
+    ReportPost,
+    ReportComment,
+    ReportMessage,
+    ReportLive,
+    UserTransaction,
+    UserWallet,
+    UserSubscriptionHistory,
+    GlobalPointsBuy,
+    UserWithdrawalBankAccount,
+    UserBankAccount,
+    UserAttachments,
+    UserPointsPurchase,
+    PostComment,
+    PostCommentAttachments
 };

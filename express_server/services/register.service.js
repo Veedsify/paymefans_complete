@@ -2,6 +2,8 @@ const prismaQuery = require("../utils/prisma");
 const hashPassword = require("../utils/passwordHasher");
 const { v4: uuid } = require("uuid");
 const sendWelcomeEmail = require("../libs/send-welcome-email");
+const mongo = require("../db/mongoose");
+const { PostLike, User } = require("../db/db.models");
 module.exports = async (body) => {
   const registerData = body;
 
@@ -31,7 +33,7 @@ module.exports = async (body) => {
   const pointsId = uuid().split("-").join(""); // Generate unique points ID
 
   try {
-    // Create a new user
+
     const user = await prismaQuery.user.create({
       data: {
         fullname: registerData?.name,
