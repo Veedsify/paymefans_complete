@@ -1,8 +1,24 @@
 "use client"
 import { LucideArrowDown, LucideArrowUp, LucideLoader, LucideSearch } from "lucide-react"
 import ModelsFetch from "../custom-hooks/model-fetch"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useCallback, useState } from "react"
 import ModelsSubscription from "../sub_componnets/models_subscription"
+
+const useDebounce = (callback: (value: string) => void, delay: number) => {
+    const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null);
+
+    const debouncedCallback = useCallback((value: string) => {
+        if (typingTimer) {
+            clearTimeout(typingTimer);
+        }
+        const newTimer = setTimeout(() => {
+            callback(value);
+        }, delay);
+        setTypingTimer(newTimer);
+    }, [callback, delay, typingTimer]);
+
+    return debouncedCallback;
+};
 
 export default function ModelsPageSearch() {
     const [pageNumber, setPageNumber] = useState<number>(1)
@@ -14,10 +30,10 @@ export default function ModelsPageSearch() {
         error
     } = ModelsFetch(pageNumber, search)
 
-    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-        setPageNumber(1)
-        setSearch(e.target.value)
-    }
+    const handleSearch = useDebounce((value: string) => {
+        setSearch(value);
+        setPageNumber(1);
+    }, 500);
 
     return (
         <>
@@ -27,7 +43,7 @@ export default function ModelsPageSearch() {
             <div className="relative overflow-auto pb-7 dark:text-white">
                 <label className="flex justify-between pr-5 overflow-hidden border border-gray-400 rounded-md">
                     <input
-                        onChange={handleSearch}
+                        onChange={e => handleSearch(e.target.value)}
                         type="search" name="Search" id="search" className="w-full p-4 outline-none  dark:bg-gray-950 " placeholder="Search" />
                     <LucideSearch className="self-center pr-2 cursor-pointer" size={30} />
                 </label>

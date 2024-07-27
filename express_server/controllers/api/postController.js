@@ -3,6 +3,7 @@ const { v4: uuid } = require("uuid")
 const prismaQuery = require("../../utils/prisma");
 const path = require("path");
 const { processPostMedia } = require("../../utils/cloudflare");
+const HandleMedia = require("../../utils/handle-post-media");
 const { SERVER_ORIGINAL_URL, CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_CUSTOMER_CODE } = process.env;
 require("dotenv").config();
 
@@ -16,8 +17,27 @@ class PostController {
             const files = req.files;
             const user = req.user;
             const { content, visibility } = req.body;
-            const media = await processPostMedia(files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, process.env.CLOUDFLARE_API_KEY);
+            let media = null;
 
+            try {
+                media = await processPostMedia(files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, process.env.CLOUDFLARE_API_KEY);
+            } catch (error) {
+                console.error(`Error in processPostMedia: ${error.message}`);
+            }
+
+            if (!media) {
+                try {
+                    media = await HandleMedia(files, req, validVideoMimetypes, SERVER_ORIGINAL_URL, process.env.CLOUDFLARE_API_KEY);
+                } catch (error) {
+                    console.error(`Error in HandleMedia: ${error.message}`);
+                }
+            }
+
+            if (!media) {
+                console.error('Failed to process media using both methods.');
+            }
+
+            // Continue with the rest of your logic
             const post = await prismaQuery.post.create({
                 data: {
                     post_id: postId,
@@ -31,24 +51,54 @@ class PostController {
                     UserMedia: {
                         createMany: {
                             data: [
-                                ...media.images.map((image) => ({
-                                    media_id: image.response.result.id,
-                                    media_type: "image",
-                                    url: (image.response.result.variants[0].includes("/public")) ? image.response.result.variants[0] : image.response.result.variants[1],
-                                    blur: (image.response.result.variants[0].includes("/blur")) ? image.response.result.variants[0] : image.response.result.variants[1],
-                                    poster: (image.response.result.variants[0].includes("/public")) ? image.response.result.variants[0] : image.response.result.variants[1],
-                                    accessible_to: visibility,
-                                    locked: visibility === "subscribers" ? true : false,
-                                })),
-                                ...media.videos.map((video) => ({
-                                    media_id: video.id,
-                                    media_type: "video",
-                                    url: `https://${CLOUDFLARE_CUSTOMER_CODE}/${video.id}/manifest/video.m3u8`,
-                                    blur: "",
-                                    poster: `https://${CLOUDFLARE_CUSTOMER_CODE}/${video.id}/thumbnails/thumbnail.jpg`,
-                                    accessible_to: visibility,
-                                    locked: visibility === "subscribers" ? true : false,
-                                }))
+                                ...media.images.map((image) => {
+                                    if (image.response.result.id) {
+                                        return {
+                                            media_id: image.response.result.id,
+                                            media_type: "image",
+                                            url: (image.response.result.variants[0].includes("/public")) ? image.response.result.variants[0] : image.response.result.variants[1],
+                                            blur: (image.response.result.variants[0].includes("/blur")) ? image.response.result.variants[0] : image.response.result.variants[1],
+                                            poster: (image.response.result.variants[0].includes("/public")) ? image.response.result.variants[0] : image.response.result.variants[1],
+                                            accessible_to: visibility,
+                                            locked: visibility === "subscribers" ? true : false,
+                                        }
+                                    } else {
+                                        return {
+                                            media_id: image.response.result.image_id,
+                                            media_type: "image",
+                                            url: image.response.result.variants[0],
+                                            blur: image.response.result.variants[1],
+                                            poster: image.response.result.variants[0],
+                                            accessible_to: visibility,
+                                            locked: visibility === "subscribers" ? true : false,
+                                        }
+                                    }
+                                }),
+                                ...media.videos.map((video) => {
+                                    if (video.id) {
+                                        const url = `https://${CLOUDFLARE_CUSTOMER_CODE}/${video.id}/manifest/video.m3u8`
+                                        const poster = `https://${CLOUDFLARE_CUSTOMER_CODE}/${video.id}/thumbnails/thumbnail.jpg`
+                                        return {
+                                            media_id: video.id,
+                                            media_type: "video",
+                                            url: url,
+                                            blur: "",
+                                            poster: poster,
+                                            accessible_to: visibility,
+                                            locked: visibility === "subscribers" ? true : false,
+                                        }
+                                    } else {
+                                        return {
+                                            media_id: video.video_id,
+                                            media_type: "video",
+                                            url: video.video_url,
+                                            blur: "",
+                                            poster: video.poster,
+                                            accessible_to: visibility,
+                                            locked: visibility === "subscribers" ? true : false,
+                                        }
+                                    }
+                                })
                             ]
                         }
                     }

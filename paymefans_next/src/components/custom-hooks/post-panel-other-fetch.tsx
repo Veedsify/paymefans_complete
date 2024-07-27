@@ -3,8 +3,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getToken } from "@/utils/cookie.get";
 import { PostData, UserPostProps, UserPostPropsOther } from "@/types/components";
-import { u } from "@vidstack/react/types/vidstack.js";
-
+const getUniqueItems = (arr: UserPostProps[]) => {
+    const uniqueMap = new Map();
+    arr.forEach(item => uniqueMap.set(item.id, item)); // Replace 'id' with the unique property
+    return Array.from(uniqueMap.values());
+};
 export default function PostPanelFetchOther(userid: number, pageNumber: number) {
     const [posts, setPosts] = useState<UserPostPropsOther[]>([]);
     const [totalResults, setTotalResults] = useState(0);
@@ -33,8 +36,9 @@ export default function PostPanelFetchOther(userid: number, pageNumber: number) 
             cancelToken: new axios.CancelToken(c => cancel = c)
         }).then(res => {
             setPosts((prev) => {
-                return [...new Set([...prev, ...res.data.data])]
-            })
+                const newPosts = [...prev, ...res.data.data];
+                return getUniqueItems(newPosts);
+            });
             setTotalResults(res.data.total)
             setHasMore(res.data.data.length > 0)
             setLoading(false)

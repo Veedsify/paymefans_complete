@@ -35,7 +35,7 @@ class modelController {
                 where: {
                     is_model: true,
                     Model: {
-                        verification_status: true,
+                        // verification_status: true,
                     },
                     NOT: [
                         {

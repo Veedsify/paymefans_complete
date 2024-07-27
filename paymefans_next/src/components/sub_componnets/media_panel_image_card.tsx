@@ -6,7 +6,11 @@ import usePostComponent from "@/contexts/post-component-preview";
 import { getToken } from "@/utils/cookie.get";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { MediaDataType } from "@/types/components";
-
+const getUniqueItems = (arr: MediaDataType[]) => {
+    const uniqueMap = new Map();
+    arr.forEach(item => uniqueMap.set(item.id, item)); // Replace 'id' with the unique property
+    return Array.from(uniqueMap.values());
+};
 const MediaPanelImageCard = ({ sort }: { sort: string }) => {
     const [data, setData] = useState<MediaDataType[]>([]);
     const [sorted, setSorted] = useState<MediaDataType[]>([]);
@@ -15,7 +19,6 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
     const { fullScreenPreview } = usePostComponent();
     const token = getToken();
     const [hasMore, setHasMore] = useState(true);
-
 
     useEffect(() => {
         const sortData = (data: MediaDataType[]) => {
@@ -61,7 +64,10 @@ const MediaPanelImageCard = ({ sort }: { sort: string }) => {
             }
         });
         const data = await res.json();
-        setData((prev) => [...prev, ...data.data]);
+        setData((prev) => {
+            const newMedia = [...prev, ...data.data];
+            return getUniqueItems(newMedia);
+        });
         setHasMore(data.data.length > 0);
         setPage((prev) => prev + 1); // Increment the page after fetching data
     };
@@ -106,7 +112,7 @@ const MediaPanelMediaCard = ({ media, PreviewImageHandler, isSubscriber }: Media
             {media.media_type === "video" ? (
                 <div className="relative w-full h-full">
                     <Image
-                        src={media?.poster || ""}
+                        src={""}
                         alt="video poster"
                         priority
                         className="w-[400px] h-[400px] cursor-pointer object-cover transition-all duration-300 ease-in-out"

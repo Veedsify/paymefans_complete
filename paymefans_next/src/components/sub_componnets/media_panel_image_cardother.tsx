@@ -9,6 +9,12 @@ import { ProfileUserProps } from "@/types/user";
 import { useUserAuthContext } from "@/lib/userUseContext";
 import { MediaDataTypeOtherProps } from "@/types/components";
 
+const getUniqueItems = (arr: MediaDataTypeOtherProps[]) => {
+    const uniqueMap = new Map();
+    arr.forEach(item => uniqueMap.set(item.id, item)); // Replace 'id' with the unique property
+    return Array.from(uniqueMap.values());
+};
+
 const MediaPanelImageCardOther = ({ sort, userdata }: { sort: string; userdata: ProfileUserProps }) => {
     const [data, setData] = useState<MediaDataTypeOtherProps[]>([]);
     const [sorted, setSorted] = useState<MediaDataTypeOtherProps[]>([]);
@@ -64,7 +70,10 @@ const MediaPanelImageCardOther = ({ sort, userdata }: { sort: string; userdata: 
             }
         });
         const data = await res.json();
-        setData((prev) => [...prev, ...data.data]);
+        setData((prev) => {
+            const newMedia = [...prev, ...data.data];
+            return getUniqueItems(newMedia);
+        });
         setHasMore(data.data.length > 0);
         setPage((prev) => prev + 1); // Increment the page after fetching data
     };

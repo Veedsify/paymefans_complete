@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { HiPlay } from "react-icons/hi";
 import usePostComponent from "@/contexts/post-component-preview";
 import Image from "next/image";
+import swal from "sweetalert";
 
 export const PostPageImage = ({ media: { media_type, poster, url } }: {
     media: {
@@ -15,15 +16,16 @@ export const PostPageImage = ({ media: { media_type, poster, url } }: {
     const [canplay, setCanplay] = useState(false);
     const handleClick = useCallback(() => {
         if (media_type === "video" && canplay) {
-            return swal({
+            swal({
                 title: "Video not ready",
                 text: "Please wait for the video to load",
                 icon: "warning",
                 timer: 2000,
             })
+            return
         }
         fullScreenPreview({ url, type: media_type, open: true });
-    }, [fullScreenPreview, media_type, url]);
+    }, [fullScreenPreview, media_type, url, canplay]);
 
     return (
         <div className="relative">
@@ -32,8 +34,8 @@ export const PostPageImage = ({ media: { media_type, poster, url } }: {
                     <video
                         onClick={handleClick}
                         className="w-full rounded-lg mt-3 block aspect-square object-cover cursor-pointer"
-                        onCanPlay={e => setCanplay(true)}
-                        poster={poster ?? ""}
+                        onLoad={e => setCanplay(true)}
+                        poster={""}
                     >
                         <source src={url} />
                     </video>

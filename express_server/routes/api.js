@@ -44,6 +44,7 @@ router.get("/user/media", checkUserIsAuthenticated, GetMyMedia);
 router.get("/profile/media/:userid", checkUserIsAuthenticated, GetUsersMedia);
 router.get("/user/:userid/posts", checkUserIsAuthenticated, GetUserPostByID);
 router.get("/posts/:post_id", GetCurrentUserPost);
+
 // Post Interactions
 router.post("/post/like/:post_id", checkUserIsAuthenticated, likePost);
 

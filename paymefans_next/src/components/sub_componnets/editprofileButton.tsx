@@ -13,9 +13,16 @@ const EditProfileButton = ({ user }: { user: any }) => {
     const [file, setFile] = useState<File | null>(null)
     const [userData, setUserData] = useState<UserUpdateProfileType>({} as UserUpdateProfileType)
     const router = useRouter()
+
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setUserData({ ...userData, [e.target.name]: e.target.value })
     }
+
+    useEffect(() => {
+        setUserData((prev) => {
+            return { ...prev, email: user?.email }
+        })
+    }, [user])
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.files) {
@@ -199,7 +206,6 @@ const EditProfileButton = ({ user }: { user: any }) => {
                             onClick={handleSaveClick}
                             defaultValue={"Save"}
                             className="w-full block border mb-3 dark:text-white dark:bg-slate-900 dark:border-slate-700 bg-primary-dark-pink p-4 outline-none text-white rounded-xl cursor-pointer"
-                            placeholder="Website "
                         />
                     </div>
                 </div>

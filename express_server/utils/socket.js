@@ -113,3 +113,21 @@ const serverSocket = (http) => {
 }
 
 module.exports = serverSocket;
+
+
+
+// $work = [
+//     'jobs' => [
+//         [
+//             'name' => 'Job 1'
+//         ],
+//         [
+//             'name' => 'Job 2'
+//         ]
+//     ]
+// ]
+
+// foreach($work['jobs'] as $job){
+//     echo $job['name'];
+// }
+

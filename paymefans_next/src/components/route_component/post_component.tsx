@@ -117,8 +117,8 @@ const PostComponent: React.FC<PostComponentProps> = ({ user, data, isSubscriber 
                     {data.media.slice(0, 3).map((media, index) => (
                         <div className="relative rounded-lg overflow-hidden" key={index} onClick={handleNonSubscriberClick}>
                             {(!isSubscriber && data.post_audience === "subscribers") && (
-                                <div className="absolute inset-0 bg-black bg-opacity-50 rounded-lg overflow-hidden flex items-center justify-center z-10">
-                                    <Image src={media.blur ? media.blur : "/site/blur.jpg"} alt="" width={300} height={300} className="w-full h-full brightness-50 aspect-square object-cover absolute inset-0" />
+                                <div className="absolute inset-0 bg-black bg-opacity-20 rounded-lg overflow-hidden flex items-center justify-center z-10">
+                                    <Image src={media.blur ? media.blur : "/site/blur.jpg"} alt="" width={300} height={300} className="w-full aspect-square object-cover absolute inset-0" />
                                     <Link href="/subscribe" className="text-white absolute text-lg font-bold">
                                         <LucideLock />
                                     </Link>
@@ -194,7 +194,7 @@ const VideoComponent: React.FC<VideoComponentProps> = ({ media, data, clickImage
             }
             setPlaying(!playing);
         }
-    }, [isSubscriber, data.post_audience, playing]);
+    }, [isSubscriber, data.post_audience, playing, canplay]);
 
     useEffect(() => {
         const videoElement = videoRef.current;
