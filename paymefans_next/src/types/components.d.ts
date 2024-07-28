@@ -319,3 +319,9 @@ interface UserFollowCompProps {
         iAmFollowing: boolean;
     }
 }
+
+// Story Types
+interface SelectMoreProps {
+    openMore: boolean;
+    handleOpenMore: () => void;
+}
