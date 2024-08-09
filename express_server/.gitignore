@@ -2,6 +2,7 @@ node_modules
 public/images/uploads/
 public/images/converted/
 public/attachments/
+public/story/
 public/posts/
 public/comments/
 .env 

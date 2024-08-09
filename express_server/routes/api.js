@@ -13,13 +13,19 @@ const uploadAttachmentMulterMiddleware = require("../middlewares/uploadAttachmen
 const multerPostMiddleware = require("../middlewares/multerPostMiddleware.middleware");
 const uploadMediaController = require("../controllers/api/mediaUploadController");
 const { GetTransactions, OtherTransactions } = require("../controllers/api/transactionsController");
-const { CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID, GetMyMedia, GetUsersMedia } = require("../controllers/api/postController");
+const {
+    CreatePost, GetMyPosts, GetCurrentUserPost, GetUserPostByID, GetMyMedia, GetUsersMedia
+} = require("../controllers/api/postController");
 const checkEmailIsVerifiedMiddleware = require("../middlewares/checkEmailIsVerified.middleware");
-const { GetSubscriptionData, chekcSubscriber, CreateNewSubscription } = require("../controllers/api/subscriberController");
+const {
+    GetSubscriptionData, checkSubscriber, CreateNewSubscription
+} = require("../controllers/api/subscriberController");
 const { addBank, GetBanks, DeleteBank } = require("../controllers/api/banksController");
 const { likePost } = require("../controllers/api/postInteractions");
+const { UploadStoryFiles, SaveStory } = require('../controllers/api/storyController')
 const { NewPostComment, CommentsAttachMents } = require("../controllers/api/commentController");
 const commentAttachmentMiddleware = require("../middlewares/commentAttachment.middleware");
+const createUploadHandler = require("../middlewares/storypost.middleware");
 
 
 // Authentication
@@ -80,7 +86,7 @@ router.get("/wallet/transactions/other", checkUserIsAuthenticated, OtherTransact
 // router.post("/subscribe", checkUserIsAuthenticated, subscriberController.Subscribe);
 // router.post("/unsubscribe", checkUserIsAuthenticated, subscriberController.Unsubscribe);
 // router.post("/get/subscribers", checkUserIsAuthenticated, subscriberController.GetSubscribers);
-router.post("/subscriber/check", checkUserIsAuthenticated, chekcSubscriber);
+router.post("/subscriber/check", checkUserIsAuthenticated, checkSubscriber);
 router.post("/user/subscription-data/:userid", checkUserIsAuthenticated, GetSubscriptionData);
 router.post("/subscribe/subscription-to-user/:profileid", checkUserIsAuthenticated, CreateNewSubscription);
 
@@ -94,7 +100,13 @@ router.post("/conversation/create-new", checkUserIsAuthenticated, ConversationsC
 router.get("/conversations/my-conversations", checkUserIsAuthenticated, ConversationsController.myConversations);
 router.post("/upload/attachments", checkUserIsAuthenticated, uploadAttachmentMulterMiddleware.array("attachments[]"), uploadMediaController.attachments);
 
-
+// Comments
 router.post("/comment/new", checkUserIsAuthenticated, commentAttachmentMiddleware("files"), NewPostComment)
+
+
+// Stories
+router.get("/story/media", checkUserIsAuthenticated, GetMyMedia);
+router.post("/upload/story", checkUserIsAuthenticated, createUploadHandler("files[]"), UploadStoryFiles);
+router.post("/save/story", checkUserIsAuthenticated, SaveStory);
 
 module.exports = router;

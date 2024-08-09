@@ -39,9 +39,9 @@ const MessageInput = ({
   const typingTimeout = useRef<number | null>(null);
 
   const handleKeyDown = useCallback(() => {
-    if (!isTyping || message.length > 0) {
+    if (message.length > 0) {
       setIsTyping(true);
-      sendTyping(true);
+      sendTyping(message);
     }
 
     if (typingTimeout.current) {
@@ -50,7 +50,7 @@ const MessageInput = ({
 
     typingTimeout.current = window.setTimeout(() => {
       setIsTyping(false);
-      sendTyping(false);
+      sendTyping("");
     }, 1000); // Adjust the timeout duration as needed
   }, [isTyping, sendTyping, message.length]);
 
@@ -124,7 +124,7 @@ const MessageInput = ({
       e.preventDefault();
       sendNewMessage([])
       setIsTyping(false);
-      sendTyping(false);
+      sendTyping("");
       return;
     }
     if (e.key === "Enter") {

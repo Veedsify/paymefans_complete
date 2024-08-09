@@ -282,6 +282,13 @@ const pointSeeding = [
     currency: "NGN",
     conversion_rate: 100,
   },
+  {
+    id: uuidv4(),
+    points: 20000000,
+    amount: 0,
+    currency: "NGN",
+    conversion_rate: 100,
+  },
 ];
 
 const createPoints = async () => {

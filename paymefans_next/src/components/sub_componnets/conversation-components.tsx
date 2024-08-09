@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
+import ActiveProfileTag from "./sub/active-profile-tag";
 
 
 const ConversationComponent = () => {
@@ -92,8 +93,12 @@ const ConversationCard = ({ conversation }: {
                 <div className="flex items-center gap-2 md:gap-5 p-3">
                     <Link
                         onClick={(e) => e.stopPropagation()}
+                        className="relative"
                         href={`/${conversation?.receiver?.username}`}>
                         <Image width={65} height={65} src={conversation?.receiver?.profile_image} alt="user messages" className="object-cover rounded-full w-12  md:w-16 aspect-square" />
+                        <div className="absolute right-0 scale-110 bg-white p-1 rounded-full bottom-1">
+                            <ActiveProfileTag scale={1.2} userid={conversation?.receiver?.user_id} />
+                        </div>
                     </Link>
                     <div className="flex-1">
                         <div className="flex flex-1 text-sm gap-4 mb-2 w-full">

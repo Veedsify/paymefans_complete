@@ -154,9 +154,6 @@ class PostController {
                         ...postCount.map((post) => ({ post_id: post.id }))
                     ]
                 },
-                orderBy: {
-                    created_at: "desc"
-                },
                 skip: (validPage - 1) * validLimit,
                 take: validLimit,
                 orderBy: {

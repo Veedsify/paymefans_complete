@@ -3,6 +3,7 @@ import CreateConversationButton from "@/components/sub_componnets/create-convers
 import CreateSubscriptionButton from "@/components/sub_componnets/create-subscription-button";
 import FollowUserComponent from "@/components/sub_componnets/followUserComponent";
 import ProfileTabsOther from "@/components/sub_componnets/profile_tabs_other";
+import ActiveProfileTag from "@/components/sub_componnets/sub/active-profile-tag";
 import { ProfileUserProps } from "@/types/user";
 import getUserProfile from "@/utils/data/profile-data";
 import getUserData from "@/utils/data/user-data";
@@ -70,12 +71,14 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
         </div>
         <div className="flex flex-col gap-2 px-2 mt-2 mb-12 md:px-5">
           <div className="flex flex-col ">
-            <h1 className="font-bold flex gap-2">{userdata?.name}
+            <h1 className="font-bold flex items-center gap-2">
+              {userdata?.name}
               {userdata.is_model && (
                 <span title="Verified">
                   <Verified stroke="purple" />
                 </span>
               )}
+              <ActiveProfileTag userid={userdata.user_id}/>
             </h1>
             <small className="text-gray-500 ">{userdata?.username}</small>
           </div>

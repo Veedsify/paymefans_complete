@@ -41,7 +41,7 @@ export default async function RootLayout({
                 <QueryProvider>
                     <MessagesConversationProvider>
                         <UserPointsContextProvider>
-                            <body className={`${font.className} dark:bg-gray-950`}>
+                            <body className={`${font.className} dark:bg-gray-950 min-h-screen`}>
                                 {/* <Loader /> */}
                                 <Toaster />
                                 <SonnerToast richColors position="top-center"
@@ -55,16 +55,18 @@ export default async function RootLayout({
                                         },
                                     }}
                                 />
-                                <div className="relative grid lg:grid-cols-9">
+                                <div className="relative grid lg:grid-cols-9 h-screen">
                                     <MessagesConversationProvider>
                                         <div className="col-span-2">
                                             <SideBar />
                                         </div>
-                                        <div className="col-span-7 overflow-auto border-r">
+                                        <div className="col-span-7 overflow-auto border-r h-screen">
                                             <Header />
-                                            <div className="grid lg:grid-cols-7">
-                                                <div className="col-span-4 md:border-r dark:border-slate-800">
-                                                    {children}
+                                            <div className="grid lg:grid-cols-7 h-full">
+                                                <div className="col-span-4 flex flex-col h-full">
+                                                    <div className="h-full w-full md:border-r dark:border-slate-800">
+                                                        {children}
+                                                    </div>
                                                 </div>
                                                 <SideModels />
                                             </div>

@@ -96,7 +96,7 @@ const PostEditor = () => {
             toast.dismiss();
 
             if (res && res.status === true) {
-                router.push(`/posts/${res.data.post_id}`);
+                window.location.href = `/posts/${res.data.post_id}`;
                 setPostText("");
                 setVisibility("Public");
                 toast.success("Post created successfully");

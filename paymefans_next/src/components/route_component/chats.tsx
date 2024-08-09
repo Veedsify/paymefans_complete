@@ -15,6 +15,7 @@ import { useUserAuthContext } from "@/lib/userUseContext";
 import { socket } from "../sub_componnets/sub/socket";
 import swal from "sweetalert";
 import { Message } from "@/types/components";
+import ActiveProfileTag from "../sub_componnets/sub/active-profile-tag";
 
 const Chats = ({
   allmessages,
@@ -28,10 +29,11 @@ const Chats = ({
   receiver?: any;
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [typing, setTyping] = useState(false);
+  const [typing, setTyping] = useState("");
   const ref = useRef<HTMLDivElement>(null);
   const { user } = useUserAuthContext();
   const heightRef = useRef<HTMLDivElement>(null);
+  const [lastActivityTime, setLastActivityTime] = useState<number>(Date.now());
 
   const handleJoined = useCallback((message: { message: string }) => {
     // toast.success(message.message);
@@ -131,6 +133,9 @@ const Chats = ({
     socket.on("sender-typing", (data: any) => {
       if (data.sender_id === user?.user_id) return;
       setTyping(data.value);
+      if (typing) {
+        setLastActivityTime(Date.now());
+      }
     });
     return () => {
       socket.off("message", handleMessageReceived);
@@ -139,9 +144,19 @@ const Chats = ({
       socket.off("message-error");
       socket.off("message-seen-updated", handleSeenByReceiver);
     };
-  }, [conversationId, setMessages, messages, user, handleJoined]);
+  }, [conversationId, setMessages, messages, user, handleJoined, typing]);
+  useEffect(() => {
+    const checkForInactivity = () => {
+      if (Date.now() - lastActivityTime > 10000) { // 10 seconds of inactivity
+        setTyping("");
+      }
+    };
 
-  const sendTyping = (value: boolean) => {
+    const intervalId = setInterval(checkForInactivity, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [lastActivityTime]);
+  const sendTyping = (value: string) => {
     socket.emit("typing", {
       sender_id: user?.user_id,
       value,
@@ -206,13 +221,12 @@ const Chats = ({
               >
                 <span>{receiver ? receiver.name : ""}</span>
                 <span className="text-xs fw-bold text-primary-dark-pink inline-block">
-                  {typing ? "typing..." : ""}
+                  {typing.length > 0 ? "typing..." : ""}
                 </span>
               </Link>
             </div>
             <div className="flex gap-1 items-center text-xs md:text-xs">
-              <span className="block text-center align-middle w-3 h-3 bg-green-400 rounded-full"></span>
-              <p>Online</p>
+              <ActiveProfileTag userid={receiver.user_id} withText />
             </div>
           </div>
         </div>

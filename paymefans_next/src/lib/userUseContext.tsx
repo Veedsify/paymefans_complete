@@ -1,5 +1,6 @@
 "use client";
 
+import { socket } from "@/components/sub_componnets/sub/socket";
 import { AuthUserProps } from "@/types/user";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
@@ -36,6 +37,7 @@ export const UserContextProvider = ({ user, children }: UserContextProviderProps
             router.push(`/login?redirect=${location}`);
         } else {
             setUser(user);
+            socket.emit('user_active', user.user_id);
         }
     }, [user, router, location]);
 

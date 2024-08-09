@@ -2,7 +2,7 @@ const prismaQuery = require("../../utils/prisma");
 const { v4: uuidv4 } = require("uuid");
 
 class subscriberController {
-  static async chekcSubscriber(req, res) {
+  static async checkSubscriber(req, res) {
     try {
       const data = req.body;
       if (!data) {

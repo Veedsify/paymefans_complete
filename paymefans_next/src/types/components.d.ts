@@ -176,7 +176,7 @@ export interface Message {
 }
 export interface MessageInputProps {
     sendMessage: ({ }: Message) => void;
-    sendTyping: (value: boolean) => void;
+    sendTyping: (value: string) => void;
     receiver: any;
 }
 
@@ -324,4 +324,19 @@ interface UserFollowCompProps {
 interface SelectMoreProps {
     openMore: boolean;
     handleOpenMore: () => void;
+}
+
+interface StoryMediaFetchProps {
+    page: number
+}
+
+// Active Profile Tag Props
+type ActiveProfileTagProps = {
+    userid: string,
+    scale?: number
+    withText?: boolean
+}
+
+type handleActiveUsersProps = {
+    userid: string;
 }

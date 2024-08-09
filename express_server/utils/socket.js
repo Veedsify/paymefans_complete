@@ -3,6 +3,7 @@ const messagesSeenByReceiver = require("../libs/messages-seen-by-receiver");
 const getUserConversations = require("../libs/get-user-conversations");
 const { checkUserFollowing, followUser } = require("../libs/check-user-following");
 const SaveMessageToDb = require("../libs/save-message-db");
+let activeUsers = [];
 
 const serverSocket = (http) => {
 
@@ -18,8 +19,10 @@ const serverSocket = (http) => {
     io.on("connection", (socket) => {
         let room = "";
         const users = {};
+
         const interval = setInterval(() => {
             if (!users.userId) return;
+            socket.broadcast.emit('active_users', activeUsers)
             getUserConversations(users.userId).then((data) => {
                 socket.emit("conversations", data);
             });
@@ -74,6 +77,19 @@ const serverSocket = (http) => {
             });
         }
 
+
+        const handleUserActive = (userid) => {
+            if (activeUsers.some((user) => user.userid === userid)) {
+                socket.broadcast.emit('active_users', activeUsers);
+            } else {
+                activeUsers.push({
+                    userid,
+                    socket_id: socket.id
+                });
+                socket.broadcast.emit('active_users', activeUsers); // Broadcast updated list
+            }
+        }
+
         // Event handler to check if user is following
         socket.on("checkUserIsFollowing", checkFollowing);
 
@@ -102,11 +118,17 @@ const serverSocket = (http) => {
         // Listen for typing indication
         socket.on("typing", handleTyping);
 
+        // Handle User is Active
+        socket.on('user_active', handleUserActive)
+
         // Event handler for user disconnection
         socket.on("disconnect", () => {
             clearInterval(interval);
+            activeUsers = activeUsers.filter(user => user.socket_id !== socket.id);
         });
     });
+
+    // handleActiveState 
 
     return io;
 
